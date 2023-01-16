@@ -104,4 +104,4 @@ theme: maupassant
 deploy:
   type: 'git'
   repository: git@github.com:DoAutumn/doautumn.github.io.git
-  branch: main
+  branch: blog

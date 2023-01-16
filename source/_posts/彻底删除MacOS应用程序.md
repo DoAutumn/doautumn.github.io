@@ -1,6 +1,6 @@
 ---
 title: 彻底删除MacOS应用程序
-toc: true
+toc: false
 date: 2023-01-11 17:42:00
 tags:
 category: MacOS

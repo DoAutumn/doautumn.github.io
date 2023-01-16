@@ -9,16 +9,16 @@ category: 技术分享
 
 > 说明：本文中涉及的代码较少，也并非单纯的开发步骤，而是整理的一些思路和问题，如果你是想一步一参考的开发一个Demo，本文并不适合你。
 ## 一、背景
-公司的一款产品中要加入报告功能，简单来讲，就是通过Web浏览器定义word模板、定时任务，服务端根据模板、任务定时生成周报、月报的功能。对于服务端的定时任务、生成周报月报的功能实现，本文不做阐述。本文只介绍Web端的word模板定义的实现思路及遇到的一些问题，对于该功能，除了富文本编辑器基本功能之外，还需支持插入占位符`[用于服务端生成word时替换为实际内容]`、图表。
+公司的一款产品中要加入报告功能，简单来讲，就是通过Web浏览器定义word模板、定时任务，服务端根据模板、任务定时生成周报、月报的功能。对于服务端的定时任务、生成周报月报的功能实现，本文不做阐述。本文只介绍Web端的word模板定义的实现思路及遇到的一些问题，对于该功能，除了富文本编辑器基本功能之外，还需支持插入占位符（用于服务端生成word时替换为实际内容）、图表。
 ## 二、技术选型
-接到需求之后，首先想到的一些成熟的产品，像[有道云笔记](https://note.youdao.com/)、[腾讯文档](https://docs.qq.com/)、[石墨文档](https://shimo.im/)、[语雀](https://www.yuque.com/)、[我来](https://www.wolai.com/)`[没使用过，形式好像不太一样]`等都有类似功能，但具体是如何实现的呢，不得而知。由于本人之前使用过有道云，所以就想查查有没有相关文章、代码可以参考，没想到还真有。
+接到需求之后，首先想到的一些成熟的产品，像[有道云笔记](https://note.youdao.com/)、[腾讯文档](https://docs.qq.com/)、[石墨文档](https://shimo.im/)、[语雀](https://www.yuque.com/)、[我来](https://www.wolai.com/)（没使用过，形式好像不太一样）等都有类似功能，但具体是如何实现的呢，不得而知。由于本人之前使用过有道云，所以就想查查有没有相关文章、代码可以参考，没想到还真有。
 
 - [有道云笔记新版编辑器架构设计（上）](https://segmentfault.com/a/1190000039046174?utm_source=sf-similar-article)
 - [有道云笔记新版编辑器架构设计（下）](https://segmentfault.com/a/1190000039104198?utm_source=sf-similar-article)
 
 这是有道技术团队分享的架构设计，具有极高的参考价值。看完这两篇文章，本人甚至都有自己开发实现一把的冲动了。奈何考虑到只有我一个人在做这个事情，而且文章虽好，但没有技术细节，实现难度较大，最终只能作罢，只好沿着富文本编辑器的思路继续调研。
 
-网上关于富文本编辑器的推荐着实不少，[推荐几款好用的富文本编辑器](https://blog.csdn.net/growb/article/details/124446195)、[推荐10款常用的富文本编辑器](https://jishuin.proginn.com/p/763bfbd75b52)，经过综合对比，最终选定了[CKEditor](https://ckeditor.com/)。之所以选CKEditor，一是因为它可以使用与Angular`[公司前端技术栈]`的原生集成，二是支持从 Word、Excel 和 Google Docs 粘贴。
+网上关于富文本编辑器的推荐着实不少，[推荐几款好用的富文本编辑器](https://blog.csdn.net/growb/article/details/124446195)、[推荐10款常用的富文本编辑器](https://jishuin.proginn.com/p/763bfbd75b52)，经过综合对比，最终选定了[CKEditor](https://ckeditor.com/)。之所以选CKEditor，一是因为它可以使用与Angular（公司前端技术栈）的原生集成，二是支持从 Word、Excel 和 Google Docs 粘贴。
 ## 三、CKEditor的使用与踩坑
 对于CKEditor的介绍，这里就不再赘述了，官方文档介绍的更为详细，但目前还没找到中文文档。
 
@@ -35,11 +35,9 @@ CKEditor支持在5种模式下使用：Classic、Balloon、Balloon Block、Inlin
 
 如果只是计划添加CKEditor提供的现有插件，则可以使用[Online Builder](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#creating-custom-builds-with-online-builder)来解决上述问题。但正如前文提到的，我们的需求还包括支持插入占位符、图表，因此我们还需继续研究CKEditor如何扩展一个新的插件。
 ### 3、[从源代码构建编辑器](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source)
-正如上文提到，当我们想要扩展一个新插件时，就不能使用CKEditor提供的已经构建好的包了`[CKEditor提供了5种已构建好的包，对应上述提到的5种使用模式]`，而是需要基于源码进行开发构建。可以按照其[文档](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source)一步步搭建开发环境、开发、构建，而另一种相对比较简单的方式则是直接下载[源码](https://github.com/ckeditor/ckeditor5)，进入packages/ckeditor5-build-decoupled-document目录，直接安装依赖、开发、构建。
+正如上文提到，当我们想要扩展一个新插件时，就不能使用CKEditor提供的已经构建好的包了`[CKEditor提供了5种已构建好的包，对应上述提到的5种使用模式]`，而是需要基于源码进行开发构建。可以按照其[文档](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source)一步步搭建开发环境、开发、构建，而另一种相对比较简单的方式则是直接下载[源码](https://github.com/ckeditor/ckeditor5)，进入packages/ckeditor5-build-decoupled-document目录，直接安装依赖、开发、构建，这就意味着我们开发并构建了一个属于自己的包`@ckedtior/ckeditor5-build-decoupled-document1`。
 
-不过这种方式，和我们最初的设想还有些偏差。我们希望将富文本编辑器开发成一个公共组件供产线各个产品使用，设想的使用方式也尽量简单，只需安装我们提供的组件包`teditor`和我们依赖的开源包`@ckeditor/*`即可，安装脚本如下：
-
-`npm i teditor @ckedtior/ckeditor5-build-decoupled-document`
+上述这两种方式，和我们最初的设想还有些偏差。我们希望将富文本编辑器开发成一个公共组件供产线各个产品使用，设想的使用方式也尽量简单，只需安装我们提供的富文本编辑器组件包`teditor`和我们依赖的开源包`@ckeditor/*`即可。
 
 而一旦我们开发并构建了属于自己的`@ckedtior/ckeditor5-build-decoupled-document1`，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，主要问题在于Angular工程不能构建CKEditor源码中的css文件。
 
