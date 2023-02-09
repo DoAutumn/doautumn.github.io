@@ -1027,13 +1027,14 @@ figure.highlight,
     margin: 10px 0;
     line-height: 1.1em;
     color: #333;
-    padding-top: 15px;
+    // padding-top: 15px;
     overflow: hidden;
     border-radius: 3px;
     border: solid 1px #dadada;
     table {
         display: block;
         width: 100%;
+        margin: auto auto 0;
     }
     // Reset for tag `pre` and  for class `.gutter`, `.code`, `.tag`
     pre,
