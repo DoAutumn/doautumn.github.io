@@ -22,14 +22,14 @@ nexus需要运行在jdk1.8及以上环境
 默认用户名admin，会提示默认密码在安装包的什么位置
 *windows虚拟机上的密码改为了Talent123*
 ### 1.7.Create repository
-![图1](https://user-images.githubusercontent.com/122422382/212615009-f3486952-8471-4a54-9e42-2584a6c44978.jpg)
+![图1](https://foruda.gitee.com/images/1676621309015372122/930080e8_358662.jpeg)
 其中，npm（hosted）可设置包的发布策略，是否允许重新发布，如果不允许重新发布，则每次发布包，均需升级版本号
-![图2](https://user-images.githubusercontent.com/122422382/212615055-8e929888-2b79-4f76-a967-77fc46b26e75.jpg)
+![图2](https://foruda.gitee.com/images/1676621325937814584/7cf04fdf_358662.jpeg)
 ## 2.CentOS7下将Nexus设置为系统服务
 ### 2.1.修改nexus启动脚本
 修改脚本第14行：`INSTALL4J_JAVA_HOME_OVERRIDE=/root/jdk_1.8.0_231  // jdk安装路径`
 否则，可能会出现以下错误：
-<img width="230" alt="图3" src="https://user-images.githubusercontent.com/122422382/212615075-813e217a-3942-484e-b789-bf6ff21a67b2.png">
+<img width="460" alt="图3" src="https://foruda.gitee.com/images/1676621336743603556/a788b3b1_358662.png">
 ### 2.2.配置系统服务
 设置软连接：
 `sudo ln -s /opt/nexus-3.18.1-01/bin/nexus /etc/init.d/nexus`

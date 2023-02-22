@@ -72,11 +72,12 @@ husky可以让我们向项目中方便添加git hooks。
 `npm pkg set scripts.changelog="conventional-changelog -p angular -i CHANGELOG.md -s"`
 
 各参数含义：
--p 指定风格
--i 指定输出的文件名称
--s 输出到infile，这样就不需要指定与outfile相同的文件
--r 从最新的版本生成多少个版本。如果为0，则整个更改日志将被重新生成，输出文件将被覆盖。默认值:1
--n ./changelog-option.js 指定自定义配置
+`-p` Name of the preset you want to use. Must be one of the following: angular, atom, codemirror, ember, eslint, express, jquery, jscs or jshint
+`-i` Read the CHANGELOG from this file
+`-s` Outputting to the infile so you don't need to specify the same file as outfile
+`-r` How many releases to be generated from the latest. If 0, the whole changelog will be regenerated and the outfile will be overwritten. Default: 1
+
+更详细的参数说明请查看[这里](https://zhuanlan.zhihu.com/p/392303778/)
 
 ### 3、生成changelog
 

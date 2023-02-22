@@ -74,11 +74,12 @@ export class WindowComponent implements OnInit, OnDestroy {
 
 具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。
 <img width="800" alt="图3 路由复用与多窗口" src="https://foruda.gitee.com/images/1675924756031355629/ad3c0063_358662.jpeg">
+<img width="800" alt="图4 路由复用与多窗口" src="https://foruda.gitee.com/images/1675939326104981687/ef74d29b_358662.png">
 
 **非活动状态窗口的激活**
 
 我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击`Wiki`并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。
-<img width="650" alt="图4 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif">
+<img width="650" alt="图5 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif">
 为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。
 
 **窗口的最小化**
@@ -87,7 +88,7 @@ export class WindowComponent implements OnInit, OnDestroy {
 `new DockItem().init({ name: title, iconPath: image, path: routePath })`
 
 至于缩略图的生成，则是使用了`html2canvas`。
-<img width="650" alt="图5 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif">
+<img width="650" alt="图6 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif">
 
 ### 3.Dock
 Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。
@@ -139,7 +140,7 @@ const routes: Routes = [
 ```
 
 对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。
-<img width="650" alt="图6 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif">
+<img width="650" alt="图7 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif">
 另外，推荐下[Steven](https://juejin.cn/post/6942325271349592100)实现的效果，很丝滑。
 
 ## 如何使用

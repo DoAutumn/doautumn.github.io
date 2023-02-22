@@ -7,7 +7,7 @@ category: 技术分享
 ---
 ### 问题
 直接使用 http-server 命令开启的是 http 服务，在 npmjs 的官网地址中只是看到了 http-server -S 是开启 https 服务的方法，但是我这边直接使用该命令会报如下所示的错误，具体原因是没有证书密钥对文件。
-![图1](https://user-images.githubusercontent.com/122422382/212654004-69a18062-3720-4c2c-8925-68ce745b5051.png)
+![图1](https://foruda.gitee.com/images/1676620564917247477/32d29592_358662.png)
 ### 解决方法
 - 1、下载安装openssl
 - 2、使用以下命令生成一个证书密钥对 key.pem 和 cert.pem，设置有效期约10年（准确地说是3650天）
