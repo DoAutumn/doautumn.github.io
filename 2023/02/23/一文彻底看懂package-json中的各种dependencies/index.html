@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="度·秋的博客"><title>Gzip压缩 | 度·秋</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.png"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="度·秋的博客"><title>一文彻底看懂 package.json 中的各种 dependencies | 度·秋</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.png"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
 var toggle = document.querySelector('.darkmode-toggle');
 var html = document.querySelector('html');
 
@@ -7,9 +7,50 @@ html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
 toggle.addEventListener('click', () => {
 localStorage.dark = !(html.dataset.dark == 'true');
 html.dataset.dark = localStorage.dark;
-});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Gzip压缩</h1><a id="logo" href="/.">度·秋</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Gzip压缩</h1><div class="post-meta">2022-08-10<span> | </span><span class="category"><a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 142</span><span class="post-meta-item-text"> 字</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 1</span><span class="post-meta-item-text"> 分钟</span></span></span></div><a class="disqus-comment-count" href="/2022/08/10/Gzip%E5%8E%8B%E7%BC%A9/#vcomment"><span class="valine-comment-count" data-xid="/2022/08/10/Gzip%E5%8E%8B%E7%BC%A9/"></span><span> 条评论</span></a><div class="post-content"><p>开启Gzip压缩功能后，服务对资源进行Gzip压缩后返回，缩小传输文件大小，提升文件传输效率，减少带宽消耗。</p>
-<h4 id="Spring-Boot配置方法"><a href="#Spring-Boot配置方法" class="headerlink" title="Spring Boot配置方法"></a>Spring Boot配置方法</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#是否开启压缩，默认为false</span><br><span class="line">server.compression.enabled=true</span><br><span class="line">#指定要压缩的MIME type</span><br><span class="line">server.compression.mime-types=text/*,image/*,application/javascript,application/xml,application/x-font-ttf,application/font-woff</span><br></pre></td></tr></table></figure>
-<h4 id="Tomcat配置方法"><a href="#Tomcat配置方法" class="headerlink" title="Tomcat配置方法"></a>Tomcat配置方法</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server.xml</span><br><span class="line">&lt;Connector port=&quot;8080&quot;</span><br><span class="line">  protocol=&quot;HTTP/1.1&quot;</span><br><span class="line">  connectionTimeout=&quot;20000&quot;</span><br><span class="line">  redirectPort=&quot;8443&quot;</span><br><span class="line">  compression=&quot;on&quot;</span><br><span class="line">  compressionMinSize=&quot;2048&quot;</span><br><span class="line">  noCompressionUserAgents=&quot;gozilla, traviata&quot;</span><br><span class="line">  compressableMimeType=&quot;text/*,image/*,application/javascript,application/xml,application/x-font-ttf,application/font-woff&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure></div><div class="tags"><a href="/tags/Gzip"><i class="fa fa-tag">Gzip</i></a><a href="/tags/性能优化"><i class="fa fa-tag">性能优化</i></a></div><div class="post-nav"><a class="pre" href="/2022/08/17/http-server%E5%BC%80%E5%90%AFhttps%E6%9C%8D%E5%8A%A1/">http-server开启https服务</a><a class="next" href="/2022/07/16/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B/">可视化技术选型</a></div><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == 'true' ? true : false;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">一文彻底看懂 package.json 中的各种 dependencies</h1><a id="logo" href="/.">度·秋</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">一文彻底看懂 package.json 中的各种 dependencies</h1><div class="post-meta">2023-02-23<span> | </span><span class="category"><a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/">技术分享</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 447</span><span class="post-meta-item-text"> 字</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 1</span><span class="post-meta-item-text"> 分钟</span></span></span></div><a class="disqus-comment-count" href="/2023/02/23/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/#vcomment"><span class="valine-comment-count" data-xid="/2023/02/23/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/"></span><span> 条评论</span></a><div class="post-content"><p>关于package.json中的各种dependencies的详细解释，可以直接参考<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1051418">这篇文章</a>。</p>
+<p>这里只做一个最终结论的摘录。</p>
+<table>
+<thead>
+<tr>
+<th>依赖类型</th>
+<th>定义在项目中</th>
+<th>定义在依赖中</th>
+<th>一句话总结</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dependencies</td>
+<td>会被安装</td>
+<td>会被安装</td>
+<td>定义包运行所需要的依赖包</td>
+<td>某前端项目使用 react 进行开发，需要将 react 添加到 dependencies 中</td>
+</tr>
+<tr>
+<td>devDependencies</td>
+<td>会被安装</td>
+<td>不会被安装</td>
+<td>定义包在开发时所需要的依赖包</td>
+<td>antd 使用了 @testing-library&#x2F;react 进行测试，需要将 @testing-library&#x2F;react 添加到 devDependencies 中</td>
+</tr>
+<tr>
+<td>peerDependencies</td>
+<td>不会被安装</td>
+<td>不会被安装，但是如果指向的依赖没有被安装或不符合时会有警告（peerDependenciesMeta 会影响该行为）</td>
+<td>定义该包运行所需要的依赖环境，一般和 devDependencies 一起使用</td>
+<td>antd 是一个 react 组件库，为了不和使用它的项目中的 react 版本定义造成冲突，需要将支持的 react 版本添加到 peerDependencies 中</td>
+</tr>
+<tr>
+<td>optionalDependencies</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>optionalDependencies 用于定义对包运行不会造成影响的依赖包</td>
+<td>一个包在使用 A 包进行了某些操作，但是如果 A 包不在的话，可以使用别的 API 达到同样的效果，可以将 A 包添加到 optionalDependencies 中</td>
+</tr>
+</tbody></table>
+<hr>
+<p>另外记录下版本号的格式规定：<br><code>固定版本</code>：如4.0.3<br><code>～</code>：如～4.0.3，表示安装 4.0.x 的最新版本，也就是说安装时不会改变主版本号和次版本号<br><code>^</code>：如^17.0.2，表示安装 17.x.x 的最新版本，也就是说安装时不会改变主版本号<br><code>latest</code>：安装最新版本</p>
+</div><div class="tags"><a href="/tags/package.json"><i class="fa fa-tag">package.json</i></a></div><div class="post-nav"><a class="next" href="/2023/02/22/vscode%E7%9A%84%E4%B8%80%E4%BA%9B%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE/">VS Code的一些偏好设置</a></div><div id="vcomment"></div><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' == 'true' ? true : false;
 var verify = 'false' == 'true' ? true : false;
 var GUEST_INFO = ['nick','mail','link'];
 var guest_info = 'nick,mail,link'.split(',').filter(function(item){

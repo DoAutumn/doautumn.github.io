@@ -121,8 +121,8 @@
 <h3 id="1-4-启动"><a href="#1-4-启动" class="headerlink" title="1.4.启动"></a>1.4.启动</h3><p>进入nexus-3.18.1-01&#x2F;bin&#x2F;目录，<code>./nexus run</code></p>
 <h3 id="1-5-访问"><a href="#1-5-访问" class="headerlink" title="1.5.访问"></a>1.5.访问</h3><p>浏览器输入<a href="http://ip:8081/">http://ip:8081</a></p>
 <h3 id="1-6-登录"><a href="#1-6-登录" class="headerlink" title="1.6.登录"></a>1.6.登录</h3><p>默认用户名admin，会提示默认密码在安装包的什么位置<br><em>windows虚拟机上的密码改为了Talent123</em></p>
-<h3 id="1-7-Create-repository"><a href="#1-7-Create-repository" class="headerlink" title="1.7.Create repository"></a>1.7.Create repository</h3><p><img src="https://user-images.githubusercontent.com/122422382/212615009-f3486952-8471-4a54-9e42-2584a6c44978.jpg" alt="图1"><br>其中，npm（hosted）可设置包的发布策略，是否允许重新发布，如果不允许重新发布，则每次发布包，均需升级版本号<br><img src="https://user-images.githubusercontent.com/122422382/212615055-8e929888-2b79-4f76-a967-77fc46b26e75.jpg" alt="图2"></p>
-<h2 id="2-CentOS7下将Nexus设置为系统服务"><a href="#2-CentOS7下将Nexus设置为系统服务" class="headerlink" title="2.CentOS7下将Nexus设置为系统服务"></a>2.CentOS7下将Nexus设置为系统服务</h2><h3 id="2-1-修改nexus启动脚本"><a href="#2-1-修改nexus启动脚本" class="headerlink" title="2.1.修改nexus启动脚本"></a>2.1.修改nexus启动脚本</h3><p>修改脚本第14行：<code>INSTALL4J_JAVA_HOME_OVERRIDE=/root/jdk_1.8.0_231  // jdk安装路径</code><br>否则，可能会出现以下错误：<br><img width="230" alt="图3" src="https://user-images.githubusercontent.com/122422382/212615075-813e217a-3942-484e-b789-bf6ff21a67b2.png"></p>
+<h3 id="1-7-Create-repository"><a href="#1-7-Create-repository" class="headerlink" title="1.7.Create repository"></a>1.7.Create repository</h3><p><img src="https://foruda.gitee.com/images/1676621309015372122/930080e8_358662.jpeg" alt="图1"><br>其中，npm（hosted）可设置包的发布策略，是否允许重新发布，如果不允许重新发布，则每次发布包，均需升级版本号<br><img src="https://foruda.gitee.com/images/1676621325937814584/7cf04fdf_358662.jpeg" alt="图2"></p>
+<h2 id="2-CentOS7下将Nexus设置为系统服务"><a href="#2-CentOS7下将Nexus设置为系统服务" class="headerlink" title="2.CentOS7下将Nexus设置为系统服务"></a>2.CentOS7下将Nexus设置为系统服务</h2><h3 id="2-1-修改nexus启动脚本"><a href="#2-1-修改nexus启动脚本" class="headerlink" title="2.1.修改nexus启动脚本"></a>2.1.修改nexus启动脚本</h3><p>修改脚本第14行：<code>INSTALL4J_JAVA_HOME_OVERRIDE=/root/jdk_1.8.0_231  // jdk安装路径</code><br>否则，可能会出现以下错误：<br><img width="460" alt="图3" src="https://foruda.gitee.com/images/1676621336743603556/a788b3b1_358662.png"></p>
 <h3 id="2-2-配置系统服务"><a href="#2-2-配置系统服务" class="headerlink" title="2.2.配置系统服务"></a>2.2.配置系统服务</h3><p>设置软连接：<br><code>sudo ln -s /opt/nexus-3.18.1-01/bin/nexus /etc/init.d/nexus</code></p>
 <p>采用systemd的方式配置服务</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/systemd/system</span><br><span class="line">vi nexus.service</span><br><span class="line"></span><br><span class="line">在nexus.service文件中添加以下内容：</span><br><span class="line">[Unit]</span><br><span class="line">Description=nexus service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/opt/nexus-3.18.1-01/bin/nexus start  #nexus的安装目录</span><br><span class="line">ExecStop=/opt/nexus-3.18.1-01/bin/nexus stop</span><br><span class="line">User=root  #系统用户名</span><br><span class="line">Restart=on-abort</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
@@ -142,9 +142,29 @@
       </tags>
   </entry>
   <entry>
+    <title>markdown文件转word文件</title>
+    <url>/2023/01/11/markdown%E6%96%87%E4%BB%B6%E8%BD%ACword%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ul>
+<li>1、安装nodejs</li>
+<li>2、安装marked，<code>npm i marked</code></li>
+<li>3、转换成doc格式前，需要把md文件转换为html标签格式，才能保留doc文件中的样式，新建立<code>head.html</code>模板文件，内容如下：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Markdoc Preview&lt;/title&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;style type=&quot;text/css&quot;&gt;html &#123;font-family: sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; &#125;body &#123;margin: 0;&#125;article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary &#123;display: block;&#125;audio,canvas,progress,video &#123;display: inline-block; vertical-align: baseline; &#125;audio:not([controls]) &#123;display: none;height: 0;&#125;[hidden],template &#123;display: none;&#125;a &#123;background: transparent;&#125;a:active,a:hover &#123;outline: 0;&#125;abbr[title] &#123;border-bottom: 1px dotted;&#125;b,strong &#123;font-weight: bold;&#125;dfn &#123;font-style: italic;&#125;h1 &#123;font-size: 2em;margin: 0.67em 0;&#125;mark &#123;background: #ff0;color: #000;&#125;small &#123;font-size: 80%;&#125;sub,sup &#123;font-size: 75%;line-height: 0;position: relative;vertical-align: baseline;&#125;sup &#123;top: -0.5em;&#125;sub &#123;bottom: -0.25em;&#125;img &#123;border: 0;&#125;svg:not(:root) &#123;overflow: hidden;&#125;figure &#123;margin: 1em 40px;&#125;hr &#123;-moz-box-sizing: content-box;box-sizing: content-box;height: 0;&#125;pre &#123;overflow: auto;&#125;code,kbd,pre,samp &#123;font-family: monospace, monospace;font-size: 1em;&#125;button,input,optgroup,select,textarea &#123;color: inherit; font: inherit; margin: 0; &#125;button &#123;overflow: visible;&#125;button,select &#123;text-transform: none;&#125;button,html input[type=&quot;button&quot;], input[type=&quot;reset&quot;],input[type=&quot;submit&quot;] &#123;-webkit-appearance: button; cursor: pointer; &#125;button[disabled],html input[disabled] &#123;cursor: default;&#125;button::-moz-focus-inner,input::-moz-focus-inner &#123;border: 0;padding: 0;&#125;input &#123;line-height: normal;&#125;input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;] &#123;box-sizing: border-box; padding: 0; &#125;input[type=&quot;number&quot;]::-webkit-inner-spin-button,input[type=&quot;number&quot;]::-webkit-outer-spin-button &#123;height: auto;&#125;input[type=&quot;search&quot;] &#123;-webkit-appearance: textfield; -moz-box-sizing: content-box;-webkit-box-sizing: content-box; box-sizing: content-box;&#125;input[type=&quot;search&quot;]::-webkit-search-cancel-button,input[type=&quot;search&quot;]::-webkit-search-decoration &#123;-webkit-appearance: none;&#125;fieldset &#123;border: 1px solid #c0c0c0;margin: 0 2px;padding: 0.35em 0.625em 0.75em;&#125;legend &#123;border: 0; padding: 0; &#125;textarea &#123;overflow: auto;&#125;optgroup &#123;font-weight: bold;&#125;table &#123;border-collapse: collapse;border-spacing: 0;&#125;td,th &#123;padding: 0;&#125;* &#123;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;&#125;*:before,*:after &#123;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;&#125;html &#123;font-size: 62.5%;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);&#125;body &#123;font-family: &#x27;Helvetica Neue&#x27;, Helvetica, Arial, &#x27;Microsoft Yahei&#x27;, sans-serif;font-size: 14px;line-height: 1.42857143;color: #333333;background-color: #ffffff;&#125;input,button,select,textarea &#123;font-family: inherit;font-size: inherit;line-height: inherit;&#125;a &#123;color: #428bca;text-decoration: none;&#125;a:hover,a:focus &#123;color: #2a6496;text-decoration: underline;&#125;a:focus &#123;outline: thin dotted;outline: 5px auto -webkit-focus-ring-color;outline-offset: -2px;&#125;figure &#123;margin: 0;&#125;img &#123;vertical-align: middle;&#125;.hljs &#123;display: block;overflow-x: auto;padding: 0.5em;background: #f0f0f0;-webkit-text-size-adjust: none;&#125;.hljs,.hljs-subst,.hljs-tag .hljs-title,.nginx .hljs-title &#123;color: black;&#125;.hljs-string,.hljs-title,.hljs-constant,.hljs-parent,.hljs-tag .hljs-value,.hljs-rules .hljs-value,.hljs-preprocessor,.hljs-pragma,.haml .hljs-symbol,.ruby .hljs-symbol,.ruby .hljs-symbol .hljs-string,.hljs-template_tag,.django .hljs-variable,.smalltalk .hljs-class,.hljs-addition,.hljs-flow,.hljs-stream,.bash .hljs-variable,.apache .hljs-tag,.apache .hljs-cbracket,.tex .hljs-command,.tex .hljs-special,.erlang_repl .hljs-function_or_atom,.asciidoc .hljs-header,.markdown .hljs-header,.coffeescript .hljs-attribute &#123;color: #800;&#125;.smartquote,.hljs-comment,.hljs-annotation,.diff .hljs-header,.hljs-chunk,.asciidoc .hljs-blockquote,.markdown .hljs-blockquote &#123;color: #888;&#125;.hljs-number,.hljs-date,.hljs-regexp,.hljs-literal,.hljs-hexcolor,.smalltalk .hljs-symbol,.smalltalk .hljs-char,.go .hljs-constant,.hljs-change,.lasso .hljs-variable,.makefile .hljs-variable,.asciidoc .hljs-bullet,.markdown .hljs-bullet,.asciidoc .hljs-link_url,.markdown .hljs-link_url &#123;color: #080;&#125;.hljs-label,.hljs-javadoc,.ruby .hljs-string,.hljs-decorator,.hljs-filter .hljs-argument,.hljs-localvars,.hljs-array,.hljs-attr_selector,.hljs-important,.hljs-pseudo,.hljs-pi,.haml .hljs-bullet,.hljs-doctype,.hljs-deletion,.hljs-envvar,.hljs-shebang,.apache .hljs-sqbracket,.nginx .hljs-built_in,.tex .hljs-formula,.erlang_repl .hljs-reserved,.hljs-prompt,.asciidoc .hljs-link_label,.markdown .hljs-link_label,.vhdl .hljs-attribute,.clojure .hljs-attribute,.asciidoc .hljs-attribute,.lasso .hljs-attribute,.coffeescript .hljs-property,.hljs-phony &#123;color: #88f;&#125;.hljs-keyword,.hljs-id,.hljs-title,.hljs-built_in,.css .hljs-tag,.hljs-javadoctag,.hljs-phpdoc,.hljs-dartdoc,.hljs-yardoctag,.smalltalk .hljs-class,.hljs-winutils,.bash .hljs-variable,.apache .hljs-tag,.hljs-type,.hljs-typename,.tex .hljs-command,.asciidoc .hljs-strong,.markdown .hljs-strong,.hljs-request,.hljs-status &#123;font-weight: bold;&#125;.asciidoc .hljs-emphasis,.markdown .hljs-emphasis &#123;font-style: italic;&#125;.nginx .hljs-built_in &#123;font-weight: normal;&#125;.coffeescript .javascript,.javascript .xml,.lasso .markup,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata &#123;opacity: 0.5;&#125;#container &#123;padding: 15px;margin-left:20px;&#125;pre &#123;border: 1px solid #ccc;border-radius: 4px;display: block;&#125;pre code &#123;white-space: pre-wrap;&#125;.hljs,code &#123;font-family: Monaco, Menlo, Consolas, &#x27;Courier New&#x27;, monospace;&#125;pre&#123;background-color: #dddddd;padding:8px 0px 8px 30px;word-wrap: break-word;&#125;table tbody tr:nth-child(2n) &#123;background: rgba(158,188,226,0.12); &#125;:not(pre) &gt; code &#123;padding: 2px 4px;font-size: 90%;color: #c7254e;background-color: #f9f2f4;white-space: nowrap;border-radius: 4px;&#125;th, td &#123;border: 1px solid #ccc;padding: 6px 12px;&#125;blockquote &#123;border-left-width: 10px;background-color: rgba(102,128,153,0.05);border-top-right-radius: 5px;border-bottom-right-radius: 5px;padding: 1px 20px&#125;blockquote.pull-right small:before,blockquote.pull-right .small:before &#123;content: &#x27;&#x27;&#125;blockquote.pull-right small:after,blockquote.pull-right .small:after &#123;content: &#x27;\00A0 \2014&#x27;&#125;blockquote:before,blockquote:after &#123;content: &quot;&quot;&#125;blockquote &#123;margin: 0 0 1.1em&#125;blockquote p &#123;margin-bottom: 1.1em;font-size: 1em;line-height: 1.45&#125;blockquote ul:last-child,blockquote ol:last-child &#123;margin-bottom: 0&#125;blockquote &#123;margin: 0 0 21px;border-left: 10px solid #dddddd;&#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body marginwidth=&quot;0&quot; marginheight=&quot;0&quot;&gt;</span><br><span class="line">        &lt;div id=&quot;container&quot;&gt;</span><br><span class="line">            replace_area</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></li>
+<li>4、新建js脚本文件<code>convert.js</code>内容如下：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var fs = require(&#x27;fs&#x27;);</span><br><span class="line">var &#123;marked&#125; = require(&#x27;marked&#x27;);</span><br><span class="line">// console.log(marked);</span><br><span class="line">// 读取第3步创建的模板html文件</span><br><span class="line">var headFile = fs.readFileSync(&#x27;head.html&#x27;);// 读取将要被转换的md文件</span><br><span class="line">var mdFile = fs.readFileSync(&#x27;mark.md&#x27;);</span><br><span class="line"></span><br><span class="line">// console.log(&#x27;----正在转换...&#x27;);</span><br><span class="line"></span><br><span class="line">var mdStr = mdFile.toString()// 调用marked将md文件转换成html</span><br><span class="line">var mdToHtmlStr = marked(mdStr);</span><br><span class="line">// 将md转换成html字符串替换到html模板文件中replace_area的位置</span><br><span class="line">var content = headFile.toString().replace(&#x27;replace_area&#x27;,mdToHtmlStr);</span><br><span class="line"></span><br><span class="line">// console.log(&quot;准备写入文件&quot;);</span><br><span class="line"></span><br><span class="line">fs.writeFile(&#x27;output.doc&#x27;, content, function(err) &#123;</span><br><span class="line">   if (err) &#123;</span><br><span class="line">       return console.error(err);</span><br><span class="line">   &#125;</span><br><span class="line">   console.log(&quot;数据写入成功！&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">// console.log(content);</span><br></pre></td></tr></table></figure></li>
+<li>5、运行脚本<code>node convert.js</code>即可</li>
+</ul>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>Markdown</tag>
+        <tag>ToWord</tag>
+        <tag>NodeJS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>http-server开启https服务</title>
     <url>/2022/08/17/http-server%E5%BC%80%E5%90%AFhttps%E6%9C%8D%E5%8A%A1/</url>
-    <content><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>直接使用 http-server 命令开启的是 http 服务，在 npmjs 的官网地址中只是看到了 http-server -S 是开启 https 服务的方法，但是我这边直接使用该命令会报如下所示的错误，具体原因是没有证书密钥对文件。<br><img src="https://user-images.githubusercontent.com/122422382/212654004-69a18062-3720-4c2c-8925-68ce745b5051.png" alt="图1"></p>
+    <content><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>直接使用 http-server 命令开启的是 http 服务，在 npmjs 的官网地址中只是看到了 http-server -S 是开启 https 服务的方法，但是我这边直接使用该命令会报如下所示的错误，具体原因是没有证书密钥对文件。<br><img src="https://foruda.gitee.com/images/1676620564917247477/32d29592_358662.png" alt="图1"></p>
 <h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
 <li>1、下载安装openssl</li>
 <li>2、使用以下命令生成一个证书密钥对 key.pem 和 cert.pem，设置有效期约10年（准确地说是3650天）<br><code>openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem</code></li>
@@ -158,6 +178,60 @@
       </categories>
       <tags>
         <tag>https</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一文彻底看懂 package.json 中的各种 dependencies</title>
+    <url>/2023/02/23/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/</url>
+    <content><![CDATA[<p>关于package.json中的各种dependencies的详细解释，可以直接参考<a href="https://developer.aliyun.com/article/1051418">这篇文章</a>。</p>
+<p>这里只做一个最终结论的摘录。</p>
+<table>
+<thead>
+<tr>
+<th>依赖类型</th>
+<th>定义在项目中</th>
+<th>定义在依赖中</th>
+<th>一句话总结</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dependencies</td>
+<td>会被安装</td>
+<td>会被安装</td>
+<td>定义包运行所需要的依赖包</td>
+<td>某前端项目使用 react 进行开发，需要将 react 添加到 dependencies 中</td>
+</tr>
+<tr>
+<td>devDependencies</td>
+<td>会被安装</td>
+<td>不会被安装</td>
+<td>定义包在开发时所需要的依赖包</td>
+<td>antd 使用了 @testing-library&#x2F;react 进行测试，需要将 @testing-library&#x2F;react 添加到 devDependencies 中</td>
+</tr>
+<tr>
+<td>peerDependencies</td>
+<td>不会被安装</td>
+<td>不会被安装，但是如果指向的依赖没有被安装或不符合时会有警告（peerDependenciesMeta 会影响该行为）</td>
+<td>定义该包运行所需要的依赖环境，一般和 devDependencies 一起使用</td>
+<td>antd 是一个 react 组件库，为了不和使用它的项目中的 react 版本定义造成冲突，需要将支持的 react 版本添加到 peerDependencies 中</td>
+</tr>
+<tr>
+<td>optionalDependencies</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>optionalDependencies 用于定义对包运行不会造成影响的依赖包</td>
+<td>一个包在使用 A 包进行了某些操作，但是如果 A 包不在的话，可以使用别的 API 达到同样的效果，可以将 A 包添加到 optionalDependencies 中</td>
+</tr>
+</tbody></table>
+<hr>
+<p>另外记录下版本号的格式规定：<br><code>固定版本</code>：如4.0.3<br><code>～</code>：如～4.0.3，表示安装 4.0.x 的最新版本，也就是说安装时不会改变主版本号和次版本号<br><code>^</code>：如^17.0.2，表示安装 17.x.x 的最新版本，也就是说安装时不会改变主版本号<br><code>latest</code>：安装最新版本</p>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>package.json</tag>
       </tags>
   </entry>
   <entry>
@@ -176,6 +250,49 @@
       <categories>
         <category>开发效率</category>
       </categories>
+  </entry>
+  <entry>
+    <title>仿MacOS的后台管理系统</title>
+    <url>/2023/01/13/%E4%BB%BFMacOS%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前比较流行的开源后台管理系统<a href="https://ng-alain.com/en">NG-ALAIN</a>、<a href="https://pro.ant.design/">Ant Design Pro</a>、<a href="https://panjiachen.github.io/vue-element-admin-site/zh/">Vue-Element-Admin</a>、<a href="http://boot.jeecg.com/">Jeecg Boot</a>等，其页面布局基本都是如下形式：<br><img width="500" alt="图1 常见布局" src="https://foruda.gitee.com/images/1675924467881077922/4994c85f_358662.png"><br>诚然，这种形式并非不好，但看的多了，难免视觉疲劳。</p>
+<p>其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。</p>
+<p>体验地址：<a href="https://doautumn.github.io/web-os">https://doautumn.github.io/web-os</a></p>
+<blockquote>
+<p>该解决方案并未投入实战，只是用作学习与交流，欢迎感兴趣的小伙伴留言支持。</p>
+</blockquote>
+<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>技术栈：Angular13 + NG-ZORRO13</p>
+<h3 id="1-基本布局"><a href="#1-基本布局" class="headerlink" title="1.基本布局"></a>1.基本布局</h3><p>基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。<br><img width="500" alt="图2 MacOS布局" src="https://foruda.gitee.com/images/1675924583486574320/d4685efd_358662.png"></p>
+<h3 id="2-Window"><a href="#2-Window" class="headerlink" title="2.Window"></a>2.Window</h3><p>不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种<code>键盘独占</code>的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。</p>
+<p>下面来聊一聊Window的具体实现方案。</p>
+<h4 id="2-1-公开的属性、事件"><a href="#2-1-公开的属性、事件" class="headerlink" title="2.1 公开的属性、事件"></a>2.1 公开的属性、事件</h4><p>在做这种开发套件时，我一般首先考虑的是开发人员该如何使用我们提供的基础组件、服务。对于一个窗口而言，首先想到的需要开发人员干预的只有两项内容：<code>title和content</code>。进一步思考，当窗口处于非活动或最小化状态时，我们希望开发人员能够关注下性能，毕竟如果窗口打开过多，如何保证页面不卡顿将会是一件非常有必要的事情。为此我们需要提供两个状态切换事件：<code>active和inactive</code>，当窗口处于上述某种状态时，可以考虑暂停定时器、暂停持续的渲染动画等非必要的性能开销。对开发人员公开的内容除上述4项之外，还会有一些其他细节项，如<code>minimizable（是否能够最小化）、maximizable（是否能够最大化）、style（默认位置尺寸）</code>等。</p>
+<p>使用Window的伪代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;mz-window mzTitle=&quot;这是一个标题&quot; (active)=&quot;handleActive()&quot; (inactive)=&quot;handleInactive()&quot;&gt;</span><br><span class="line">  your code</span><br><span class="line">  ...</span><br><span class="line">&lt;/mz-window&gt;</span><br></pre></td></tr></table></figure>
+<p>内部实现的伪代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// window.component.ts</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &#x27;mz-window&#x27;,</span><br><span class="line">  templateUrl: &#x27;./window.component.html&#x27;,</span><br><span class="line">  styleUrls: [&#x27;./window.component.less&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line">export class WindowComponent implements OnInit, OnDestroy &#123;</span><br><span class="line"></span><br><span class="line">  @Input() mzTitle: string;</span><br><span class="line">  @Input() minimizable: boolean = true;</span><br><span class="line">  @Input() maximizable: boolean = true;</span><br><span class="line">  @Input() style: any;</span><br><span class="line"></span><br><span class="line">  @Output() active = new EventEmitter();</span><br><span class="line">  @Output() inactive = new EventEmitter();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// window.component.html</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;window&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;title&quot;&gt;</span><br><span class="line">    &lt;span&gt;&#123;&#123; mzTitle &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">    &lt;ng-content&gt;&lt;/ng-content&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-窗口的通用逻辑"><a href="#2-2-窗口的通用逻辑" class="headerlink" title="2.2 窗口的通用逻辑"></a>2.2 窗口的通用逻辑</h4><p>对于窗口的打开、关闭、最大化、最小化、拖拽、窗口切换等通用逻辑，都由框架统一实现即可。</p>
+<p><strong>窗口与路由的关系</strong></p>
+<p>而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的<a href="https://angular.cn/api/router/RouteReuseStrategy">路由复用策略</a>与<a href="https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive">keep-alive</a>可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。</p>
+<p>具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。<br><img width="800" alt="图3 路由复用与多窗口" src="https://foruda.gitee.com/images/1675924756031355629/ad3c0063_358662.jpeg"><br><img width="800" alt="图4 路由复用与多窗口" src="https://foruda.gitee.com/images/1675939326104981687/ef74d29b_358662.png"></p>
+<p><strong>非活动状态窗口的激活</strong></p>
+<p>我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击<code>Wiki</code>并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。<br><img width="650" alt="图5 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif"><br>为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。</p>
+<p><strong>窗口的最小化</strong></p>
+<p>目前我们还没有实现MacOS最小化窗口的神奇动画效果的技术方案，暂且实现了缩放的动画效果，和MacOS类似，窗口缩放之后会以缩略图的形式暂存到Dock中。那如何生成窗口的缩略图呢？或者是否可以将窗口直接缩放至Dock中？经过综合考虑，我们希望窗口和Dock尽量是解耦的，所以还是采用了生成缩略图的方案，因为Dock本身也是支持设置图标的，这样只需创建一个Dock对象并将缩略图、窗口标题带上即可。<br><code>new DockItem().init(&#123; name: title, iconPath: image, path: routePath &#125;)</code></p>
+<p>至于缩略图的生成，则是使用了<code>html2canvas</code>。<br><img width="650" alt="图6 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif"></p>
+<h3 id="3-Dock"><a href="#3-Dock" class="headerlink" title="3.Dock"></a>3.Dock</h3><p>Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。</p>
+<p>关于DockItem和Window的关联，其实比较简单，上文已提到，Window和路由是一一对应的，那只需将DockItem和路由也做关联即可。只不过DockItem和路由并非一一对应，而是一个DockItem对应一个一级路由，包含若干个子路由。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义DockItem</span><br><span class="line">&#123;</span><br><span class="line">  &quot;apps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;VSCode&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/vscode.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo1&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Webstorm&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/webstorm.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo2&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Chrome&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/chrome.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo3&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一级路由</span><br><span class="line">const routes: Routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;&#x27;,</span><br><span class="line">    component: WebOSLayoutComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo1&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo1/demo1.module&#x27;).then(m =&gt; m.Demo1Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo2&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo2/demo2.module&#x27;).then(m =&gt; m.Demo2Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo3&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo3/demo3.module&#x27;).then(m =&gt; m.Demo3Module)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。<br><img width="650" alt="图7 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif"><br>另外，推荐下<a href="https://juejin.cn/post/6942325271349592100">Steven</a>实现的效果，很丝滑。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>计划将其作为基础开发包发布到npm，但由于还有一些功能暂未完成，如<code>键盘独占</code>、<code>国际化</code>等，故还需等待时日。</p>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>WebOS</tag>
+        <tag>MacOS</tag>
+        <tag>后台管理系统</tag>
+      </tags>
   </entry>
   <entry>
     <title>使用Vite构建Vue3组件库</title>
@@ -221,23 +338,39 @@
       </tags>
   </entry>
   <entry>
-    <title>markdown文件转word文件</title>
-    <url>/2023/01/11/markdown%E6%96%87%E4%BB%B6%E8%BD%ACword%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ul>
-<li>1、安装nodejs</li>
-<li>2、安装marked，<code>npm i marked</code></li>
-<li>3、转换成doc格式前，需要把md文件转换为html标签格式，才能保留doc文件中的样式，新建立<code>head.html</code>模板文件，内容如下：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Markdoc Preview&lt;/title&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;style type=&quot;text/css&quot;&gt;html &#123;font-family: sans-serif; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; &#125;body &#123;margin: 0;&#125;article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary &#123;display: block;&#125;audio,canvas,progress,video &#123;display: inline-block; vertical-align: baseline; &#125;audio:not([controls]) &#123;display: none;height: 0;&#125;[hidden],template &#123;display: none;&#125;a &#123;background: transparent;&#125;a:active,a:hover &#123;outline: 0;&#125;abbr[title] &#123;border-bottom: 1px dotted;&#125;b,strong &#123;font-weight: bold;&#125;dfn &#123;font-style: italic;&#125;h1 &#123;font-size: 2em;margin: 0.67em 0;&#125;mark &#123;background: #ff0;color: #000;&#125;small &#123;font-size: 80%;&#125;sub,sup &#123;font-size: 75%;line-height: 0;position: relative;vertical-align: baseline;&#125;sup &#123;top: -0.5em;&#125;sub &#123;bottom: -0.25em;&#125;img &#123;border: 0;&#125;svg:not(:root) &#123;overflow: hidden;&#125;figure &#123;margin: 1em 40px;&#125;hr &#123;-moz-box-sizing: content-box;box-sizing: content-box;height: 0;&#125;pre &#123;overflow: auto;&#125;code,kbd,pre,samp &#123;font-family: monospace, monospace;font-size: 1em;&#125;button,input,optgroup,select,textarea &#123;color: inherit; font: inherit; margin: 0; &#125;button &#123;overflow: visible;&#125;button,select &#123;text-transform: none;&#125;button,html input[type=&quot;button&quot;], input[type=&quot;reset&quot;],input[type=&quot;submit&quot;] &#123;-webkit-appearance: button; cursor: pointer; &#125;button[disabled],html input[disabled] &#123;cursor: default;&#125;button::-moz-focus-inner,input::-moz-focus-inner &#123;border: 0;padding: 0;&#125;input &#123;line-height: normal;&#125;input[type=&quot;checkbox&quot;],input[type=&quot;radio&quot;] &#123;box-sizing: border-box; padding: 0; &#125;input[type=&quot;number&quot;]::-webkit-inner-spin-button,input[type=&quot;number&quot;]::-webkit-outer-spin-button &#123;height: auto;&#125;input[type=&quot;search&quot;] &#123;-webkit-appearance: textfield; -moz-box-sizing: content-box;-webkit-box-sizing: content-box; box-sizing: content-box;&#125;input[type=&quot;search&quot;]::-webkit-search-cancel-button,input[type=&quot;search&quot;]::-webkit-search-decoration &#123;-webkit-appearance: none;&#125;fieldset &#123;border: 1px solid #c0c0c0;margin: 0 2px;padding: 0.35em 0.625em 0.75em;&#125;legend &#123;border: 0; padding: 0; &#125;textarea &#123;overflow: auto;&#125;optgroup &#123;font-weight: bold;&#125;table &#123;border-collapse: collapse;border-spacing: 0;&#125;td,th &#123;padding: 0;&#125;* &#123;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;&#125;*:before,*:after &#123;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;&#125;html &#123;font-size: 62.5%;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);&#125;body &#123;font-family: &#x27;Helvetica Neue&#x27;, Helvetica, Arial, &#x27;Microsoft Yahei&#x27;, sans-serif;font-size: 14px;line-height: 1.42857143;color: #333333;background-color: #ffffff;&#125;input,button,select,textarea &#123;font-family: inherit;font-size: inherit;line-height: inherit;&#125;a &#123;color: #428bca;text-decoration: none;&#125;a:hover,a:focus &#123;color: #2a6496;text-decoration: underline;&#125;a:focus &#123;outline: thin dotted;outline: 5px auto -webkit-focus-ring-color;outline-offset: -2px;&#125;figure &#123;margin: 0;&#125;img &#123;vertical-align: middle;&#125;.hljs &#123;display: block;overflow-x: auto;padding: 0.5em;background: #f0f0f0;-webkit-text-size-adjust: none;&#125;.hljs,.hljs-subst,.hljs-tag .hljs-title,.nginx .hljs-title &#123;color: black;&#125;.hljs-string,.hljs-title,.hljs-constant,.hljs-parent,.hljs-tag .hljs-value,.hljs-rules .hljs-value,.hljs-preprocessor,.hljs-pragma,.haml .hljs-symbol,.ruby .hljs-symbol,.ruby .hljs-symbol .hljs-string,.hljs-template_tag,.django .hljs-variable,.smalltalk .hljs-class,.hljs-addition,.hljs-flow,.hljs-stream,.bash .hljs-variable,.apache .hljs-tag,.apache .hljs-cbracket,.tex .hljs-command,.tex .hljs-special,.erlang_repl .hljs-function_or_atom,.asciidoc .hljs-header,.markdown .hljs-header,.coffeescript .hljs-attribute &#123;color: #800;&#125;.smartquote,.hljs-comment,.hljs-annotation,.diff .hljs-header,.hljs-chunk,.asciidoc .hljs-blockquote,.markdown .hljs-blockquote &#123;color: #888;&#125;.hljs-number,.hljs-date,.hljs-regexp,.hljs-literal,.hljs-hexcolor,.smalltalk .hljs-symbol,.smalltalk .hljs-char,.go .hljs-constant,.hljs-change,.lasso .hljs-variable,.makefile .hljs-variable,.asciidoc .hljs-bullet,.markdown .hljs-bullet,.asciidoc .hljs-link_url,.markdown .hljs-link_url &#123;color: #080;&#125;.hljs-label,.hljs-javadoc,.ruby .hljs-string,.hljs-decorator,.hljs-filter .hljs-argument,.hljs-localvars,.hljs-array,.hljs-attr_selector,.hljs-important,.hljs-pseudo,.hljs-pi,.haml .hljs-bullet,.hljs-doctype,.hljs-deletion,.hljs-envvar,.hljs-shebang,.apache .hljs-sqbracket,.nginx .hljs-built_in,.tex .hljs-formula,.erlang_repl .hljs-reserved,.hljs-prompt,.asciidoc .hljs-link_label,.markdown .hljs-link_label,.vhdl .hljs-attribute,.clojure .hljs-attribute,.asciidoc .hljs-attribute,.lasso .hljs-attribute,.coffeescript .hljs-property,.hljs-phony &#123;color: #88f;&#125;.hljs-keyword,.hljs-id,.hljs-title,.hljs-built_in,.css .hljs-tag,.hljs-javadoctag,.hljs-phpdoc,.hljs-dartdoc,.hljs-yardoctag,.smalltalk .hljs-class,.hljs-winutils,.bash .hljs-variable,.apache .hljs-tag,.hljs-type,.hljs-typename,.tex .hljs-command,.asciidoc .hljs-strong,.markdown .hljs-strong,.hljs-request,.hljs-status &#123;font-weight: bold;&#125;.asciidoc .hljs-emphasis,.markdown .hljs-emphasis &#123;font-style: italic;&#125;.nginx .hljs-built_in &#123;font-weight: normal;&#125;.coffeescript .javascript,.javascript .xml,.lasso .markup,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata &#123;opacity: 0.5;&#125;#container &#123;padding: 15px;margin-left:20px;&#125;pre &#123;border: 1px solid #ccc;border-radius: 4px;display: block;&#125;pre code &#123;white-space: pre-wrap;&#125;.hljs,code &#123;font-family: Monaco, Menlo, Consolas, &#x27;Courier New&#x27;, monospace;&#125;pre&#123;background-color: #dddddd;padding:8px 0px 8px 30px;word-wrap: break-word;&#125;table tbody tr:nth-child(2n) &#123;background: rgba(158,188,226,0.12); &#125;:not(pre) &gt; code &#123;padding: 2px 4px;font-size: 90%;color: #c7254e;background-color: #f9f2f4;white-space: nowrap;border-radius: 4px;&#125;th, td &#123;border: 1px solid #ccc;padding: 6px 12px;&#125;blockquote &#123;border-left-width: 10px;background-color: rgba(102,128,153,0.05);border-top-right-radius: 5px;border-bottom-right-radius: 5px;padding: 1px 20px&#125;blockquote.pull-right small:before,blockquote.pull-right .small:before &#123;content: &#x27;&#x27;&#125;blockquote.pull-right small:after,blockquote.pull-right .small:after &#123;content: &#x27;\00A0 \2014&#x27;&#125;blockquote:before,blockquote:after &#123;content: &quot;&quot;&#125;blockquote &#123;margin: 0 0 1.1em&#125;blockquote p &#123;margin-bottom: 1.1em;font-size: 1em;line-height: 1.45&#125;blockquote ul:last-child,blockquote ol:last-child &#123;margin-bottom: 0&#125;blockquote &#123;margin: 0 0 21px;border-left: 10px solid #dddddd;&#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body marginwidth=&quot;0&quot; marginheight=&quot;0&quot;&gt;</span><br><span class="line">        &lt;div id=&quot;container&quot;&gt;</span><br><span class="line">            replace_area</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></li>
-<li>4、新建js脚本文件<code>convert.js</code>内容如下：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var fs = require(&#x27;fs&#x27;);</span><br><span class="line">var &#123;marked&#125; = require(&#x27;marked&#x27;);</span><br><span class="line">// console.log(marked);</span><br><span class="line">// 读取第3步创建的模板html文件</span><br><span class="line">var headFile = fs.readFileSync(&#x27;head.html&#x27;);// 读取将要被转换的md文件</span><br><span class="line">var mdFile = fs.readFileSync(&#x27;mark.md&#x27;);</span><br><span class="line"></span><br><span class="line">// console.log(&#x27;----正在转换...&#x27;);</span><br><span class="line"></span><br><span class="line">var mdStr = mdFile.toString()// 调用marked将md文件转换成html</span><br><span class="line">var mdToHtmlStr = marked(mdStr);</span><br><span class="line">// 将md转换成html字符串替换到html模板文件中replace_area的位置</span><br><span class="line">var content = headFile.toString().replace(&#x27;replace_area&#x27;,mdToHtmlStr);</span><br><span class="line"></span><br><span class="line">// console.log(&quot;准备写入文件&quot;);</span><br><span class="line"></span><br><span class="line">fs.writeFile(&#x27;output.doc&#x27;, content, function(err) &#123;</span><br><span class="line">   if (err) &#123;</span><br><span class="line">       return console.error(err);</span><br><span class="line">   &#125;</span><br><span class="line">   console.log(&quot;数据写入成功！&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">// console.log(content);</span><br></pre></td></tr></table></figure></li>
-<li>5、运行脚本<code>node convert.js</code>即可</li>
-</ul>
+    <title>关于commitlint和husky的安装和使用</title>
+    <url>/2023/01/11/%E5%85%B3%E4%BA%8Ecommitlint%E5%92%8Chusky%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>现在大部分公司和项目用的代码管理工具基本都是git，在一个大的项目组中，会涉及很多的开发人员，这就会面临着频繁的提交代码。规范的提交代码规则会有利于问题的查找和回归，所以提交规范变得尤其的重要。下面我会为大家介绍一下，关于git的代码提交规则的约束工具：commitlint和husky。</p>
+<span id="more"></span>
+
+<h2 id="一、commitlint-链接"><a href="#一、commitlint-链接" class="headerlink" title="一、commitlint 链接"></a>一、commitlint <a href="https://commitlint.js.org/">链接</a></h2><h3 id="1、安装"><a href="#1、安装" class="headerlink" title="1、安装"></a>1、安装</h3><p><code>npm i -D @commitlint/cli @commitlint/config-conventional</code></p>
+<h3 id="2、生成commitlint配置文件"><a href="#2、生成commitlint配置文件" class="headerlink" title="2、生成commitlint配置文件"></a>2、生成commitlint配置文件</h3><p>项目根目录下执行：</p>
+<p><code>echo &quot;module.exports = &#123;extends: [&#39;@commitlint/config-conventional&#39;]&#125;&quot; &gt; commitlint.config.js</code></p>
+<p>可以在这个文件里设置自定义的git提交message的规则。</p>
+<h3 id="3、常用的commit-message的类型"><a href="#3、常用的commit-message的类型" class="headerlink" title="3、常用的commit message的类型"></a>3、常用的commit message的类型</h3><p><code>build:</code>编译相关的修改，例如发布版本、对项目构建或者依赖的改动<br><code>chore:</code>其他修改, 比如改变构建流程、或者增加依赖库、工具等<br><code>ci:</code>持续集成修改<br><code>docs:</code>文档修改<br><code>feat:</code>新特性、新功能<br><code>fix:</code>修改bug<br><code>perf:</code>优化相关，比如提升性能、体验<br><code>refactor:</code>代码重构<br><code>revert:</code>回滚到上一个版本<br><code>style:</code>代码格式修改, 注意不是 css 修改<br><code>test:</code>测试用例修改</p>
+<h2 id="二、husky-链接"><a href="#二、husky-链接" class="headerlink" title="二、husky 链接"></a>二、husky <a href="https://typicode.github.io/husky">链接</a></h2><p>husky可以让我们向项目中方便添加git hooks。</p>
+<h3 id="1、安装-1"><a href="#1、安装-1" class="headerlink" title="1、安装"></a>1、安装</h3><p><code>npm i -D husky</code></p>
+<h3 id="2、编辑package-json-gt-prepare-脚本并运行"><a href="#2、编辑package-json-gt-prepare-脚本并运行" class="headerlink" title="2、编辑package.json &gt; prepare 脚本并运行"></a>2、编辑package.json &gt; prepare 脚本并运行</h3><p><code>npm pkg set scripts.prepare=&quot;husky install&quot;</code><br><code>npm run prepare</code></p>
+<p>此时会在项目根目录下创建一个.husky目录<br>后续，当别人clone了你的仓(意味着项目根目录下有.git目录)，并执行npm install(无参数)时，husky install命令会自动执行</p>
+<h3 id="3、添加一个钩子"><a href="#3、添加一个钩子" class="headerlink" title="3、添加一个钩子"></a>3、添加一个钩子</h3><p><code>npx husky add .husky/commit-msg &#39;npx --no-install commitlint --edit &quot;$1&quot;&#39;</code></p>
+<p>此时会在.husky目录下创建一个commit-msg文件</p>
+<h3 id="4、测试"><a href="#4、测试" class="headerlink" title="4、测试"></a>4、测试</h3><p><code>git commit -m &quot;新增了一个xxx功能&quot;</code><em>这样的commit message将会直接报错</em><br><code>git commit -m &quot;feat(scope?): 新增了一个xxx功能&quot;</code><em>这样规范的commit message是被允许的</em></p>
+<h2 id="三、根据commit-message自动生成changelog"><a href="#三、根据commit-message自动生成changelog" class="headerlink" title="三、根据commit message自动生成changelog"></a>三、根据commit message自动生成changelog</h2><h3 id="1、安装依赖"><a href="#1、安装依赖" class="headerlink" title="1、安装依赖"></a>1、安装依赖</h3><p><code>npm i -D conventional-changelog conventional-changelog-cli</code></p>
+<h3 id="2、编辑package-json-gt-changelog-脚本"><a href="#2、编辑package-json-gt-changelog-脚本" class="headerlink" title="2、编辑package.json &gt; changelog 脚本"></a>2、编辑package.json &gt; changelog 脚本</h3><p><code>npm pkg set scripts.changelog=&quot;conventional-changelog -p angular -i CHANGELOG.md -s&quot;</code></p>
+<p>各参数含义：<br><code>-p</code> Name of the preset you want to use. Must be one of the following: angular, atom, codemirror, ember, eslint, express, jquery, jscs or jshint<br><code>-i</code> Read the CHANGELOG from this file<br><code>-s</code> Outputting to the infile so you don’t need to specify the same file as outfile<br><code>-r</code> How many releases to be generated from the latest. If 0, the whole changelog will be regenerated and the outfile will be overwritten. Default: 1</p>
+<p>更详细的参数说明请查看<a href="https://zhuanlan.zhihu.com/p/392303778/">这里</a></p>
+<h3 id="3、生成changelog"><a href="#3、生成changelog" class="headerlink" title="3、生成changelog"></a>3、生成changelog</h3><p>运行命令即可生成changelog</p>
+<p><code>npm run changelog</code></p>
+<hr>
+<p>最后附上一个开源项目<a href="https://github.com/ng-docs/awesome-angular">https://github.com/ng-docs/awesome-angular</a>，关于husky的使用，即是从这里学到的。<br>另外，作者还用到了<a href="https://blog.csdn.net/duansamve/article/details/122644111">prestart、prebuild</a>钩子，实现了启动、打包项目之前的一些校验工作。<br>还有，作者还通过nodejs实现了获取文件git提交历史等的相关信息。<br>后续如果有需要，可以参考。</p>
 ]]></content>
       <categories>
         <category>技术分享</category>
       </categories>
       <tags>
-        <tag>Markdown</tag>
-        <tag>ToWord</tag>
-        <tag>NodeJS</tag>
+        <tag>Git_hooks</tag>
+        <tag>commitlint</tag>
+        <tag>husky</tag>
       </tags>
   </entry>
   <entry>
@@ -290,83 +423,5 @@
       <categories>
         <category>MacOS</category>
       </categories>
-  </entry>
-  <entry>
-    <title>仿MacOS的后台管理系统</title>
-    <url>/2023/01/13/%E4%BB%BFMacOS%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前比较流行的开源后台管理系统<a href="https://ng-alain.com/en">NG-ALAIN</a>、<a href="https://pro.ant.design/">Ant Design Pro</a>、<a href="https://panjiachen.github.io/vue-element-admin-site/zh/">Vue-Element-Admin</a>、<a href="http://boot.jeecg.com/">Jeecg Boot</a>等，其页面布局基本都是如下形式：<br><img width="500" alt="图1 常见布局" src="https://foruda.gitee.com/images/1675924467881077922/4994c85f_358662.png"><br>诚然，这种形式并非不好，但看的多了，难免视觉疲劳。</p>
-<p>其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。</p>
-<p>体验地址：<a href="https://doautumn.github.io/web-os">https://doautumn.github.io/web-os</a></p>
-<blockquote>
-<p>该解决方案并未投入实战，只是用作学习与交流，欢迎感兴趣的小伙伴留言支持。</p>
-</blockquote>
-<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>技术栈：Angular13 + NG-ZORRO13</p>
-<h3 id="1-基本布局"><a href="#1-基本布局" class="headerlink" title="1.基本布局"></a>1.基本布局</h3><p>基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。<br><img width="500" alt="图2 MacOS布局" src="https://foruda.gitee.com/images/1675924583486574320/d4685efd_358662.png"></p>
-<h3 id="2-Window"><a href="#2-Window" class="headerlink" title="2.Window"></a>2.Window</h3><p>不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种<code>键盘独占</code>的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。</p>
-<p>下面来聊一聊Window的具体实现方案。</p>
-<h4 id="2-1-公开的属性、事件"><a href="#2-1-公开的属性、事件" class="headerlink" title="2.1 公开的属性、事件"></a>2.1 公开的属性、事件</h4><p>在做这种开发套件时，我一般首先考虑的是开发人员该如何使用我们提供的基础组件、服务。对于一个窗口而言，首先想到的需要开发人员干预的只有两项内容：<code>title和content</code>。进一步思考，当窗口处于非活动或最小化状态时，我们希望开发人员能够关注下性能，毕竟如果窗口打开过多，如何保证页面不卡顿将会是一件非常有必要的事情。为此我们需要提供两个状态切换事件：<code>active和inactive</code>，当窗口处于上述某种状态时，可以考虑暂停定时器、暂停持续的渲染动画等非必要的性能开销。对开发人员公开的内容除上述4项之外，还会有一些其他细节项，如<code>minimizable（是否能够最小化）、maximizable（是否能够最大化）、style（默认位置尺寸）</code>等。</p>
-<p>使用Window的伪代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;mz-window mzTitle=&quot;这是一个标题&quot; (active)=&quot;handleActive()&quot; (inactive)=&quot;handleInactive()&quot;&gt;</span><br><span class="line">  your code</span><br><span class="line">  ...</span><br><span class="line">&lt;/mz-window&gt;</span><br></pre></td></tr></table></figure>
-<p>内部实现的伪代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// window.component.ts</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &#x27;mz-window&#x27;,</span><br><span class="line">  templateUrl: &#x27;./window.component.html&#x27;,</span><br><span class="line">  styleUrls: [&#x27;./window.component.less&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line">export class WindowComponent implements OnInit, OnDestroy &#123;</span><br><span class="line"></span><br><span class="line">  @Input() mzTitle: string;</span><br><span class="line">  @Input() minimizable: boolean = true;</span><br><span class="line">  @Input() maximizable: boolean = true;</span><br><span class="line">  @Input() style: any;</span><br><span class="line"></span><br><span class="line">  @Output() active = new EventEmitter();</span><br><span class="line">  @Output() inactive = new EventEmitter();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// window.component.html</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;window&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;title&quot;&gt;</span><br><span class="line">    &lt;span&gt;&#123;&#123; mzTitle &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">    &lt;ng-content&gt;&lt;/ng-content&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="2-2-窗口的通用逻辑"><a href="#2-2-窗口的通用逻辑" class="headerlink" title="2.2 窗口的通用逻辑"></a>2.2 窗口的通用逻辑</h4><p>对于窗口的打开、关闭、最大化、最小化、拖拽、窗口切换等通用逻辑，都由框架统一实现即可。</p>
-<p><strong>窗口与路由的关系</strong></p>
-<p>而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的<a href="https://angular.cn/api/router/RouteReuseStrategy">路由复用策略</a>与<a href="https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive">keep-alive</a>可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。</p>
-<p>具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。<br><img width="800" alt="图3 路由复用与多窗口" src="https://foruda.gitee.com/images/1675924756031355629/ad3c0063_358662.jpeg"></p>
-<p><strong>非活动状态窗口的激活</strong></p>
-<p>我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击<code>Wiki</code>并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。<br><img width="650" alt="图4 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif"><br>为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。</p>
-<p><strong>窗口的最小化</strong></p>
-<p>目前我们还没有实现MacOS最小化窗口的神奇动画效果的技术方案，暂且实现了缩放的动画效果，和MacOS类似，窗口缩放之后会以缩略图的形式暂存到Dock中。那如何生成窗口的缩略图呢？或者是否可以将窗口直接缩放至Dock中？经过综合考虑，我们希望窗口和Dock尽量是解耦的，所以还是采用了生成缩略图的方案，因为Dock本身也是支持设置图标的，这样只需创建一个Dock对象并将缩略图、窗口标题带上即可。<br><code>new DockItem().init(&#123; name: title, iconPath: image, path: routePath &#125;)</code></p>
-<p>至于缩略图的生成，则是使用了<code>html2canvas</code>。<br><img width="650" alt="图5 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif"></p>
-<h3 id="3-Dock"><a href="#3-Dock" class="headerlink" title="3.Dock"></a>3.Dock</h3><p>Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。</p>
-<p>关于DockItem和Window的关联，其实比较简单，上文已提到，Window和路由是一一对应的，那只需将DockItem和路由也做关联即可。只不过DockItem和路由并非一一对应，而是一个DockItem对应一个一级路由，包含若干个子路由。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义DockItem</span><br><span class="line">&#123;</span><br><span class="line">  &quot;apps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;VSCode&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/vscode.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo1&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Webstorm&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/webstorm.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo2&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Chrome&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/chrome.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo3&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一级路由</span><br><span class="line">const routes: Routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;&#x27;,</span><br><span class="line">    component: WebOSLayoutComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo1&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo1/demo1.module&#x27;).then(m =&gt; m.Demo1Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo2&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo2/demo2.module&#x27;).then(m =&gt; m.Demo2Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo3&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo3/demo3.module&#x27;).then(m =&gt; m.Demo3Module)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-
-<p>对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。<br><img width="650" alt="图6 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif"><br>另外，推荐下<a href="https://juejin.cn/post/6942325271349592100">Steven</a>实现的效果，很丝滑。</p>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>计划将其作为基础开发包发布到npm，但由于还有一些功能暂未完成，如<code>键盘独占</code>、<code>国际化</code>等，故还需等待时日。</p>
-]]></content>
-      <categories>
-        <category>技术分享</category>
-      </categories>
-      <tags>
-        <tag>WebOS</tag>
-        <tag>MacOS</tag>
-        <tag>后台管理系统</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于commitlint和husky的安装和使用</title>
-    <url>/2023/01/11/%E5%85%B3%E4%BA%8Ecommitlint%E5%92%8Chusky%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>现在大部分公司和项目用的代码管理工具基本都是git，在一个大的项目组中，会涉及很多的开发人员，这就会面临着频繁的提交代码。规范的提交代码规则会有利于问题的查找和回归，所以提交规范变得尤其的重要。下面我会为大家介绍一下，关于git的代码提交规则的约束工具：commitlint和husky。</p>
-<span id="more"></span>
-
-<h2 id="一、commitlint-链接"><a href="#一、commitlint-链接" class="headerlink" title="一、commitlint 链接"></a>一、commitlint <a href="https://commitlint.js.org/">链接</a></h2><h3 id="1、安装"><a href="#1、安装" class="headerlink" title="1、安装"></a>1、安装</h3><p><code>npm i -D @commitlint/cli @commitlint/config-conventional</code></p>
-<h3 id="2、生成commitlint配置文件"><a href="#2、生成commitlint配置文件" class="headerlink" title="2、生成commitlint配置文件"></a>2、生成commitlint配置文件</h3><p>项目根目录下执行：</p>
-<p><code>echo &quot;module.exports = &#123;extends: [&#39;@commitlint/config-conventional&#39;]&#125;&quot; &gt; commitlint.config.js</code></p>
-<p>可以在这个文件里设置自定义的git提交message的规则。</p>
-<h3 id="3、常用的commit-message的类型"><a href="#3、常用的commit-message的类型" class="headerlink" title="3、常用的commit message的类型"></a>3、常用的commit message的类型</h3><p><code>build:</code>编译相关的修改，例如发布版本、对项目构建或者依赖的改动<br><code>chore:</code>其他修改, 比如改变构建流程、或者增加依赖库、工具等<br><code>ci:</code>持续集成修改<br><code>docs:</code>文档修改<br><code>feat:</code>新特性、新功能<br><code>fix:</code>修改bug<br><code>perf:</code>优化相关，比如提升性能、体验<br><code>refactor:</code>代码重构<br><code>revert:</code>回滚到上一个版本<br><code>style:</code>代码格式修改, 注意不是 css 修改<br><code>test:</code>测试用例修改</p>
-<h2 id="二、husky-链接"><a href="#二、husky-链接" class="headerlink" title="二、husky 链接"></a>二、husky <a href="https://typicode.github.io/husky">链接</a></h2><p>husky可以让我们向项目中方便添加git hooks。</p>
-<h3 id="1、安装-1"><a href="#1、安装-1" class="headerlink" title="1、安装"></a>1、安装</h3><p><code>npm i -D husky</code></p>
-<h3 id="2、编辑package-json-gt-prepare-脚本并运行"><a href="#2、编辑package-json-gt-prepare-脚本并运行" class="headerlink" title="2、编辑package.json &gt; prepare 脚本并运行"></a>2、编辑package.json &gt; prepare 脚本并运行</h3><p><code>npm pkg set scripts.prepare=&quot;husky install&quot;</code><br><code>npm run prepare</code></p>
-<p>此时会在项目根目录下创建一个.husky目录<br>后续，当别人clone了你的仓(意味着项目根目录下有.git目录)，并执行npm install(无参数)时，husky install命令会自动执行</p>
-<h3 id="3、添加一个钩子"><a href="#3、添加一个钩子" class="headerlink" title="3、添加一个钩子"></a>3、添加一个钩子</h3><p><code>npx husky add .husky/commit-msg &#39;npx --no-install commitlint --edit &quot;$1&quot;&#39;</code></p>
-<p>此时会在.husky目录下创建一个commit-msg文件</p>
-<h3 id="4、测试"><a href="#4、测试" class="headerlink" title="4、测试"></a>4、测试</h3><p><code>git commit -m &quot;新增了一个xxx功能&quot;</code><em>这样的commit message将会直接报错</em><br><code>git commit -m &quot;feat(scope?): 新增了一个xxx功能&quot;</code><em>这样规范的commit message是被允许的</em></p>
-<h2 id="三、根据commit-message自动生成changelog"><a href="#三、根据commit-message自动生成changelog" class="headerlink" title="三、根据commit message自动生成changelog"></a>三、根据commit message自动生成changelog</h2><h3 id="1、安装依赖"><a href="#1、安装依赖" class="headerlink" title="1、安装依赖"></a>1、安装依赖</h3><p><code>npm i -D conventional-changelog conventional-changelog-cli</code></p>
-<h3 id="2、编辑package-json-gt-changelog-脚本"><a href="#2、编辑package-json-gt-changelog-脚本" class="headerlink" title="2、编辑package.json &gt; changelog 脚本"></a>2、编辑package.json &gt; changelog 脚本</h3><p><code>npm pkg set scripts.changelog=&quot;conventional-changelog -p angular -i CHANGELOG.md -s&quot;</code></p>
-<p>各参数含义：<br>-p 指定风格<br>-i 指定输出的文件名称<br>-s 输出到infile，这样就不需要指定与outfile相同的文件<br>-r 从最新的版本生成多少个版本。如果为0，则整个更改日志将被重新生成，输出文件将被覆盖。默认值:1<br>-n .&#x2F;changelog-option.js 指定自定义配置</p>
-<h3 id="3、生成changelog"><a href="#3、生成changelog" class="headerlink" title="3、生成changelog"></a>3、生成changelog</h3><p>运行命令即可生成changelog</p>
-<p><code>npm run changelog</code></p>
-<hr>
-<p>最后附上一个开源项目<a href="https://github.com/ng-docs/awesome-angular">https://github.com/ng-docs/awesome-angular</a>，关于husky的使用，即是从这里学到的。<br>另外，作者还用到了<a href="https://blog.csdn.net/duansamve/article/details/122644111">prestart、prebuild</a>钩子，实现了启动、打包项目之前的一些校验工作。<br>还有，作者还通过nodejs实现了获取文件git提交历史等的相关信息。<br>后续如果有需要，可以参考。</p>
-]]></content>
-      <categories>
-        <category>技术分享</category>
-      </categories>
-      <tags>
-        <tag>Git_hooks</tag>
-        <tag>commitlint</tag>
-        <tag>husky</tag>
-      </tags>
   </entry>
 </search>
