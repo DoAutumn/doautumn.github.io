@@ -4,6 +4,7 @@ toc: true
 date: 2023-01-13 14:09:06
 tags: [WebOS,MacOS,后台管理系统]
 category: 技术分享
+sticky: 9
 ---
 ## 前言
 目前比较流行的开源后台管理系统[NG-ALAIN](https://ng-alain.com/en)、[Ant Design Pro](https://pro.ant.design/)、[Vue-Element-Admin](https://panjiachen.github.io/vue-element-admin-site/zh/)、[Jeecg Boot](http://boot.jeecg.com/)等，其页面布局基本都是如下形式：

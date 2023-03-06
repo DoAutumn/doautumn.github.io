@@ -4,6 +4,7 @@ toc: true
 date: 2023-01-11 16:22:26
 tags: [CKEditor5,富文本编辑器,Angular,Markdown]
 category: 技术分享
+sticky: 8
 ---
 > 在开发富文本编辑器的过程中，遇到了很多问题，这里做下记录与分享。
 
@@ -67,7 +68,7 @@ DecoupledEditor.Command = Command;
 对于图表，我们测试使用的是ECharts。我们知道如果想要实例化一个图表，也即调用`echarts.init(dom?: HTMLDivElement|HTMLCanvasElement)`，需要一个Dom元素作为参数，那么我们需要研究的就是在插件中如何能够获取到新创建的Dom了。
 通过文档中的 [Using a React component in a block widget](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/tutorials/using-react-in-a-widget.html) 这个教程，我们发现其在渲染 React component 时，就是获取到插件中新创建的Dom进而渲染组件的。
 那么这个问题便迎刃而解了，个人觉得最难的也就是这点了，主要是如何能够想到这一点并找到合适的解决方法。
-> 当我们查阅别人的技术分享，顺着别人的思路思考问题时，总会觉得一切都是顺理成章、自然而然的事情，事实上，或许别人也是经历了各种调研、试错，最终才找到了一个最优的解决方案。
+> 通过这个问题，需要再次告诫自己，对于这种比较成熟的产品、开发套件、开源库等，一手文档一定是其官方文档，哪怕是英文的，也要仔细研读，不要图省事去网上搜罗别人的博客、技术分享。
 
 - 思考二
 图表插入之后，如何确定当前选中的是图表元素，进而进行后续的业务操作？
@@ -80,6 +81,7 @@ DecoupledEditor.Command = Command;
 
 - 思考四
 实例化多个图表之后，如何区分？
-这里主要是在定义图表插件的 schema 时带入了 Id 的设计，将来不论是图表的数据填充还是保存模板到服务端，都将通过 Id 来标识唯一的图表实例。
-## 五、源码
-[https://gitee.com/doautumn/ckeditor5](https://gitee.com/doautumn/ckeditor5)
+这里主要是在定义图表插件的 schema 时带入一个 Id 即可，将来不论是图表的数据填充还是保存模板到服务端，都将通过 Id 来标识唯一的图表实例。
+## 五、源码及Demo
+[https://github.com/DoAutumn/CKEditor5](https://github.com/DoAutumn/CKEditor5)
+[https://doautumn.github.io/CKEditor5/](https://doautumn.github.io/CKEditor5/)
