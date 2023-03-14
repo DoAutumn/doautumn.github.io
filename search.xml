@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Gzip压缩</title>
+    <url>/2022/08/10/Gzip%E5%8E%8B%E7%BC%A9/</url>
+    <content><![CDATA[<p>开启Gzip压缩功能后，服务对资源进行Gzip压缩后返回，缩小传输文件大小，提升文件传输效率，减少带宽消耗。</p>
+<h4 id="Spring-Boot配置方法"><a href="#Spring-Boot配置方法" class="headerlink" title="Spring Boot配置方法"></a>Spring Boot配置方法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#是否开启压缩，默认为false</span><br><span class="line">server.compression.enabled=true</span><br><span class="line">#指定要压缩的MIME type</span><br><span class="line">server.compression.mime-types=text/*,image/*,application/javascript,application/xml,application/x-font-ttf,application/font-woff</span><br></pre></td></tr></table></figure>
+<h4 id="Tomcat配置方法"><a href="#Tomcat配置方法" class="headerlink" title="Tomcat配置方法"></a>Tomcat配置方法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server.xml</span><br><span class="line">&lt;Connector port=&quot;8080&quot;</span><br><span class="line">  protocol=&quot;HTTP/1.1&quot;</span><br><span class="line">  connectionTimeout=&quot;20000&quot;</span><br><span class="line">  redirectPort=&quot;8443&quot;</span><br><span class="line">  compression=&quot;on&quot;</span><br><span class="line">  compressionMinSize=&quot;2048&quot;</span><br><span class="line">  noCompressionUserAgents=&quot;gozilla, traviata&quot;</span><br><span class="line">  compressableMimeType=&quot;text/*,image/*,application/javascript,application/xml,application/x-font-ttf,application/font-woff&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>Gzip</tag>
+        <tag>性能优化</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CKEditor5学习开发之路</title>
     <url>/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/</url>
     <content><![CDATA[<blockquote>
@@ -61,18 +75,15 @@
       </tags>
   </entry>
   <entry>
-    <title>Gzip压缩</title>
-    <url>/2022/08/10/Gzip%E5%8E%8B%E7%BC%A9/</url>
-    <content><![CDATA[<p>开启Gzip压缩功能后，服务对资源进行Gzip压缩后返回，缩小传输文件大小，提升文件传输效率，减少带宽消耗。</p>
-<h4 id="Spring-Boot配置方法"><a href="#Spring-Boot配置方法" class="headerlink" title="Spring Boot配置方法"></a>Spring Boot配置方法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#是否开启压缩，默认为false</span><br><span class="line">server.compression.enabled=true</span><br><span class="line">#指定要压缩的MIME type</span><br><span class="line">server.compression.mime-types=text/*,image/*,application/javascript,application/xml,application/x-font-ttf,application/font-woff</span><br></pre></td></tr></table></figure>
-<h4 id="Tomcat配置方法"><a href="#Tomcat配置方法" class="headerlink" title="Tomcat配置方法"></a>Tomcat配置方法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server.xml</span><br><span class="line">&lt;Connector port=&quot;8080&quot;</span><br><span class="line">  protocol=&quot;HTTP/1.1&quot;</span><br><span class="line">  connectionTimeout=&quot;20000&quot;</span><br><span class="line">  redirectPort=&quot;8443&quot;</span><br><span class="line">  compression=&quot;on&quot;</span><br><span class="line">  compressionMinSize=&quot;2048&quot;</span><br><span class="line">  noCompressionUserAgents=&quot;gozilla, traviata&quot;</span><br><span class="line">  compressableMimeType=&quot;text/*,image/*,application/javascript,application/xml,application/x-font-ttf,application/font-woff&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>]]></content>
+    <title>Mac_Chrome跨域</title>
+    <url>/2023/02/05/Mac-Chrome%E8%B7%A8%E5%9F%9F/</url>
+    <content><![CDATA[<p>Mac以跨域方式启动Chrome，直接在终端执行以下命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">open -n /Applications/Google\ Chrome.app/ --args --disable-web-security  --user-data-dir=/Users/jingfang/m_www/chrome/MyChromeDevUserData</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/dxzg/p/9707639.html">参考链接</a></p>
+]]></content>
       <categories>
-        <category>技术分享</category>
+        <category>MacOS</category>
       </categories>
-      <tags>
-        <tag>Gzip</tag>
-        <tag>性能优化</tag>
-      </tags>
   </entry>
   <entry>
     <title>Mac_ll命令</title>
@@ -98,67 +109,21 @@
       </categories>
   </entry>
   <entry>
-    <title>Mac_Chrome跨域</title>
-    <url>/2023/02/05/Mac-Chrome%E8%B7%A8%E5%9F%9F/</url>
-    <content><![CDATA[<p>Mac以跨域方式启动Chrome，直接在终端执行以下命令即可：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">open -n /Applications/Google\ Chrome.app/ --args --disable-web-security  --user-data-dir=/Users/jingfang/m_www/chrome/MyChromeDevUserData</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.cnblogs.com/dxzg/p/9707639.html">参考链接</a></p>
+    <title>VS Code的一些偏好设置</title>
+    <url>/2023/02/22/vscode%E7%9A%84%E4%B8%80%E4%BA%9B%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE/</url>
+    <content><![CDATA[<p><a href="https://code.visualstudio.com/">VS Code</a>作为前端开发的必备神器，其作用自然不必多说。这里记录下个人的使用习惯，免得以后再查。</p>
+<h3 id="1-颜色主题"><a href="#1-颜色主题" class="headerlink" title="1.颜色主题"></a>1.颜色主题</h3><p>使用这个：Monokai</p>
+<h3 id="2-通过code命令快速启动"><a href="#2-通过code命令快速启动" class="headerlink" title="2.通过code命令快速启动"></a>2.通过code命令快速启动</h3><p>如果想在某目录下直接通过<code>code ./</code>命令打开vscode，需做如下配置：</p>
+<p>打开vscode，command + shift + p，然后输入shell，选择<code>Install &#39;code&#39; command in PATH</code></p>
+<h3 id="3-保存全部文件"><a href="#3-保存全部文件" class="headerlink" title="3.保存全部文件"></a>3.保存全部文件</h3><p>默认<code>command + s</code>只保存当前文件，如果想保存全部文件，需做如下配置：</p>
+<p>Preferences ——&gt; Keyboard Shortcuts ——&gt; 找到 Save All Files，将其命令设置为<code>command + s</code>即可</p>
+<h3 id="4-设置缩进为2个空格"><a href="#4-设置缩进为2个空格" class="headerlink" title="4.设置缩进为2个空格"></a>4.设置缩进为2个空格</h3><p>Preferences ——&gt; Settings</p>
+<p>——&gt; 找到 Tab Size，将值改为2</p>
+<p>——&gt; 找到 Detect Indentation，将前边的复选框的勾选取消（配置全局文件为2个空格，不勾选则以前文件不变）</p>
 ]]></content>
       <categories>
-        <category>MacOS</category>
+        <category>开发效率</category>
       </categories>
-  </entry>
-  <entry>
-    <title>NPM私服</title>
-    <url>/2022/09/11/NPM%E7%A7%81%E6%9C%8D/</url>
-    <content><![CDATA[<h2 id="1-安装Nexus"><a href="#1-安装Nexus" class="headerlink" title="1.安装Nexus"></a>1.安装Nexus</h2><h3 id="1-1-前置条件"><a href="#1-1-前置条件" class="headerlink" title="1.1.前置条件"></a>1.1.前置条件</h3><p>nexus需要运行在jdk1.8及以上环境</p>
-<h3 id="1-2-下载"><a href="#1-2-下载" class="headerlink" title="1.2.下载"></a>1.2.下载</h3><p>链接：<a href="https://pan.baidu.com/s/1r5x6flbkiTgI0MiJVrvq4Q">https://pan.baidu.com/s/1r5x6flbkiTgI0MiJVrvq4Q</a>，提取码：hsnr</p>
-<h3 id="1-3-安装"><a href="#1-3-安装" class="headerlink" title="1.3.安装"></a>1.3.安装</h3><p>直接解压即可，解压后会有两个目录：</p>
-<ul>
-<li>nexus-3.18.1-01：nexus私服管理界面的容器，内部集成了jetty</li>
-<li>sonatype-work：私服的默认仓库，用于存储索引和组件资源</li>
-</ul>
-<h3 id="1-4-启动"><a href="#1-4-启动" class="headerlink" title="1.4.启动"></a>1.4.启动</h3><p>进入nexus-3.18.1-01&#x2F;bin&#x2F;目录，<code>./nexus run</code></p>
-<h3 id="1-5-访问"><a href="#1-5-访问" class="headerlink" title="1.5.访问"></a>1.5.访问</h3><p>浏览器输入<a href="http://ip:8081/">http://ip:8081</a></p>
-<h3 id="1-6-登录"><a href="#1-6-登录" class="headerlink" title="1.6.登录"></a>1.6.登录</h3><p>默认用户名admin，会提示默认密码在安装包的什么位置<br><em>windows虚拟机上的密码改为了Talent123</em></p>
-<h3 id="1-7-Create-repository"><a href="#1-7-Create-repository" class="headerlink" title="1.7.Create repository"></a>1.7.Create repository</h3><p><img src="https://foruda.gitee.com/images/1676621309015372122/930080e8_358662.jpeg" alt="图1"><br>其中，npm（hosted）可设置包的发布策略，是否允许重新发布，如果不允许重新发布，则每次发布包，均需升级版本号<br><img src="https://foruda.gitee.com/images/1676621325937814584/7cf04fdf_358662.jpeg" alt="图2"></p>
-<h2 id="2-CentOS7下将Nexus设置为系统服务"><a href="#2-CentOS7下将Nexus设置为系统服务" class="headerlink" title="2.CentOS7下将Nexus设置为系统服务"></a>2.CentOS7下将Nexus设置为系统服务</h2><h3 id="2-1-修改nexus启动脚本"><a href="#2-1-修改nexus启动脚本" class="headerlink" title="2.1.修改nexus启动脚本"></a>2.1.修改nexus启动脚本</h3><p>修改脚本第14行：<code>INSTALL4J_JAVA_HOME_OVERRIDE=/root/jdk_1.8.0_231  // jdk安装路径</code><br>否则，可能会出现以下错误：<br><img width="460" alt="图3" src="https://foruda.gitee.com/images/1676621336743603556/a788b3b1_358662.png"></p>
-<h3 id="2-2-配置系统服务"><a href="#2-2-配置系统服务" class="headerlink" title="2.2.配置系统服务"></a>2.2.配置系统服务</h3><p>设置软连接：<br><code>sudo ln -s /opt/nexus-3.18.1-01/bin/nexus /etc/init.d/nexus</code></p>
-<p>采用systemd的方式配置服务</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/systemd/system</span><br><span class="line">vi nexus.service</span><br><span class="line"></span><br><span class="line">在nexus.service文件中添加以下内容：</span><br><span class="line">[Unit]</span><br><span class="line">Description=nexus service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/opt/nexus-3.18.1-01/bin/nexus start  #nexus的安装目录</span><br><span class="line">ExecStop=/opt/nexus-3.18.1-01/bin/nexus stop</span><br><span class="line">User=root  #系统用户名</span><br><span class="line">Restart=on-abort</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-
-<p>分别执行以下命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload #重新加载服务</span><br><span class="line">sudo systemctl enable nexus.service #开启开机自启动服务</span><br><span class="line">sudo systemctl start nexus.service #启动服务</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p>由于自己是在虚拟机上安装的，本机访问没有问题，但其他主机访问不到服务，故还需做如下配置：<br><a href="https://www.cnblogs.com/mkl34367803/p/10095055.html">如何让局域网中的其他主机访问虚拟机</a></p>
-]]></content>
-      <categories>
-        <category>技术分享</category>
-      </categories>
-      <tags>
-        <tag>NPM私服</tag>
-        <tag>Nexus</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>http-server开启https服务</title>
-    <url>/2022/08/17/http-server%E5%BC%80%E5%90%AFhttps%E6%9C%8D%E5%8A%A1/</url>
-    <content><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>直接使用 http-server 命令开启的是 http 服务，在 npmjs 的官网地址中只是看到了 http-server -S 是开启 https 服务的方法，但是我这边直接使用该命令会报如下所示的错误，具体原因是没有证书密钥对文件。<br><img src="https://foruda.gitee.com/images/1676620564917247477/32d29592_358662.png" alt="图1"></p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
-<li>1、下载安装openssl</li>
-<li>2、使用以下命令生成一个证书密钥对 key.pem 和 cert.pem，设置有效期约10年（准确地说是3650天）<br><code>openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem</code></li>
-<li>3、然后就可以起服务了<br><code>http-server -S</code></li>
-</ul>
-<hr>
-<p>下面这个记不清是在什么场景下使用的了<br>在html的头部加入meta使得所有的资源请求由http请求转成https请求<br><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;upgrade-insecure-requests&quot;&gt;</code></p>
-]]></content>
-      <categories>
-        <category>技术分享</category>
-      </categories>
-      <tags>
-        <tag>https</tag>
-      </tags>
   </entry>
   <entry>
     <title>Mac_tree命令</title>
@@ -213,74 +178,55 @@
       </tags>
   </entry>
   <entry>
-    <title>VS Code的一些偏好设置</title>
-    <url>/2023/02/22/vscode%E7%9A%84%E4%B8%80%E4%BA%9B%E5%81%8F%E5%A5%BD%E8%AE%BE%E7%BD%AE/</url>
-    <content><![CDATA[<p><a href="https://code.visualstudio.com/">VS Code</a>作为前端开发的必备神器，其作用自然不必多说。这里记录下个人的使用习惯，免得以后再查。</p>
-<h3 id="1-颜色主题"><a href="#1-颜色主题" class="headerlink" title="1.颜色主题"></a>1.颜色主题</h3><p>使用这个：Monokai</p>
-<h3 id="2-通过code命令快速启动"><a href="#2-通过code命令快速启动" class="headerlink" title="2.通过code命令快速启动"></a>2.通过code命令快速启动</h3><p>如果想在某目录下直接通过<code>code ./</code>命令打开vscode，需做如下配置：</p>
-<p>打开vscode，command + shift + p，然后输入shell，选择<code>Install &#39;code&#39; command in PATH</code></p>
-<h3 id="3-保存全部文件"><a href="#3-保存全部文件" class="headerlink" title="3.保存全部文件"></a>3.保存全部文件</h3><p>默认<code>command + s</code>只保存当前文件，如果想保存全部文件，需做如下配置：</p>
-<p>Preferences ——&gt; Keyboard Shortcuts ——&gt; 找到 Save All Files，将其命令设置为<code>command + s</code>即可</p>
-<h3 id="4-设置缩进为2个空格"><a href="#4-设置缩进为2个空格" class="headerlink" title="4.设置缩进为2个空格"></a>4.设置缩进为2个空格</h3><p>Preferences ——&gt; Settings</p>
-<p>——&gt; 找到 Tab Size，将值改为2</p>
-<p>——&gt; 找到 Detect Indentation，将前边的复选框的勾选取消（配置全局文件为2个空格，不勾选则以前文件不变）</p>
-]]></content>
-      <categories>
-        <category>开发效率</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>一文彻底看懂 package.json 中的各种 dependencies</title>
-    <url>/2022/08/31/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/</url>
-    <content><![CDATA[<p>关于package.json中的各种dependencies的详细解释，可以直接参考<a href="https://developer.aliyun.com/article/1051418">这篇文章</a>。</p>
-<p>这里只做一个最终结论的摘录。</p>
-<table>
-<thead>
-<tr>
-<th>依赖类型</th>
-<th>定义在项目中</th>
-<th>定义在依赖中</th>
-<th>一句话总结</th>
-<th>举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dependencies</td>
-<td>会被安装</td>
-<td>会被安装</td>
-<td>定义包运行所需要的依赖包</td>
-<td>某前端项目使用 react 进行开发，需要将 react 添加到 dependencies 中</td>
-</tr>
-<tr>
-<td>devDependencies</td>
-<td>会被安装</td>
-<td>不会被安装</td>
-<td>定义包在开发时所需要的依赖包</td>
-<td>antd 使用了 @testing-library&#x2F;react 进行测试，需要将 @testing-library&#x2F;react 添加到 devDependencies 中</td>
-</tr>
-<tr>
-<td>peerDependencies</td>
-<td>不会被安装</td>
-<td>不会被安装，但是如果指向的依赖没有被安装或不符合时会有警告（peerDependenciesMeta 会影响该行为）</td>
-<td>定义该包运行所需要的依赖环境，一般和 devDependencies 一起使用</td>
-<td>antd 是一个 react 组件库，为了不和使用它的项目中的 react 版本定义造成冲突，需要将支持的 react 版本添加到 peerDependencies 中</td>
-</tr>
-<tr>
-<td>optionalDependencies</td>
-<td>会被安装，但是安装报错不会影响</td>
-<td>会被安装，但是安装报错不会影响</td>
-<td>optionalDependencies 用于定义对包运行不会造成影响的依赖包</td>
-<td>一个包在使用 A 包进行了某些操作，但是如果 A 包不在的话，可以使用别的 API 达到同样的效果，可以将 A 包添加到 optionalDependencies 中</td>
-</tr>
-</tbody></table>
+    <title>http-server开启https服务</title>
+    <url>/2022/08/17/http-server%E5%BC%80%E5%90%AFhttps%E6%9C%8D%E5%8A%A1/</url>
+    <content><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>直接使用 http-server 命令开启的是 http 服务，在 npmjs 的官网地址中只是看到了 http-server -S 是开启 https 服务的方法，但是我这边直接使用该命令会报如下所示的错误，具体原因是没有证书密钥对文件。<br><img src="https://foruda.gitee.com/images/1676620564917247477/32d29592_358662.png" alt="图1"></p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
+<li>1、下载安装openssl</li>
+<li>2、使用以下命令生成一个证书密钥对 key.pem 和 cert.pem，设置有效期约10年（准确地说是3650天）<br><code>openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem</code></li>
+<li>3、然后就可以起服务了<br><code>http-server -S</code></li>
+</ul>
 <hr>
-<p>另外记录下版本号的格式规定：<br><code>固定版本</code>：如4.0.3<br><code>～</code>：如～4.0.3，表示安装 4.0.x 的最新版本，也就是说安装时不会改变主版本号和次版本号<br><code>^</code>：如^17.0.2，表示安装 17.x.x 的最新版本，也就是说安装时不会改变主版本号<br><code>latest</code>：安装最新版本</p>
+<p>下面这个记不清是在什么场景下使用的了<br>在html的头部加入meta使得所有的资源请求由http请求转成https请求<br><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;upgrade-insecure-requests&quot;&gt;</code></p>
 ]]></content>
       <categories>
         <category>技术分享</category>
       </categories>
       <tags>
-        <tag>package.json</tag>
+        <tag>https</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>NPM私服</title>
+    <url>/2022/09/11/NPM%E7%A7%81%E6%9C%8D/</url>
+    <content><![CDATA[<h2 id="1-安装Nexus"><a href="#1-安装Nexus" class="headerlink" title="1.安装Nexus"></a>1.安装Nexus</h2><h3 id="1-1-前置条件"><a href="#1-1-前置条件" class="headerlink" title="1.1.前置条件"></a>1.1.前置条件</h3><p>nexus需要运行在jdk1.8及以上环境</p>
+<h3 id="1-2-下载"><a href="#1-2-下载" class="headerlink" title="1.2.下载"></a>1.2.下载</h3><p>链接：<a href="https://pan.baidu.com/s/1r5x6flbkiTgI0MiJVrvq4Q">https://pan.baidu.com/s/1r5x6flbkiTgI0MiJVrvq4Q</a>，提取码：hsnr</p>
+<h3 id="1-3-安装"><a href="#1-3-安装" class="headerlink" title="1.3.安装"></a>1.3.安装</h3><p>直接解压即可，解压后会有两个目录：</p>
+<ul>
+<li>nexus-3.18.1-01：nexus私服管理界面的容器，内部集成了jetty</li>
+<li>sonatype-work：私服的默认仓库，用于存储索引和组件资源</li>
+</ul>
+<h3 id="1-4-启动"><a href="#1-4-启动" class="headerlink" title="1.4.启动"></a>1.4.启动</h3><p>进入nexus-3.18.1-01&#x2F;bin&#x2F;目录，<code>./nexus run</code></p>
+<h3 id="1-5-访问"><a href="#1-5-访问" class="headerlink" title="1.5.访问"></a>1.5.访问</h3><p>浏览器输入<a href="http://ip:8081/">http://ip:8081</a></p>
+<h3 id="1-6-登录"><a href="#1-6-登录" class="headerlink" title="1.6.登录"></a>1.6.登录</h3><p>默认用户名admin，会提示默认密码在安装包的什么位置<br><em>windows虚拟机上的密码改为了Talent123</em></p>
+<h3 id="1-7-Create-repository"><a href="#1-7-Create-repository" class="headerlink" title="1.7.Create repository"></a>1.7.Create repository</h3><p><img src="https://foruda.gitee.com/images/1676621309015372122/930080e8_358662.jpeg" alt="图1"><br>其中，npm（hosted）可设置包的发布策略，是否允许重新发布，如果不允许重新发布，则每次发布包，均需升级版本号<br><img src="https://foruda.gitee.com/images/1676621325937814584/7cf04fdf_358662.jpeg" alt="图2"></p>
+<h2 id="2-CentOS7下将Nexus设置为系统服务"><a href="#2-CentOS7下将Nexus设置为系统服务" class="headerlink" title="2.CentOS7下将Nexus设置为系统服务"></a>2.CentOS7下将Nexus设置为系统服务</h2><h3 id="2-1-修改nexus启动脚本"><a href="#2-1-修改nexus启动脚本" class="headerlink" title="2.1.修改nexus启动脚本"></a>2.1.修改nexus启动脚本</h3><p>修改脚本第14行：<code>INSTALL4J_JAVA_HOME_OVERRIDE=/root/jdk_1.8.0_231  // jdk安装路径</code><br>否则，可能会出现以下错误：<br><img width="460" alt="图3" src="https://foruda.gitee.com/images/1676621336743603556/a788b3b1_358662.png"></p>
+<h3 id="2-2-配置系统服务"><a href="#2-2-配置系统服务" class="headerlink" title="2.2.配置系统服务"></a>2.2.配置系统服务</h3><p>设置软连接：<br><code>sudo ln -s /opt/nexus-3.18.1-01/bin/nexus /etc/init.d/nexus</code></p>
+<p>采用systemd的方式配置服务</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd /etc/systemd/system</span><br><span class="line">vi nexus.service</span><br><span class="line"></span><br><span class="line">在nexus.service文件中添加以下内容：</span><br><span class="line">[Unit]</span><br><span class="line">Description=nexus service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/opt/nexus-3.18.1-01/bin/nexus start  #nexus的安装目录</span><br><span class="line">ExecStop=/opt/nexus-3.18.1-01/bin/nexus stop</span><br><span class="line">User=root  #系统用户名</span><br><span class="line">Restart=on-abort</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>分别执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo systemctl daemon-reload #重新加载服务</span><br><span class="line">sudo systemctl enable nexus.service #开启开机自启动服务</span><br><span class="line">sudo systemctl start nexus.service #启动服务</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>由于自己是在虚拟机上安装的，本机访问没有问题，但其他主机访问不到服务，故还需做如下配置：<br><a href="https://www.cnblogs.com/mkl34367803/p/10095055.html">如何让局域网中的其他主机访问虚拟机</a></p>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>NPM私服</tag>
+        <tag>Nexus</tag>
       </tags>
   </entry>
   <entry>
@@ -344,49 +290,6 @@
       </tags>
   </entry>
   <entry>
-    <title>仿MacOS的后台管理系统</title>
-    <url>/2023/01/13/%E4%BB%BFMacOS%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前比较流行的开源后台管理系统<a href="https://ng-alain.com/en">NG-ALAIN</a>、<a href="https://pro.ant.design/">Ant Design Pro</a>、<a href="https://panjiachen.github.io/vue-element-admin-site/zh/">Vue-Element-Admin</a>、<a href="http://boot.jeecg.com/">Jeecg Boot</a>等，其页面布局基本都是如下形式：<br><img width="500" alt="图1 常见布局" src="https://foruda.gitee.com/images/1675924467881077922/4994c85f_358662.png"><br>诚然，这种形式并非不好，但看的多了，难免视觉疲劳。</p>
-<p>其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。</p>
-<p>体验地址：<a href="https://doautumn.github.io/web-os">https://doautumn.github.io/web-os</a></p>
-<blockquote>
-<p>该解决方案并未投入实战，只是用作学习与交流，欢迎感兴趣的小伙伴留言支持。</p>
-</blockquote>
-<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>技术栈：Angular13 + NG-ZORRO13</p>
-<h3 id="1-基本布局"><a href="#1-基本布局" class="headerlink" title="1.基本布局"></a>1.基本布局</h3><p>基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。<br><img width="500" alt="图2 MacOS布局" src="https://foruda.gitee.com/images/1675924583486574320/d4685efd_358662.png"></p>
-<h3 id="2-Window"><a href="#2-Window" class="headerlink" title="2.Window"></a>2.Window</h3><p>不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种<code>键盘独占</code>的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。</p>
-<p>下面来聊一聊Window的具体实现方案。</p>
-<h4 id="2-1-公开的属性、事件"><a href="#2-1-公开的属性、事件" class="headerlink" title="2.1 公开的属性、事件"></a>2.1 公开的属性、事件</h4><p>在做这种开发套件时，我一般首先考虑的是开发人员该如何使用我们提供的基础组件、服务。对于一个窗口而言，首先想到的需要开发人员干预的只有两项内容：<code>title和content</code>。进一步思考，当窗口处于非活动或最小化状态时，我们希望开发人员能够关注下性能，毕竟如果窗口打开过多，如何保证页面不卡顿将会是一件非常有必要的事情。为此我们需要提供两个状态切换事件：<code>active和inactive</code>，当窗口处于上述某种状态时，可以考虑暂停定时器、暂停持续的渲染动画等非必要的性能开销。对开发人员公开的内容除上述4项之外，还会有一些其他细节项，如<code>minimizable（是否能够最小化）、maximizable（是否能够最大化）、style（默认位置尺寸）</code>等。</p>
-<p>使用Window的伪代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;mz-window mzTitle=&quot;这是一个标题&quot; (active)=&quot;handleActive()&quot; (inactive)=&quot;handleInactive()&quot;&gt;</span><br><span class="line">  your code</span><br><span class="line">  ...</span><br><span class="line">&lt;/mz-window&gt;</span><br></pre></td></tr></table></figure>
-<p>内部实现的伪代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// window.component.ts</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &#x27;mz-window&#x27;,</span><br><span class="line">  templateUrl: &#x27;./window.component.html&#x27;,</span><br><span class="line">  styleUrls: [&#x27;./window.component.less&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line">export class WindowComponent implements OnInit, OnDestroy &#123;</span><br><span class="line"></span><br><span class="line">  @Input() mzTitle: string;</span><br><span class="line">  @Input() minimizable: boolean = true;</span><br><span class="line">  @Input() maximizable: boolean = true;</span><br><span class="line">  @Input() style: any;</span><br><span class="line"></span><br><span class="line">  @Output() active = new EventEmitter();</span><br><span class="line">  @Output() inactive = new EventEmitter();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// window.component.html</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;window&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;title&quot;&gt;</span><br><span class="line">    &lt;span&gt;&#123;&#123; mzTitle &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">    &lt;ng-content&gt;&lt;/ng-content&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="2-2-窗口的通用逻辑"><a href="#2-2-窗口的通用逻辑" class="headerlink" title="2.2 窗口的通用逻辑"></a>2.2 窗口的通用逻辑</h4><p>对于窗口的打开、关闭、最大化、最小化、拖拽、窗口切换等通用逻辑，都由框架统一实现即可。</p>
-<p><strong>窗口与路由的关系</strong></p>
-<p>而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的<a href="https://angular.cn/api/router/RouteReuseStrategy">路由复用策略</a>与<a href="https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive">keep-alive</a>可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。</p>
-<p>具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。<br><img width="800" alt="图3 路由复用与多窗口" src="https://foruda.gitee.com/images/1675924756031355629/ad3c0063_358662.jpeg"><br><img width="800" alt="图4 路由复用与多窗口" src="https://foruda.gitee.com/images/1675939326104981687/ef74d29b_358662.png"></p>
-<p><strong>非活动状态窗口的激活</strong></p>
-<p>我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击<code>Wiki</code>并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。<br><img width="650" alt="图5 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif"><br>为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。</p>
-<p><strong>窗口的最小化</strong></p>
-<p>目前我们还没有实现MacOS最小化窗口的神奇动画效果的技术方案，暂且实现了缩放的动画效果，和MacOS类似，窗口缩放之后会以缩略图的形式暂存到Dock中。那如何生成窗口的缩略图呢？或者是否可以将窗口直接缩放至Dock中？经过综合考虑，我们希望窗口和Dock尽量是解耦的，所以还是采用了生成缩略图的方案，因为Dock本身也是支持设置图标的，这样只需创建一个Dock对象并将缩略图、窗口标题带上即可。<br><code>new DockItem().init(&#123; name: title, iconPath: image, path: routePath &#125;)</code></p>
-<p>至于缩略图的生成，则是使用了<code>html2canvas</code>。<br><img width="650" alt="图6 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif"></p>
-<h3 id="3-Dock"><a href="#3-Dock" class="headerlink" title="3.Dock"></a>3.Dock</h3><p>Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。</p>
-<p>关于DockItem和Window的关联，其实比较简单，上文已提到，Window和路由是一一对应的，那只需将DockItem和路由也做关联即可。只不过DockItem和路由并非一一对应，而是一个DockItem对应一个一级路由，包含若干个子路由。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义DockItem</span><br><span class="line">&#123;</span><br><span class="line">  &quot;apps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;VSCode&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/vscode.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo1&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Webstorm&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/webstorm.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo2&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Chrome&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/chrome.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo3&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一级路由</span><br><span class="line">const routes: Routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;&#x27;,</span><br><span class="line">    component: WebOSLayoutComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo1&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo1/demo1.module&#x27;).then(m =&gt; m.Demo1Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo2&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo2/demo2.module&#x27;).then(m =&gt; m.Demo2Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo3&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo3/demo3.module&#x27;).then(m =&gt; m.Demo3Module)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-
-<p>对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。<br><img width="650" alt="图7 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif"><br>另外，推荐下<a href="https://juejin.cn/post/6942325271349592100">Steven</a>实现的效果，很丝滑。</p>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>计划将其作为基础开发包发布到npm，但由于还有一些功能暂未完成，如<code>键盘独占</code>、<code>国际化</code>等，故还需等待时日。</p>
-]]></content>
-      <categories>
-        <category>技术分享</category>
-      </categories>
-      <tags>
-        <tag>WebOS</tag>
-        <tag>MacOS</tag>
-        <tag>后台管理系统</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用Vite构建Vue3组件库</title>
     <url>/2023/01/11/%E4%BD%BF%E7%94%A8Vite%E6%9E%84%E5%BB%BAVue3%E7%BB%84%E4%BB%B6%E5%BA%93/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>当我们使用Angular开发库项目时，直接通过<code>ng g lib [name]</code>在当前工作空间中创建一个新的通用库项目即可，Angular会帮我们把依赖、配置甚至打包命令都设置好，还是相当方便的。</p>
@@ -430,40 +333,46 @@
       </tags>
   </entry>
   <entry>
-    <title>可视化技术选型</title>
-    <url>/2022/07/16/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="架构对比"><a href="#架构对比" class="headerlink" title="架构对比"></a>架构对比</h2><ul>
-<li>BS 架构：Unity、WebGL、Threejs</li>
-<li>CS 架构：Unity、UE4、Ventuz</li>
-<li>因为 Ventuz 是国外收费引擎，因此下面内容不做对比。</li>
-</ul>
-<h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2><ul>
-<li>CS 架构优于 BS 架构。</li>
-<li>CS 架构中，UE4 和 Unity 效果各有特色，UE4 写实效果优于 Unity，Unity 其他效果优于UE4。</li>
-<li>BS 架构：Unity 的 B 端效果要优于 Webgl 和 Threejs，Webgl 和 Threejs 效果基本差不多。</li>
-</ul>
-<h2 id="体量对比"><a href="#体量对比" class="headerlink" title="体量对比"></a>体量对比</h2><p>UE4 体量是这几个技术中最大的，相对于 Unity，UE4 的安装包 10GB 左右，同时对开发设备要求也是最高的，相同的项目等级，UE4 项目的体量要大于 Unity。<br>BS 架构因为效果低于 CS 架构，因此体量相对较小。</p>
-<h2 id="开发对比"><a href="#开发对比" class="headerlink" title="开发对比"></a>开发对比</h2><ul>
-<li>BS 架构中 WebGL 和 Threejs 因为没有成熟的渲染流程，开发工作量比较大，但是 Unity的 Webgl 是基于 Unity 引擎渲染，有成熟的渲染流程，开发工作量比较小；举个例子，在场景中增加一个相机，webgl 和threejs 需要手动敲代码增加一个相机，而 Unity 只需要拖一个相机组件到场景即可。前两者使用 JS 语言，后面的 Unity 使用 C#语言，最后发布成 Webgl。</li>
-<li>相比 Webgl 和 Threejs，Unity 开发 B 端，主要工作是场景设计以及开发部分，不需要关心模型导入等其他问题。</li>
-<li>CS 架构中，UE4 使用 C++语言开发，Unity 使用 C#语言开发，UE4 的 C++语言也是在源C++语言上增加的反射机制，因此编译比较慢；C#语言是面向对象语言，有反射机制，因此开发过程中编译比较快。</li>
-<li>扩展性：Unity 要优于 UE4，毕竟 C#语言是面向对象的语言，市面上 Unity 的插件是要多余 UE4 的插件。这个从腾讯选择 Unity 做自己产品就可以看出。</li>
-</ul>
-<h2 id="友好对比"><a href="#友好对比" class="headerlink" title="友好对比"></a>友好对比</h2><p>这里不做 B 端的阐述，相对 C 端，B 端的友好度很低。<br>Unity 的界面友好度要由于 UE4，UE4 的界面给人一种比较乱的感觉，画面跳色太多；在编辑材质、模型等资源时，会从新打开一个窗口，造成多个窗口来回拖动，影响操作性；Unity的所有窗口都在同一个大窗口之下，一目了然的可以看到各个窗口的内容。</p>
-<h2 id="渲染对比"><a href="#渲染对比" class="headerlink" title="渲染对比"></a>渲染对比</h2><p>因为 C 端效果要优于 B 端，因此不做 B 端阐述。<br>Unity 是实时渲染，当修改材质时，可以实时看到场景内物体上材质的改变；但是 UE4 修改材质时，需要保存并编译后才能看到，编译过程耗费的时间也跟使用的设备配置有关。</p>
-<h2 id="平台对比"><a href="#平台对比" class="headerlink" title="平台对比"></a>平台对比</h2><ul>
-<li>Unity 可以发布成 B 端、C 端、移动端等</li>
-<li>UE4 可以发布成 C 端、移动端等</li>
-</ul>
-<h2 id="维护对比"><a href="#维护对比" class="headerlink" title="维护对比"></a>维护对比</h2><p>Unity 的项目维护成本要低于 UE4 的维护成本，这个维护成本是从人力、设备等多方面考虑，一个相同体量项目，UE4 技术比 Unity 技术要多 1~2 个人。</p>
-<h2 id="发布对比"><a href="#发布对比" class="headerlink" title="发布对比"></a>发布对比</h2><p>以相同项目发布成 C 端为例，UE4 耗费的时间要高于 Unity，具体是多少要看项目大小。</p>
-<h2 id="像素流技术"><a href="#像素流技术" class="headerlink" title="像素流技术"></a>像素流技术</h2><p>现在 UE4 和 Unity 都有像素流技术，像素流的原理是将服务器渲染的画面通过视频流的方式传递至客户端，客户端不做渲染工作。因为是视频流，所以对网络带宽是有要求的，当然务器成本就很高。</p>
+    <title>仿MacOS的后台管理系统</title>
+    <url>/2023/01/13/%E4%BB%BFMacOS%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前比较流行的开源后台管理系统<a href="https://ng-alain.com/en">NG-ALAIN</a>、<a href="https://pro.ant.design/">Ant Design Pro</a>、<a href="https://panjiachen.github.io/vue-element-admin-site/zh/">Vue-Element-Admin</a>、<a href="http://boot.jeecg.com/">Jeecg Boot</a>等，其页面布局基本都是如下形式：<br><img width="500" alt="图1 常见布局" src="https://foruda.gitee.com/images/1675924467881077922/4994c85f_358662.png"><br>诚然，这种形式并非不好，但看的多了，难免视觉疲劳。</p>
+<p>其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。</p>
+<p>体验地址：<a href="https://doautumn.github.io/web-os">https://doautumn.github.io/web-os</a></p>
+<blockquote>
+<p>该解决方案并未投入实战，只是用作学习与交流，欢迎感兴趣的小伙伴留言支持。</p>
+</blockquote>
+<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>技术栈：Angular13 + NG-ZORRO13</p>
+<h3 id="1-基本布局"><a href="#1-基本布局" class="headerlink" title="1.基本布局"></a>1.基本布局</h3><p>基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。<br><img width="500" alt="图2 MacOS布局" src="https://foruda.gitee.com/images/1675924583486574320/d4685efd_358662.png"></p>
+<h3 id="2-Window"><a href="#2-Window" class="headerlink" title="2.Window"></a>2.Window</h3><p>不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种<code>键盘独占</code>的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。</p>
+<p>下面来聊一聊Window的具体实现方案。</p>
+<h4 id="2-1-公开的属性、事件"><a href="#2-1-公开的属性、事件" class="headerlink" title="2.1 公开的属性、事件"></a>2.1 公开的属性、事件</h4><p>在做这种开发套件时，我一般首先考虑的是开发人员该如何使用我们提供的基础组件、服务。对于一个窗口而言，首先想到的需要开发人员干预的只有两项内容：<code>title和content</code>。进一步思考，当窗口处于非活动或最小化状态时，我们希望开发人员能够关注下性能，毕竟如果窗口打开过多，如何保证页面不卡顿将会是一件非常有必要的事情。为此我们需要提供两个状态切换事件：<code>active和inactive</code>，当窗口处于上述某种状态时，可以考虑暂停定时器、暂停持续的渲染动画等非必要的性能开销。对开发人员公开的内容除上述4项之外，还会有一些其他细节项，如<code>minimizable（是否能够最小化）、maximizable（是否能够最大化）、style（默认位置尺寸）</code>等。</p>
+<p>使用Window的伪代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;mz-window mzTitle=&quot;这是一个标题&quot; (active)=&quot;handleActive()&quot; (inactive)=&quot;handleInactive()&quot;&gt;</span><br><span class="line">  your code</span><br><span class="line">  ...</span><br><span class="line">&lt;/mz-window&gt;</span><br></pre></td></tr></table></figure>
+<p>内部实现的伪代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// window.component.ts</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &#x27;mz-window&#x27;,</span><br><span class="line">  templateUrl: &#x27;./window.component.html&#x27;,</span><br><span class="line">  styleUrls: [&#x27;./window.component.less&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line">export class WindowComponent implements OnInit, OnDestroy &#123;</span><br><span class="line"></span><br><span class="line">  @Input() mzTitle: string;</span><br><span class="line">  @Input() minimizable: boolean = true;</span><br><span class="line">  @Input() maximizable: boolean = true;</span><br><span class="line">  @Input() style: any;</span><br><span class="line"></span><br><span class="line">  @Output() active = new EventEmitter();</span><br><span class="line">  @Output() inactive = new EventEmitter();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// window.component.html</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;window&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;title&quot;&gt;</span><br><span class="line">    &lt;span&gt;&#123;&#123; mzTitle &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">    &lt;ng-content&gt;&lt;/ng-content&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-窗口的通用逻辑"><a href="#2-2-窗口的通用逻辑" class="headerlink" title="2.2 窗口的通用逻辑"></a>2.2 窗口的通用逻辑</h4><p>对于窗口的打开、关闭、最大化、最小化、拖拽、窗口切换等通用逻辑，都由框架统一实现即可。</p>
+<p><strong>窗口与路由的关系</strong></p>
+<p>而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的<a href="https://angular.cn/api/router/RouteReuseStrategy">路由复用策略</a>与<a href="https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive">keep-alive</a>可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。</p>
+<p>具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。<br><img width="800" alt="图3 路由复用与多窗口" src="https://foruda.gitee.com/images/1675924756031355629/ad3c0063_358662.jpeg"><br><img width="800" alt="图4 路由复用与多窗口" src="https://foruda.gitee.com/images/1675939326104981687/ef74d29b_358662.png"></p>
+<p><strong>非活动状态窗口的激活</strong></p>
+<p>我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击<code>Wiki</code>并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。<br><img width="650" alt="图5 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif"><br>为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。</p>
+<p><strong>窗口的最小化</strong></p>
+<p>目前我们还没有实现MacOS最小化窗口的神奇动画效果的技术方案，暂且实现了缩放的动画效果，和MacOS类似，窗口缩放之后会以缩略图的形式暂存到Dock中。那如何生成窗口的缩略图呢？或者是否可以将窗口直接缩放至Dock中？经过综合考虑，我们希望窗口和Dock尽量是解耦的，所以还是采用了生成缩略图的方案，因为Dock本身也是支持设置图标的，这样只需创建一个Dock对象并将缩略图、窗口标题带上即可。<br><code>new DockItem().init(&#123; name: title, iconPath: image, path: routePath &#125;)</code></p>
+<p>至于缩略图的生成，则是使用了<code>html2canvas</code>。<br><img width="650" alt="图6 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif"></p>
+<h3 id="3-Dock"><a href="#3-Dock" class="headerlink" title="3.Dock"></a>3.Dock</h3><p>Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。</p>
+<p>关于DockItem和Window的关联，其实比较简单，上文已提到，Window和路由是一一对应的，那只需将DockItem和路由也做关联即可。只不过DockItem和路由并非一一对应，而是一个DockItem对应一个一级路由，包含若干个子路由。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义DockItem</span><br><span class="line">&#123;</span><br><span class="line">  &quot;apps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;VSCode&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/vscode.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo1&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Webstorm&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/webstorm.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo2&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Chrome&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/chrome.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo3&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一级路由</span><br><span class="line">const routes: Routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;&#x27;,</span><br><span class="line">    component: WebOSLayoutComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo1&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo1/demo1.module&#x27;).then(m =&gt; m.Demo1Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo2&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo2/demo2.module&#x27;).then(m =&gt; m.Demo2Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo3&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo3/demo3.module&#x27;).then(m =&gt; m.Demo3Module)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。<br><img width="650" alt="图7 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif"><br>另外，推荐下<a href="https://juejin.cn/post/6942325271349592100">Steven</a>实现的效果，很丝滑。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>计划将其作为基础开发包发布到npm，但由于还有一些功能暂未完成，如<code>键盘独占</code>、<code>国际化</code>等，故还需等待时日。</p>
 ]]></content>
       <categories>
-        <category>可视化</category>
+        <category>技术分享</category>
       </categories>
       <tags>
-        <tag>可视化</tag>
+        <tag>WebOS</tag>
+        <tag>MacOS</tag>
+        <tag>后台管理系统</tag>
       </tags>
   </entry>
   <entry>
@@ -515,5 +424,96 @@
       <categories>
         <category>MacOS</category>
       </categories>
+  </entry>
+  <entry>
+    <title>可视化技术选型</title>
+    <url>/2022/07/16/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="架构对比"><a href="#架构对比" class="headerlink" title="架构对比"></a>架构对比</h2><ul>
+<li>BS 架构：Unity、WebGL、Threejs</li>
+<li>CS 架构：Unity、UE4、Ventuz</li>
+<li>因为 Ventuz 是国外收费引擎，因此下面内容不做对比。</li>
+</ul>
+<h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2><ul>
+<li>CS 架构优于 BS 架构。</li>
+<li>CS 架构中，UE4 和 Unity 效果各有特色，UE4 写实效果优于 Unity，Unity 其他效果优于UE4。</li>
+<li>BS 架构：Unity 的 B 端效果要优于 Webgl 和 Threejs，Webgl 和 Threejs 效果基本差不多。</li>
+</ul>
+<h2 id="体量对比"><a href="#体量对比" class="headerlink" title="体量对比"></a>体量对比</h2><p>UE4 体量是这几个技术中最大的，相对于 Unity，UE4 的安装包 10GB 左右，同时对开发设备要求也是最高的，相同的项目等级，UE4 项目的体量要大于 Unity。<br>BS 架构因为效果低于 CS 架构，因此体量相对较小。</p>
+<h2 id="开发对比"><a href="#开发对比" class="headerlink" title="开发对比"></a>开发对比</h2><ul>
+<li>BS 架构中 WebGL 和 Threejs 因为没有成熟的渲染流程，开发工作量比较大，但是 Unity的 Webgl 是基于 Unity 引擎渲染，有成熟的渲染流程，开发工作量比较小；举个例子，在场景中增加一个相机，webgl 和threejs 需要手动敲代码增加一个相机，而 Unity 只需要拖一个相机组件到场景即可。前两者使用 JS 语言，后面的 Unity 使用 C#语言，最后发布成 Webgl。</li>
+<li>相比 Webgl 和 Threejs，Unity 开发 B 端，主要工作是场景设计以及开发部分，不需要关心模型导入等其他问题。</li>
+<li>CS 架构中，UE4 使用 C++语言开发，Unity 使用 C#语言开发，UE4 的 C++语言也是在源C++语言上增加的反射机制，因此编译比较慢；C#语言是面向对象语言，有反射机制，因此开发过程中编译比较快。</li>
+<li>扩展性：Unity 要优于 UE4，毕竟 C#语言是面向对象的语言，市面上 Unity 的插件是要多余 UE4 的插件。这个从腾讯选择 Unity 做自己产品就可以看出。</li>
+</ul>
+<h2 id="友好对比"><a href="#友好对比" class="headerlink" title="友好对比"></a>友好对比</h2><p>这里不做 B 端的阐述，相对 C 端，B 端的友好度很低。<br>Unity 的界面友好度要由于 UE4，UE4 的界面给人一种比较乱的感觉，画面跳色太多；在编辑材质、模型等资源时，会从新打开一个窗口，造成多个窗口来回拖动，影响操作性；Unity的所有窗口都在同一个大窗口之下，一目了然的可以看到各个窗口的内容。</p>
+<h2 id="渲染对比"><a href="#渲染对比" class="headerlink" title="渲染对比"></a>渲染对比</h2><p>因为 C 端效果要优于 B 端，因此不做 B 端阐述。<br>Unity 是实时渲染，当修改材质时，可以实时看到场景内物体上材质的改变；但是 UE4 修改材质时，需要保存并编译后才能看到，编译过程耗费的时间也跟使用的设备配置有关。</p>
+<h2 id="平台对比"><a href="#平台对比" class="headerlink" title="平台对比"></a>平台对比</h2><ul>
+<li>Unity 可以发布成 B 端、C 端、移动端等</li>
+<li>UE4 可以发布成 C 端、移动端等</li>
+</ul>
+<h2 id="维护对比"><a href="#维护对比" class="headerlink" title="维护对比"></a>维护对比</h2><p>Unity 的项目维护成本要低于 UE4 的维护成本，这个维护成本是从人力、设备等多方面考虑，一个相同体量项目，UE4 技术比 Unity 技术要多 1~2 个人。</p>
+<h2 id="发布对比"><a href="#发布对比" class="headerlink" title="发布对比"></a>发布对比</h2><p>以相同项目发布成 C 端为例，UE4 耗费的时间要高于 Unity，具体是多少要看项目大小。</p>
+<h2 id="像素流技术"><a href="#像素流技术" class="headerlink" title="像素流技术"></a>像素流技术</h2><p>现在 UE4 和 Unity 都有像素流技术，像素流的原理是将服务器渲染的画面通过视频流的方式传递至客户端，客户端不做渲染工作。因为是视频流，所以对网络带宽是有要求的，当然务器成本就很高。</p>
+]]></content>
+      <categories>
+        <category>可视化</category>
+      </categories>
+      <tags>
+        <tag>可视化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一文彻底看懂 package.json 中的各种 dependencies</title>
+    <url>/2022/08/31/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/</url>
+    <content><![CDATA[<p>关于package.json中的各种dependencies的详细解释，可以直接参考<a href="https://developer.aliyun.com/article/1051418">这篇文章</a>。</p>
+<p>这里只做一个最终结论的摘录。</p>
+<table>
+<thead>
+<tr>
+<th>依赖类型</th>
+<th>定义在项目中</th>
+<th>定义在依赖中</th>
+<th>一句话总结</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dependencies</td>
+<td>会被安装</td>
+<td>会被安装</td>
+<td>定义包运行所需要的依赖包</td>
+<td>某前端项目使用 react 进行开发，需要将 react 添加到 dependencies 中</td>
+</tr>
+<tr>
+<td>devDependencies</td>
+<td>会被安装</td>
+<td>不会被安装</td>
+<td>定义包在开发时所需要的依赖包</td>
+<td>antd 使用了 @testing-library&#x2F;react 进行测试，需要将 @testing-library&#x2F;react 添加到 devDependencies 中</td>
+</tr>
+<tr>
+<td>peerDependencies</td>
+<td>不会被安装</td>
+<td>不会被安装，但是如果指向的依赖没有被安装或不符合时会有警告（peerDependenciesMeta 会影响该行为）</td>
+<td>定义该包运行所需要的依赖环境，一般和 devDependencies 一起使用</td>
+<td>antd 是一个 react 组件库，为了不和使用它的项目中的 react 版本定义造成冲突，需要将支持的 react 版本添加到 peerDependencies 中</td>
+</tr>
+<tr>
+<td>optionalDependencies</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>optionalDependencies 用于定义对包运行不会造成影响的依赖包</td>
+<td>一个包在使用 A 包进行了某些操作，但是如果 A 包不在的话，可以使用别的 API 达到同样的效果，可以将 A 包添加到 optionalDependencies 中</td>
+</tr>
+</tbody></table>
+<hr>
+<p>另外记录下版本号的格式规定：<br><code>固定版本</code>：如4.0.3<br><code>～</code>：如～4.0.3，表示安装 4.0.x 的最新版本，也就是说安装时不会改变主版本号和次版本号<br><code>^</code>：如^17.0.2，表示安装 17.x.x 的最新版本，也就是说安装时不会改变主版本号<br><code>latest</code>：安装最新版本</p>
+]]></content>
+      <categories>
+        <category>技术分享</category>
+      </categories>
+      <tags>
+        <tag>package.json</tag>
+      </tags>
   </entry>
 </search>
