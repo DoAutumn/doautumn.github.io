@@ -3,7 +3,7 @@ title: 关于commitlint和husky的安装和使用
 toc: true
 date: 2023-01-11 17:41:55
 tags: [Git_hooks,commitlint,husky]
-category: 技术分享
+category: Git
 ---
 
 现在大部分公司和项目用的代码管理工具基本都是git，在一个大的项目组中，会涉及很多的开发人员，这就会面临着频繁的提交代码。规范的提交代码规则会有利于问题的查找和回归，所以提交规范变得尤其的重要。下面我会为大家介绍一下，关于git的代码提交规则的约束工具：commitlint和husky。
