@@ -9,7 +9,7 @@ category: 技术分享
 - 1、安装nodejs
 - 2、安装marked，`npm i marked`
 - 3、转换成doc格式前，需要把md文件转换为html标签格式，才能保留doc文件中的样式，新建立`head.html`模板文件，内容如下：
-```
+```html
 <html>
     <head>
     <meta charset="utf-8">
@@ -27,7 +27,7 @@ category: 技术分享
 </html>
 ```
 - 4、新建js脚本文件`convert.js`内容如下：
-```
+```javascript
 var fs = require('fs');
 var {marked} = require('marked');
 // console.log(marked);
