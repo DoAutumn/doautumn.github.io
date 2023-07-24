@@ -1,5 +1,8 @@
 Blog Repository
 
+## 安装hexo
+- `npm i -g hexo-cli`
+
 ## 开发
 - `hexo server`
 
