@@ -1,8 +1,8 @@
 ---
-title: NPM私服
+title: nexus的安装与使用
 toc: true
 date: 2022-09-11 13:51:57
-tags: [NPM私服,Nexus]
+tags: [nexus,npm私服]
 category: 技术分享
 ---
 ## 1.安装Nexus

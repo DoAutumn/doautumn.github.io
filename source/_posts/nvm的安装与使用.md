@@ -2,7 +2,7 @@
 title: nvm的安装与使用
 toc: true
 date: 2023-07-24 11:15:43
-tags: nvm
+tags: [nvm,Node版本管理]
 category: 技术分享
 ---
 ## 1、Node版本管理工具

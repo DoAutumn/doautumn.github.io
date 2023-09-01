@@ -2,7 +2,6 @@
 title: Mac_ll命令
 toc: false
 date: 2023-02-22 11:50:50
-tags:
 category: MacOS
 ---
 MacOS默认是不支持ll命令的，为此我们需要做一些配置。

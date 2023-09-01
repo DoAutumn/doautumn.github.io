@@ -2,7 +2,7 @@
 title: CKEditor5学习开发之路
 toc: true
 date: 2023-01-11 16:22:26
-tags: [CKEditor5,富文本编辑器,Angular,Markdown]
+tags: [CKEditor5,富文本编辑器]
 category: 技术分享
 sticky: 8
 ---
@@ -40,7 +40,7 @@ CKEditor支持在5种模式下使用：Classic、Balloon、Balloon Block、Inlin
 
 上述这两种方式，和我们最初的设想还有些偏差。我们希望将富文本编辑器开发成一个公共组件供产线各个产品使用，设想的使用方式也尽量简单，只需安装我们提供的富文本编辑器组件包`teditor`和我们依赖的开源包`@ckeditor/*`即可。
 
-而一旦我们开发并构建了属于自己的`@ckedtior/ckeditor5-build-decoupled-document1`，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，主要问题在于Angular工程不能构建CKEditor源码中的css文件。
+而一旦我们开发并构建了属于自己的`@ckedtior/ckeditor5-build-decoupled-document1`，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，我记得遇到的问题是，CKEditor源码中虽然是.css文件，但某些.css中却是less的语法，导致编译不成功。
 
 不过最终，为了开发方便，我们还是决定在安装了构建包的Angular工程中开发插件，只不过相关依赖不是在Angular工程中引入，而是在源码中将其挂载到export的对象上，部分代码如下：
 ```

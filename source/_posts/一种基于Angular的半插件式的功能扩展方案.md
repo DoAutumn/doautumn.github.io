@@ -2,8 +2,8 @@
 title: 一种基于Angular的半插件式的功能扩展方案
 toc: true
 date: 2023-03-03 14:39:50
-tags: [Angular,插件,License]
-category: 技术分享
+tags: [Angular插件,License]
+category: Angular
 sticky: 7
 ---
 ## 前言

@@ -2,8 +2,8 @@
 title: VS Code的一些偏好设置
 toc: true
 date: 2023-02-22 13:45:14
-tags:
-category: 开发效率
+tags: [vscode]
+category: 技术分享
 ---
 [VS Code](https://code.visualstudio.com/)作为前端开发的必备神器，其作用自然不必多说。这里记录下个人的使用习惯，免得以后再查。
 

@@ -1745,18 +1745,32 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
     text-align: left;
+    border: solid 1px #dfe2e5;
     th {
         font-weight: bold;
         padding: 5px 10px;
-        border-bottom: 2px solid #909ba2;
+        border-bottom: 1px solid #dfe2e5;
+        border-right: solid 1px #dfe2e5;
+        background-color: #efefef;
+        &:last-child {
+          border-right: none;
+        }
     }
     td {
         padding: 5px 10px;
+        border-top: solid 1px #dfe2e5;
+        border-right: solid 1px #dfe2e5;
+        &:last-child {
+          border-right: none;
+        }
     }
     tr {
         &:nth-child(2n) {
-            background: #e4e4e4;
+            background: #f6f8fa;
         }
+    }
+    a, a:hover, a:focus, a:active {
+        color: #0366d6;
     }
 }
 

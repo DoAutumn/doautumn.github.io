@@ -2,8 +2,7 @@
 title: Angular依赖包，图片找不到的原因分析及解决方案
 toc: true
 date: 2023-07-12 16:31:43
-tags:
-category: 技术分享
+category: Angular
 ---
 ### 1、问题描述
 在Angular开发的依赖包中，若某个组件使用了图片，当集成该依赖包并使用该组件时，会出现图片丢失的问题。

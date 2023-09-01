@@ -2,7 +2,6 @@
 title: Mac连接Win10共享的目录
 toc: false
 date: 2023-06-30 22:26:40
-tags:
 category: MacOS
 ---
 ### 废话不多说，直接上步骤

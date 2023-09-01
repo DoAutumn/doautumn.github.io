@@ -2,7 +2,7 @@
 title: 使用nrm管理切换多个npm registry地址
 toc: true
 date: 2023-03-15 13:14:06
-tags: [nrm,npm registry]
+tags: [nrm,npm源管理]
 category: 技术分享
 ---
 ## 前言

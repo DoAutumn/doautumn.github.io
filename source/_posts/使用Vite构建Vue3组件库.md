@@ -2,8 +2,8 @@
 title: 使用Vite构建Vue3组件库
 toc: true
 date: 2023-01-11 17:48:42
-tags: [vite,vue,vue3,组件库]
-category: 技术分享
+tags: [Vite,Vue3组件库]
+category: Vue
 ---
 ### 前言
 
