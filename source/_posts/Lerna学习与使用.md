@@ -8,7 +8,7 @@ category: 技术分享
 ## 一、介绍
 在学习[wangEditor](https://doautumn.github.io/2023/09/01/wangEditor%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/)的过程中，了解到Lerna，这里记录下学习与使用过程。
 
-基本概念就不再赘述了，直接参考[这里](https://www.lernajs.cn/)。在学习过程中也查阅了部分博文，发现有些朋友不是很清楚这个东西是解决什么问题的，这里举例说明下。
+基本概念就不再赘述了，直接参考[这里](https://lerna.js.org/)。在学习过程中也查阅了部分博文，发现有些朋友不是很清楚这个东西是解决什么问题的，这里举例说明下。
 
 在一个成熟的开发团队中，往往比较注重代码的积累、复用、共享，单就前端来说，一般会积累如下几个开发包：frame、components、charts、utils等等
 - **frame**：路由复用策略、路由守卫、HTTP拦截器、国际化、主题。。。
@@ -17,7 +17,7 @@ category: 技术分享
 
 这些开发包如果是独立的，也不是不可以，只是管理、使用起来比较麻烦，如果相互之前再有依赖关系的话，那就不是比较麻烦了，而是相当麻烦。那么Lerna就是为了解决这个问题的。同时它还能够根据Git提交记录，自动生成版本号、ChangeLog，省去了繁琐的配置步骤，何乐不为呢？
 ## 二、基本使用
-参考这里的[入门](https://www.lernajs.cn/#getting-started)，很容易初始化一个Lerna工程。
+参考这里的[入门](https://lerna.js.org/docs/getting-started)，很容易初始化一个Lerna工程。
 接下来就是创建子包了，可以直接手动创建，比如：
 ```shell
 # 在packages下创建文件夹sub-package
@@ -34,30 +34,24 @@ $ lerna create sub-package
 ```
 在我看来，一般我们不会从零初始化一个Lerna工程，现在3大前端框架、webpack、vite等都提供了脚手架，直接一个命令就可以初始化一个前端工程，对应的tsconfig.json、package.json、README.md、angular.json、vue.config.js等都有了，如果要是从一个空的Lerna工程手动新建这些，着实费劲。
 所以这里就不过多介绍创建子包之后的操作了，直接进入下一环节。
-## 三、在Angular工程中使用Lerna
+## 三、在Angular工程中使用Lerna@7
 我们都知道，Angular是提供在一个工程中创建多个Library的功能的，只不过这些Library的发包仍然是独立的，版本号、ChangeLog也是需要手动维护的，并不友好。
 那么在现有的Angular工程中如何使用Lerna呢？具体步骤如下：
 ### 1、初始化Angular工程
 ```shell
 $ ng new my-test
 ```
-### 2、初始化Lerna
+### 2、新建Library
 ```shell
 $ cd my-test
-$ lerna init
-```
-此时会在`my-test`目录下多出一个`packages`目录和`lerna.json`文件，同时`package.json`文件中会追加如下内容：
-```json
-"workspaces": [
-  "packages/*"
-]
-```
-由于Angular管理子包的目录名默认为`projects`，所以我们将`packages`目录删掉，将`workspaces`下的`packages`改为`projects`。
-### 3、新建Library
-```shell
 $ ng g lib my-lib1
 $ ng g lib my-lib2
 ```
+### 3、初始化Lerna
+```shell
+$ lerna init --packages="projects/*"  // Angular管理子包的目录名默认为projects
+```
+此时会在`my-test`目录下多出一个`lerna.json`文件。
 ### 4、调整Library配置
 Angular默认是将Library打包到工程根目录下的`dist`目录的，这里做个调整，打包到各自的`dist`目录：
 ```json
@@ -87,6 +81,7 @@ Angular默认是将Library打包到工程根目录下的`dist`目录的，这里
   "files": [
     "dist"
   ],
+  // 下面的视情况而定
   "main": "dist/bundles/my-lib1.umd.js",
   "module": "dist/fesm2015/my-lib1.js",
   "es2015": "dist/fesm2015/my-lib1.js",
