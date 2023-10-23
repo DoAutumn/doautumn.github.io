@@ -100,3 +100,11 @@ $ lerna version --conventional-commits
 ```shell
 $ lerna publish from-git --yes
 ```
+### 7、安装依赖
+如果只想给某个子包安装依赖 或者 子包之间有依赖关系，可通过如下命令实现：
+```shell
+$ npm install <dependency> -w <package>
+// dependency可以是子包名称，也可以是开源依赖
+// package为目标子包名称，是子包的package.json中的name值
+```
+更多细节可参考[这里](https://lerna.js.org/docs/legacy-package-management)。

@@ -24,17 +24,17 @@ category: Git
 
 ### 3、常用的commit message的类型
 
-`build:`编译相关的修改，例如发布版本、对项目构建或者依赖的改动
-`chore:`其他修改, 比如改变构建流程、或者增加依赖库、工具等
-`ci:`持续集成修改
-`docs:`文档修改
-`feat:`新特性、新功能
-`fix:`修改bug
-`perf:`优化相关，比如提升性能、体验
-`refactor:`代码重构
-`revert:`回滚到上一个版本
-`style:`代码格式修改, 注意不是 css 修改
-`test:`测试用例修改
+`feat` - A new feature.
+`fix` - A bug fix.
+`docs` - Documentation only changes.
+`style` - Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
+`refactor` - A Code change that neither fixes a bug nor adds a feature.
+`pref` - A code change that improves performance.
+`test` - Adding missing tests or correcting existing tests.
+`build` - Changes that effect the build system or external dependencies (example scopes: glup, broccoli, npm).
+`ci` - Changes to our CI configuration files and scripts (example scopes: Travis, Circle, , BrowserStack, SauceLabs).
+`chore` - Other changes that don't modify sc or test files.
+`revert` - Reverts a previous commit.
 
 ## 二、husky [链接](https://typicode.github.io/husky)
 husky可以让我们向项目中方便添加git hooks。
