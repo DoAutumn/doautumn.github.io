@@ -31,3 +31,6 @@ Preferences ——> Settings
 vscode从某个版本开始，在滚动左侧目录树、编辑区代码时，会在顶部保留层级结构，其实不好用，需要将其关闭
 
 Preferences ——> Settings ——> 搜索`sticky` ——> 将其所有复选框均取消即可
+
+### 6.安装Extensions
+- GitLens必装
