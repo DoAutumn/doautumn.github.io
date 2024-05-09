@@ -26,3 +26,8 @@ Preferences ——> Settings
 ——> 找到 Tab Size，将值改为2
 
 ——> 找到 Detect Indentation，将前边的复选框的勾选取消（配置全局文件为2个空格，不勾选则以前文件不变）
+
+### 5.关闭顶部固定区域
+vscode从某个版本开始，在滚动左侧目录树、编辑区代码时，会在顶部保留层级结构，其实不好用，需要将其关闭
+
+Preferences ——> Settings ——> 搜索`sticky` ——> 将其所有复选框均取消即可
