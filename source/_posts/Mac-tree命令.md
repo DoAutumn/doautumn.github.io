@@ -23,7 +23,7 @@ Tree是一个递归目录列表命令，使用它可以生成一个深度缩进�
 ```
 当我们需要详细介绍每个目录的作用时，这将会很有用。
 ## Tree命令安装（源码安装）
-1、[下载安装包](http://mama.indstate.edu/users/ice/tree/)
+1、[下载安装包](https://gitlab.com/OldManProgrammer/unix-tree)
 2、安装步骤
 - `tar -zxvf tree-2.1.0.tgz`
 - 进入tree-2.1.0目录，修改tree的配置文件Makefile，将其中61行左右的注释去掉，内容参照如下：
