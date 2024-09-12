@@ -1,9 +1,9 @@
 ---
-title: nexus的安装与使用
+title: 使用Nexus托管npm私有仓库
 toc: true
 date: 2022-09-11 13:51:57
-tags: [nexus,npm私服]
-category: 技术分享
+tags: [Nexus,npm私服]
+category: 工具
 ---
 ## 1.安装Nexus
 ### 1.1.前置条件

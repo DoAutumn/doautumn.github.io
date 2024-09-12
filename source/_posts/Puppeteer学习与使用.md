@@ -3,7 +3,7 @@ title: Puppeteer学习与使用
 toc: true
 date: 2023-09-08 16:46:40
 tags: [Puppeteer,无头浏览器]
-category: 技术分享
+category: 其他
 ---
 
 > 对Puppeteer的学习并没有深入，只是项目中用到了，这里记录下使用过程中的几个问题

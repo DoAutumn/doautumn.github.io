@@ -2,7 +2,7 @@
 title: Mac_tree命令
 toc: false
 date: 2023-03-06 13:53:35
-category: MacOS
+category: Mac
 ---
 ## Tree命令简介
 Tree是一个递归目录列表命令，使用它可以生成一个深度缩进的目录列表，如下形式：

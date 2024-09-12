@@ -1,8 +1,8 @@
 ---
-title: Mac-电源控制
+title: Mac_电源控制
 toc: false
 date: 2023-09-14 14:04:08
-category: MacOS
+category: Mac
 ---
 Mac电脑默认提供了`优化电池充电`功能，但没用明白，新电脑拿到手之后，不知道什么样的充电频次才能让它暂缓充电至80%。
 

@@ -3,7 +3,7 @@ title: VS Code的一些偏好设置
 toc: true
 date: 2023-02-22 13:45:14
 tags: [vscode]
-category: 技术分享
+category: 工具
 ---
 [VS Code](https://code.visualstudio.com/)作为前端开发的必备神器，其作用自然不必多说。这里记录下个人的使用习惯，免得以后再查。
 
@@ -33,4 +33,7 @@ vscode从某个版本开始，在滚动左侧目录树、编辑区代码时，�
 Preferences ——> Settings ——> 搜索`sticky` ——> 将其所有复选框均取消即可
 
 ### 6.安装Extensions
-- GitLens必装
+- GitLens
+- Vue - Official
+- Vue VSCode Snippets(Vue代码片段，方便快速生成代码，如`vbase`可直接生成`<template>`、`<script>`、`<style>`等)
+- CodeGeeX(AI代码助手)

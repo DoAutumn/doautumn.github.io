@@ -3,7 +3,7 @@ title: CKEditor5学习开发之路
 toc: true
 date: 2023-01-11 16:22:26
 tags: [CKEditor5,富文本编辑器]
-category: 技术分享
+category: 富文本编辑器
 sticky: 8
 ---
 > 在开发富文本编辑器的过程中，遇到了很多问题，这里做下记录与分享。
@@ -23,7 +23,7 @@ sticky: 8
 ## 三、CKEditor的使用与踩坑
 对于CKEditor的介绍，这里就不再赘述了，官方文档介绍的更为详细，但目前还没找到中文文档。
 
-> 不过需要说明的是，能够提前阅读到上述有道技术团队分享的架构设计，也算是比较幸运的，这对于理解CKEditor的架构设计及后面的插件开发，是相当有帮助的。个人猜测，仅仅是个人猜测，有道技术团队的架构设计，应该是参考的CKEditor吧。
+> 不过需要说明的是，能够提前阅读到上述有道技术团队分享的架构设计，也算是比较幸运的，这对于理解CKEditor的架构设计及后面的插件开发，是相当有帮助的。
 
 ### 1、Document Editor
 CKEditor支持在5种模式下使用：Classic、Balloon、Balloon Block、Inline、Document，而Document恰恰是我们需要的。按照其[文档](https://ckeditor.com/docs/ckeditor5/latest/installation/frameworks/angular.html#using-the-document-editor-build)介绍，很容易就能构建出一个Demo。
@@ -40,7 +40,7 @@ CKEditor支持在5种模式下使用：Classic、Balloon、Balloon Block、Inlin
 
 上述这两种方式，和我们最初的设想还有些偏差。我们希望将富文本编辑器开发成一个公共组件供产线各个产品使用，设想的使用方式也尽量简单，只需安装我们提供的富文本编辑器组件包`teditor`和我们依赖的开源包`@ckeditor/*`即可。
 
-而一旦我们开发并构建了属于自己的`@ckedtior/ckeditor5-build-decoupled-document1`，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，我记得遇到的问题是，CKEditor源码中虽然是.css文件，但某些.css中却是less的语法，导致编译不成功。
+而一旦我们开发并构建了属于自己的`@ckedtior/ckeditor5-build-decoupled-document1`，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，具体原因由于时间关系没有深究。
 
 不过最终，为了开发方便，我们还是决定在安装了构建包的Angular工程中开发插件，只不过相关依赖不是在Angular工程中引入，而是在源码中将其挂载到export的对象上，部分代码如下：
 ```
@@ -65,7 +65,7 @@ DecoupledEditor.Command = Command;
 前两个插件的开发，基本上只要是理解了CKEditor的架构设计，并且按照文档的步骤，一般是不会有太多问题的。但是对于插入图表的功能，完全找不到参考，无奈，只能一边梳理思路一边研究官方文档了。
 
 - 思考一
-对于图表，我们测试使用的是ECharts。我们知道如果想要实例化一个图表，也即调用`echarts.init(dom?: HTMLDivElement|HTMLCanvasElement)`，需要一个Dom元素作为参数，那么我们需要研究的就是在插件中如何能够获取到新创建的Dom了。
+对于图表，我们测试使用的是ECharts。我们知道如果想要实例化一个图表，也即调用它的初始化方法`echarts.init(dom?: HTMLDivElement|HTMLCanvasElement)`，需要一个Dom元素作为参数，那么我们需要研究的就是在插件中如何能够获取到新创建的Dom了。
 通过文档中的 [Using a React component in a block widget](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/tutorials/using-react-in-a-widget.html) 这个教程，我们发现其在渲染 React component 时，就是获取到插件中新创建的Dom进而渲染组件的。
 那么这个问题便迎刃而解了，个人觉得最难的也就是这点了，主要是如何能够想到这一点并找到合适的解决方法。
 > 通过这个问题，需要再次告诫自己，对于这种比较成熟的产品、开发套件、开源库等，一手文档一定是其官方文档，哪怕是英文的，也要仔细研读，不要图省事去网上搜罗别人的博客、技术分享。

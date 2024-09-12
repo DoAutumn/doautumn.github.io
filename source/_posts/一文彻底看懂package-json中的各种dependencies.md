@@ -1,8 +1,8 @@
 ---
-title: 一文彻底看懂 package.json 中的各种 dependencies
+title: 一文彻底看懂package.json中的各种dependencies
 toc: false
 date: 2022-08-31 14:41:58
-category: 技术分享
+category: 其他
 ---
 关于package.json中的各种dependencies的详细解释，可以直接参考[这篇文章](https://developer.aliyun.com/article/1051418)。
 

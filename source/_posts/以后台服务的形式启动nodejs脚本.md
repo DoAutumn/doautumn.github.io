@@ -1,9 +1,9 @@
 ---
-title: 以后台服务的形式启动nodejs脚本
+title: pm2:以后台服务的形式启动nodejs脚本
 toc: false
 date: 2023-03-27 15:03:45
 tags: [pm2]
-category: 技术分享
+category: 工具
 ---
 我们都知道，当我们以`node server.js`执行`server.js`服务脚本时，如果`ctrl + c`结束该进程，则对应的服务也就停止了，那如何以后台服务的形式执行该脚本呢？
 

@@ -3,7 +3,7 @@ title: yalc:最好用的前端link调试方案
 toc: true
 date: 2024-04-08 15:11:34
 tags: [yalc]
-category: 技术分享
+category: 工具
 ---
 ## 一、什么是yalc
 对包开发者而言，一种比`yarn/npm link`更好的开发流程。

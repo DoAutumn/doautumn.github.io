@@ -1,9 +1,9 @@
 ---
-title: Mac-文件添加到Docker并自定义图标
+title: Mac_文件添加到Docker并自定义图标
 toc: false
 date: 2024-05-10 15:17:40
 tags:
-category: MacOS
+category: Mac
 ---
 有些时候我们需要将文件、目录添加到Docker中实现快速访问，默认地，Mac支持将文件、目录添加到Docker的活动区，非活动区是不能添加的，那如何解决呢？
 ![图1](https://foruda.gitee.com/images/1715328057599114375/03333550_358662.png "WX20240510-153018@2x.png")

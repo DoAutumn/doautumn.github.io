@@ -3,7 +3,7 @@ title: Gzip压缩
 toc: false
 date: 2022-08-10 18:09:24
 tags: [Gzip,性能优化]
-category: 技术分享
+category: 工具
 ---
 开启Gzip压缩功能后，服务对资源进行Gzip压缩后返回，缩小传输文件大小，提升文件传输效率，减少带宽消耗。
 #### Spring Boot配置方法

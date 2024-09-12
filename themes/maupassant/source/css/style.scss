@@ -151,8 +151,16 @@ div {
         .tagcloud {
             margin-top: 10px;
             a {
-                line-height: 1.5;
-                padding: 5px;
+                padding: 0 6px;
+                border: solid 1px #ddd;
+                border-radius: 5px;
+                margin-right: 3px;
+                margin-bottom: 6px;
+                display: inline-block;
+                height: 22px;
+                line-height: 21px;
+                box-sizing: border-box;
+                font-size: 12px !important;
             }
         }
         ul {
@@ -339,6 +347,16 @@ div {
         pre code {
             padding: 0 2em;
         }
+        h1, h2, h3, h4, h5, h6 {
+            a {
+                color: #01579f;
+                padding-bottom: 2px;
+                word-break: normal;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
         p {
             margin: 0 0 1.234em;
             word-break: break-word;
@@ -346,10 +364,12 @@ div {
             code {
                 display: inline-block;
                 margin: 0;
-                padding: 0 5px;
+                padding: 0 8px;
                 background: #e4e4e4;
                 font-family: Menlo, Consolas, monospace !important;
                 line-height: 22px;
+                border-radius: 3px;
+                font-size: 15px;
             }
             a {
                 color: #01579f;
@@ -394,6 +414,8 @@ div {
                 background: #e4e4e4;
                 font-family: Menlo, Consolas, monospace !important;
                 line-height: 22px;
+                border-radius: 3px;
+                font-size: 15px;
             }
             a {
                 color: #01579f;
@@ -515,6 +537,8 @@ div {
     }
     .date {
         padding-right: .7em;
+        font-family: monospace;
+        color: #6E7173;
     }
 }
 
@@ -1698,6 +1722,7 @@ figure.highlight,
     margin: 1.1em 0 0 2em;
     padding: 0.7em 0.7em 0 0.7em;
     max-width: 40%;
+    background-color: #fff;
 }
 
 .toc-title {

@@ -1,8 +1,8 @@
 ---
-title: Mac连接Win10共享的目录
+title: Mac_连接Win10共享的目录
 toc: false
 date: 2023-06-30 22:26:40
-category: MacOS
+category: Mac
 ---
 ### 废话不多说，直接上步骤
 1、鼠标右键点击此电脑-管理-本地用户和组-用户

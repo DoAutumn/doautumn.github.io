@@ -3,7 +3,7 @@ title: Lerna学习与使用
 toc: true
 date: 2023-09-05 10:44:14
 tags: [Lerna]
-category: 技术分享
+category: 工具
 ---
 ## 一、介绍
 在学习[wangEditor](https://doautumn.github.io/2023/09/01/wangEditor%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/)的过程中，了解到Lerna，这里记录下学习与使用过程。

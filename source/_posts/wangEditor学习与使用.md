@@ -3,7 +3,7 @@ title: wangEditor学习与使用
 toc: true
 date: 2023-09-01 11:10:31
 tags: [wangEditor,TinyMCE,富文本编辑器]
-category: 技术分享
+category: 富文本编辑器
 ---
 ## 一、背景
 继之前的[CKEditor5学习开发之路](https://doautumn.github.io/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/)之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为[GNU General Public License](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)，不允许闭源商用，因此只能重新调研，具体调研结果可查看[富文本编辑器调研](https://doautumn.github.io/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/)。

@@ -2,7 +2,7 @@
 title: 关于commitlint和husky的安装和使用
 toc: true
 date: 2023-01-11 17:41:55
-tags: [Git_hooks,commitlint,husky]
+tags: [git hooks,commitlint,husky]
 category: Git
 ---
 

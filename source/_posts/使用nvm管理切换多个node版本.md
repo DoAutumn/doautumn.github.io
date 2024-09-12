@@ -1,9 +1,9 @@
 ---
-title: nvm的安装与使用
+title: 使用nvm管理切换多个node版本
 toc: true
-date: 2023-07-24 11:15:43
+date: 2023-03-10 11:15:43
 tags: [nvm,Node版本管理]
-category: 技术分享
+category: 工具
 ---
 ## 1、Node版本管理工具
 node版本管理工具其实有很多，常见的的有nvm、n、fnm。之前一直使用n来管理node版本的，但是忽然有一天发现，安装n之前是需要先安装node的，而先安装的这一版本的node，不在n的管理范畴中，基于这两点原因，放弃了n的使用，转向了nvm。
