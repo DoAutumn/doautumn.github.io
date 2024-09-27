@@ -106,6 +106,9 @@ menu:
   - page: archive
     directory: archives/
     icon: fa-archive
+  - page: pages
+    directory: pages/
+    icon: fa-magic
   - page: about
     directory: about/
     icon: fa-user
@@ -149,8 +152,6 @@ links:
     url: https://doautumn.github.io/web-os
   - title: CKEditor5学习开发之路
     url: https://doautumn.github.io/CKEditor5/
-  - title: 前端常用代码
-    url: https://doautumn.gitee.io/js-fun/
   - title: 以往可视化大屏积累的特殊字体
     url: https://github.com/DoAutumn/fonts
 
