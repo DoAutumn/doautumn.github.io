@@ -2,7 +2,7 @@
 title: Obsidian插件开发
 toc: true
 date: 2024-10-10 15:59:48
-tags: Obbsidian
+tags: Obsidian
 category: 工具
 ---
 
