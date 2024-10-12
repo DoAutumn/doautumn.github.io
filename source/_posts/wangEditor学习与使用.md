@@ -6,7 +6,7 @@ tags: [wangEditor,TinyMCE,富文本编辑器]
 category: 富文本编辑器
 ---
 ## 一、背景
-继之前的[CKEditor5学习开发之路](https://doautumn.github.io/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/)之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为[GNU General Public License](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)，不允许闭源商用，因此只能重新调研，具体调研结果可查看[富文本编辑器调研](https://doautumn.github.io/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/)。
+继之前的[CKEditor5学习开发之路](/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/)之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为[GNU General Public License](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)，不允许闭源商用，因此只能重新调研，具体调研结果可查看[富文本编辑器调研](/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/)。
 ## 二、技术选型
 从调研结果来看，除掉CKEditor5，还剩下TinyMCE、wangEditor、Froala Editor是可选的。
 
@@ -20,7 +20,7 @@ category: 富文本编辑器
 - wangEditor很明显也不是理想选择，正如调研结果中提到的，bug较多，但没办法，暂时没找到其他开源免费可商用的富文本编辑器。
 ## 三、wangEditor的使用与扩展
 不过wangEditor的优势也是比较明显的，帮助文档很详细，示例较多，源码结构也很清晰，弄清楚了它的代码逻辑，修复遇到的bug还是比较简单的。
-<img width="800" alt="图1 架构图" src="https://foruda.gitee.com/images/1693552568613627760/195da767_358662.png">
+<img width="800" alt="架构图.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/wangEditor学习与使用/架构图.png">
 这里就不再重复罗列自定义扩展新功能的步骤了，按照其[官网](https://www.wangeditor.com/v5/development.html)教程一步步来即可。附上包含插入图表、占位符的示例[代码](https://github.com/DoAutumn/wangEditor-test)。
 只记录下对其bug修复、功能调整的技术细节。
 ### 1、修复在Angular工程中编译报错的bug

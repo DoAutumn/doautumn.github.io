@@ -11,8 +11,8 @@ category: CSS
 等宽字体是指每个字符宽度相同的字体。在等宽字体中，每个字符占据相同的空间，无论是宽字符（如W）还是窄字符（如I）。这种特性使得等宽字体在某些情况下非常有用。
 
 等宽字体常用于编程环境和文字效果展示中，因为字符对齐非常重要。在编写代码时，等宽字体可以确保代码对齐整齐，提高可读性。此外，在展示年份、页码、数字动画时，等宽字体也可以使数字对齐，提高视觉效果。
-<img width="700" alt="图1 年份对齐" src="https://foruda.gitee.com/images/1726119574055319637/1025ef99_358662.png">
-<img alt="图2 页码对齐" src="https://foruda.gitee.com/images/1726119588767294440/9aabf391_358662.gif">
+<img width="700" alt="年份对齐.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/CSS_等宽字体/年份对齐.png">
+<img alt="页码对齐.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/CSS_等宽字体/页码对齐.gif">
 
 ## 在CSS中使用等宽字体
 要在CSS中使用等宽字体，我们可以使用字体族属性`font-family`。其中，`monospace`是指浏览器中默认的等宽字体。通过设置`font-family: monospace`，我们可以将元素的字体设置为等宽字体。

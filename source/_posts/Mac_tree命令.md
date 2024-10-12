@@ -27,7 +27,7 @@ Tree是一个递归目录列表命令，使用它可以生成一个深度缩进�
 2、安装步骤
 - `tar -zxvf tree-2.1.0.tgz`
 - 进入tree-2.1.0目录，修改tree的配置文件Makefile，将其中61行左右的注释去掉，内容参照如下：
-![Makefile部分内容](https://foruda.gitee.com/images/1678082807605019793/eedcc30a_358662.png "WX20230306-140628@2x.png")
+![Makefile部分内容.png](https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Mac_tree命令/Makefile部分内容.png)
 - 修改完之后，执行命令：`make`
 - 使用管理员身份安装，执行命令：`sudo cp tree /usr/local/bin/`
 - 测试使用tree命令：`tree --version`

@@ -106,9 +106,6 @@ menu:
   - page: archive
     directory: archives/
     icon: fa-archive
-  - page: pages
-    directory: pages/
-    icon: fa-magic
   - page: about
     directory: about/
     icon: fa-user
@@ -126,18 +123,15 @@ info:
   avatar: /img/avatar.jpg
   discription: To be a better man.
   outlinkitem:
-    - name: twitter
-      outlink: https://twitter.com/username
-      message: Twitter
+    - name: git
+      outlink: https://gitee.com/doautumn
+      message: Gitee
     - name: envelope
       outlink: mailto:doautumn@163.com
       message: Email
     - name: github
       outlink: https://github.com/DoAutumn
       message: Github
-    - name: rss
-      outlink: /atom.xml
-      message: RSS
 
 links:
   - title: 屠·城
@@ -148,12 +142,6 @@ links:
     url: https://cirry.cn/
     src: https://cirry.cn/favicon.ico
     desc: 菜小牛的博客
-  - title: 仿MacOS的后台管理系统
-    url: https://doautumn.github.io/web-os
-  - title: CKEditor5学习开发之路
-    url: https://doautumn.github.io/CKEditor5/
-  - title: 以往可视化大屏积累的特殊字体
-    url: https://github.com/DoAutumn/fonts
 
 timeline:
   - num: 1

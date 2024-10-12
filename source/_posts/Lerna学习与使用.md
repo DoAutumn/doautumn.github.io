@@ -6,7 +6,7 @@ tags: [Lerna]
 category: 工具
 ---
 ## 一、介绍
-在学习[wangEditor](https://doautumn.github.io/2023/09/01/wangEditor%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/)的过程中，了解到Lerna，这里记录下学习与使用过程。
+在学习[wangEditor](/2023/09/01/wangEditor%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/)的过程中，了解到Lerna，这里记录下学习与使用过程。
 
 基本概念就不再赘述了，直接参考[这里](https://lerna.js.org/)。在学习过程中也查阅了部分博文，发现有些朋友不是很清楚这个东西是解决什么问题的，这里举例说明下。
 
@@ -95,7 +95,7 @@ Angular默认是将Library打包到工程根目录下的`dist`目录的，这里
 ```shell
 $ lerna version --conventional-commits
 ```
-这将会根据[Git commit规范](https://doautumn.github.io/2023/01/11/%E5%85%B3%E4%BA%8Ecommitlint%E5%92%8Chusky%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/#3%E3%80%81%E5%B8%B8%E7%94%A8%E7%9A%84commit-message%E7%9A%84%E7%B1%BB%E5%9E%8B)生成版本号和ChangeLog，同时会生成Tag并一起推送到远程Git仓。
+这将会根据[Git commit规范](/2023/01/11/%E5%85%B3%E4%BA%8Ecommitlint%E5%92%8Chusky%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8/#3%E3%80%81%E5%B8%B8%E7%94%A8%E7%9A%84commit-message%E7%9A%84%E7%B1%BB%E5%9E%8B)生成版本号和ChangeLog，同时会生成Tag并一起推送到远程Git仓。
 ### 6、发布
 ```shell
 $ lerna publish from-git --yes

@@ -8,7 +8,7 @@ sticky: 9
 ---
 ## 前言
 目前比较流行的开源后台管理系统[NG-ALAIN](https://ng-alain.com/en)、[Ant Design Pro](https://pro.ant.design/)、[Vue-Element-Admin](https://panjiachen.github.io/vue-element-admin-site/zh/)、[Jeecg Boot](http://boot.jeecg.com/)等，其页面布局基本都是如下形式：
-<img width="500" alt="图1 常见布局" src="https://foruda.gitee.com/images/1675924467881077922/4994c85f_358662.png">
+<img width="500" alt="常见布局.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/常见布局.png">
 诚然，这种形式并非不好，但看的多了，难免视觉疲劳。
 
 其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。
@@ -19,7 +19,7 @@ sticky: 9
 技术栈：Angular13 + NG-ZORRO13
 ### 1.基本布局
 基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。
-<img width="500" alt="图2 MacOS布局" src="https://foruda.gitee.com/images/1675924583486574320/d4685efd_358662.png">
+<img width="500" alt="MacOS布局.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/MacOS布局.png">
 ### 2.Window
 不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种`键盘独占`的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。
 
@@ -74,13 +74,13 @@ export class WindowComponent implements OnInit, OnDestroy {
 而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的[路由复用策略](https://angular.cn/api/router/RouteReuseStrategy)与[keep-alive](https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive)可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。
 
 具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。
-<img width="800" alt="图3 路由复用与多窗口" src="https://foruda.gitee.com/images/1675924756031355629/ad3c0063_358662.jpeg">
-<img width="800" alt="图4 路由复用与多窗口" src="https://foruda.gitee.com/images/1675939326104981687/ef74d29b_358662.png">
+<img width="800" alt="路由复用与多窗口.jpg" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/路由复用与多窗口.jpg">
+<img width="800" alt="路由复用与多窗口.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/路由复用与多窗口.png">
 
 **非活动状态窗口的激活**
 
 我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击`Wiki`并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。
-<img width="650" alt="图5 窗口激活" src="https://foruda.gitee.com/images/1675925306171089912/bab3c306_358662.gif">
+<img width="650" alt="窗口激活.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/窗口激活.gif">
 为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。
 
 **窗口的最小化**
@@ -89,7 +89,7 @@ export class WindowComponent implements OnInit, OnDestroy {
 `new DockItem().init({ name: title, iconPath: image, path: routePath })`
 
 至于缩略图的生成，则是使用了`html2canvas`。
-<img width="650" alt="图6 窗口最小化" src="https://foruda.gitee.com/images/1675930518987025990/7f962a02_358662.gif">
+<img width="650" alt="窗口最小化.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/窗口最小化.gif">
 
 ### 3.Dock
 Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。
@@ -141,7 +141,7 @@ const routes: Routes = [
 ```
 
 对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。
-<img width="650" alt="图7 Dock" src="https://foruda.gitee.com/images/1675930533918274855/55c98167_358662.gif">
+<img width="650" alt="Dock.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/Dock.gif">
 另外，推荐下[Steven](https://juejin.cn/post/6942325271349592100)实现的效果，很丝滑。
 
 ## 如何使用
