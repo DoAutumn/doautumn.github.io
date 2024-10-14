@@ -46,7 +46,7 @@
 <li><a href="https://segmentfault.com/a/1190000039104198?utm_source=sf-similar-article">有道云笔记新版编辑器架构设计（下）</a></li>
 </ul>
 <p>这是有道技术团队分享的架构设计，具有极高的参考价值。看完这两篇文章，本人甚至都有自己开发实现一把的冲动了。奈何考虑到只有我一个人在做这个事情，而且文章虽好，但没有技术细节，实现难度较大，最终只能作罢，只好沿着富文本编辑器的思路继续调研。</p>
-<p>网上关于富文本编辑器的推荐着实不少，<a href="https://blog.csdn.net/growb/article/details/124446195">推荐几款好用的富文本编辑器</a>、<a href="https://jishuin.proginn.com/p/763bfbd75b52">推荐10款常用的富文本编辑器</a>，经过综合对比，最终选定了<a href="https://ckeditor.com/">CKEditor</a>。之所以选CKEditor，一是因为它可以使用与Angular（公司前端技术栈）的原生集成，二是支持从 Word、Excel 和 Google Docs 粘贴。</p>
+<p>网上关于富文本编辑器的推荐着实不少，<a href="https://blog.csdn.net/growb/article/details/124446195">推荐几款好用的富文本编辑器</a>、<a href="https://jishuin.proginn.com/p/763bfbd75b52">推荐10款常用的富文本编辑器</a>，经过综合对比，最终选定了<a href="https://ckeditor.com/">CKEditor</a>。之所以选CKEditor，一是因为它适配了Angular框架，提供了依赖包<code>@ckeditor/ckeditor5-angular</code>（公司技术栈就是Angular），二是支持从 Word、Excel 和 Google Docs 粘贴。</p>
 <h2 id="三、CKEditor的使用与踩坑"><a href="#三、CKEditor的使用与踩坑" class="headerlink" title="三、CKEditor的使用与踩坑"></a>三、CKEditor的使用与踩坑</h2><p>对于CKEditor的介绍，这里就不再赘述了，官方文档介绍的更为详细，但目前还没找到中文文档。</p>
 <blockquote>
 <p>不过需要说明的是，能够提前阅读到上述有道技术团队分享的架构设计，也算是比较幸运的，这对于理解CKEditor的架构设计及后面的插件开发，是相当有帮助的。</p>
@@ -55,20 +55,17 @@
 <h3 id="2、添加Page-break插件"><a href="#2、添加Page-break插件" class="headerlink" title="2、添加Page break插件"></a>2、添加<a href="https://ckeditor.com/docs/ckeditor5/latest/features/page-break.html">Page break</a>插件</h3><p>由于Document模式默认是不带分页功能的，而<a href="https://ckeditor.com/docs/ckeditor5/latest/features/pagination/pagination.html">Pagination</a>又是收费插件，我们只能退而求其次使用Page break。而当我们按照文档尝试安装并引入该插件时，程序报错了。</p>
 <p><code>core.js:7744 ERROR Error: Uncaught (in promise): CKEditorError: ckeditor-duplicated-modules</code></p>
 <p>对于这个错误，官网也有详细<a href="https://ckeditor.com/docs/ckeditor5/latest/support/error-codes.html#error-ckeditor-duplicated-modules">说明</a>，大概意思就是不能在已经构建的包<code>@ckeditor/ckeditor5-build-decoupled-document</code>中再导入新的插件。</p>
-<p>如果只是计划添加CKEditor提供的现有插件，则可以使用<a href="https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#creating-custom-builds-with-online-builder">Online Builder</a>来解决上述问题。但正如前文提到的，我们的需求还包括支持插入占位符、图表，因此我们还需继续研究CKEditor如何扩展一个新的插件。</p>
-<h3 id="3、从源代码构建编辑器"><a href="#3、从源代码构建编辑器" class="headerlink" title="3、从源代码构建编辑器"></a>3、<a href="https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source">从源代码构建编辑器</a></h3><p>正如上文提到，当我们想要扩展一个新插件时，就不能使用CKEditor提供的已经构建好的包了<code>[CKEditor提供了5种已构建好的包，对应上述提到的5种使用模式]</code>，而是需要基于源码进行开发构建。可以按照其<a href="https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source">文档</a>一步步搭建开发环境、开发、构建，而另一种相对比较简单的方式则是直接下载<a href="https://github.com/ckeditor/ckeditor5">源码</a>，进入packages&#x2F;ckeditor5-build-decoupled-document目录，直接安装依赖、开发、构建，这就意味着我们开发并构建了一个属于自己的包<code>@ckedtior/ckeditor5-build-decoupled-document1</code>。</p>
-<p>上述这两种方式，和我们最初的设想还有些偏差。我们希望将富文本编辑器开发成一个公共组件供产线各个产品使用，设想的使用方式也尽量简单，只需安装我们提供的富文本编辑器组件包<code>teditor</code>和我们依赖的开源包<code>@ckeditor/*</code>即可。</p>
-<p>而一旦我们开发并构建了属于自己的<code>@ckedtior/ckeditor5-build-decoupled-document1</code>，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，具体原因由于时间关系没有深究。</p>
-<p>不过最终，为了开发方便，我们还是决定在安装了构建包的Angular工程中开发插件，只不过相关依赖不是在Angular工程中引入，而是在源码中将其挂载到export的对象上，部分代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import Plugin from &#x27;@ckeditor/ckeditor5-core/src/plugin&#x27;;</span><br><span class="line">import Command from &#x27;@ckeditor/ckeditor5-core/src/command&#x27;;</span><br><span class="line"></span><br><span class="line">export default class DecoupledEditor extends DecoupledEditorBase &#123; &#125;</span><br><span class="line"></span><br><span class="line">DecoupledEditor.Plugin = Plugin;</span><br><span class="line">DecoupledEditor.Command = Command;</span><br><span class="line"></span><br><span class="line">// 其中 DecoupledEditor 是源码 ckeditor5-build-decoupled-document 中已有的对象</span><br><span class="line">// 将源码构建之后替换掉Angular工程node_modules中对应的包即可</span><br></pre></td></tr></table></figure>
+<p>如果只是使用CKEditor提供的现有插件，则可以使用<a href="https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#creating-custom-builds-with-online-builder">Online Builder</a>来解决上述问题。但正如前文提到的，我们的需求还包括支持插入占位符、图表，因此我们还需继续研究CKEditor如何扩展一个新的插件。</p>
+<h3 id="3、从源代码构建编辑器"><a href="#3、从源代码构建编辑器" class="headerlink" title="3、从源代码构建编辑器"></a>3、<a href="https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source">从源代码构建编辑器</a></h3><p>正如上文提到，当我们想要扩展一个新插件时，就不能使用CKEditor提供的已经构建好的包了<code>[CKEditor提供了5种已构建好的包，对应上述提到的5种使用模式]</code>，而是需要基于源码进行开发构建。可以按照其<a href="https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source">文档</a>一步步搭建开发环境、开发、构建，而另一种相对比较简单的方式则是直接下载<a href="https://github.com/ckeditor/ckeditor5">源码</a>，进入packages&#x2F;ckeditor5-build-decoupled-document目录，直接安装依赖、开发、构建。</p>
+<p>其实我一开始的想法是，在一个Angular工程中安装<code>@ckeditor/ckeditor5-angular</code>，然后开发新插件，最后将这个Angular工程打包成一个依赖包提供给产线各部门使用（我们部门的职责之一就是为各部门提供开发套件）。但是在打包代码时程序报错了，具体什么错误记不清了，由于时间关系没有继续研究。<br><em>TODO: 后面有时间了还得再回来看看。</em></p>
 <h2 id="四、插件开发"><a href="#四、插件开发" class="headerlink" title="四、插件开发"></a>四、插件开发</h2><p>好了，准备工作已完成，下面可以进入代码开发阶段了。关于插件开发的入门，可参考<a href="https://ckeditor.com/docs/ckeditor5/latest/framework/guides/plugins/creating-simple-plugin-timestamp.html">这里</a>。</p>
 <h3 id="1、图片上传"><a href="#1、图片上传" class="headerlink" title="1、图片上传"></a>1、图片上传</h3><p>我们要开发的第一个插件是图片上传插件，确切的说是扩展一个自定义的图片上传适配器。CKEditor默认提供了图片插入功能，但图片并没有提交至服务端，这部分逻辑需要自行实现，按照<a href="https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/upload-adapter.html">文档</a>一步步开发即可，没有什么需要特别注意的。</p>
 <h3 id="2、占位符"><a href="#2、占位符" class="headerlink" title="2、占位符"></a>2、占位符</h3><p>占位符插件也比较简单，直接基于文档中的一个<a href="https://ckeditor.com/docs/ckeditor5/latest/framework/guides/plugins/simple-plugin/abbreviation-plugin-level-1.html">实例</a>改造即可。</p>
 <h3 id="3、插入图表"><a href="#3、插入图表" class="headerlink" title="3、插入图表"></a>3、插入图表</h3><p>前两个插件的开发，基本上只要是理解了CKEditor的架构设计，并且按照文档的步骤，一般是不会有太多问题的。但是对于插入图表的功能，完全找不到参考，无奈，只能一边梳理思路一边研究官方文档了。</p>
 <ul>
-<li><p>思考一<br>对于图表，我们测试使用的是ECharts。我们知道如果想要实例化一个图表，也即调用它的初始化方法<code>echarts.init(dom?: HTMLDivElement|HTMLCanvasElement)</code>，需要一个Dom元素作为参数，那么我们需要研究的就是在插件中如何能够获取到新创建的Dom了。<br>通过文档中的 <a href="https://ckeditor.com/docs/ckeditor5/latest/framework/guides/tutorials/using-react-in-a-widget.html">Using a React component in a block widget</a> 这个教程，我们发现其在渲染 React component 时，就是获取到插件中新创建的Dom进而渲染组件的。<br>那么这个问题便迎刃而解了，个人觉得最难的也就是这点了，主要是如何能够想到这一点并找到合适的解决方法。</p>
+<li><p>思考一<br>对于图表，我们测试使用的是ECharts。我们知道如果想要实例化一个图表，也即调用它的初始化方法<code>echarts.init(dom?: HTMLDivElement|HTMLCanvasElement)</code>，需要一个Dom元素作为参数，那么我们需要研究的就是在插件中如何能够获取到新创建的Dom了。<br>通过文档中的 <a href="https://ckeditor.com/docs/ckeditor5/latest/framework/guides/tutorials/using-react-in-a-widget.html">Using a React component in a block widget</a> 这个教程，我们发现其在渲染 React component 时，就是获取到插件中新创建的Dom进而渲染组件的。<br>那么这个问题便迎刃而解了。</p>
 <blockquote>
-<p>通过这个问题，需要再次告诫自己，对于这种比较成熟的产品、开发套件、开源库等，一手文档一定是其官方文档，哪怕是英文的，也要仔细研读，不要图省事去网上搜罗别人的博客、技术分享。</p>
+<p>通过这个问题，需要再次告诫自己，对于这种比较成熟的产品、开发套件、开源库等，一手文档一定是其官方文档，哪怕是英文的，也要仔细研读，不要图省事去网上搜罗别人的博客、技术分享。<br>刚开始的时候，我是各种搜、各种查，但始终没有找到如何获取新创建的Dom的方案，最后还是通过官方文档找到了答案。</p>
 </blockquote>
 </li>
 <li><p>思考二<br>图表插入之后，如何确定当前选中的是图表元素，进而进行后续的业务操作？<br>相关 API 主要涉及 setCustomProperty、getCustomProperty、getSelectedElement、isWidget，具体含义及用法还是查阅<a href="https://ckeditor.com/docs/ckeditor5/latest/api/index.html">官方文档</a>吧。</p>
@@ -144,30 +141,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux无外网全局安装node依赖包</title>
-    <url>/2023/03/27/Linux%E6%97%A0%E5%A4%96%E7%BD%91%E5%85%A8%E5%B1%80%E5%AE%89%E8%A3%85node%E4%BE%9D%E8%B5%96%E5%8C%85/</url>
-    <content><![CDATA[<ul>
-<li>首先在本地全局安装需要的包<code>npm i -g http-server</code>，（注意：本地必须是全局安装），进入全局安装路径，比如我的电脑安装路径在这里：<code>/usr/local/lib/node_modules/</code>，</li>
-<li>在linux上找到node安装路径，进入其<code>lib/node_modules/</code>目录下，将上述包上传至该目录下</li>
-<li>建立软连接以便全局使用命令：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -s /usr/local/src/nodejs/lib/node_modules/http-server/bin/http-server /usr/local/bin/http-server</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Mac_Chrome跨域</title>
-    <url>/2023/02/05/Mac_Chrome%E8%B7%A8%E5%9F%9F/</url>
-    <content><![CDATA[<p>Mac以允许跨域方式启动Chrome，直接在终端执行以下命令即可：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">open -n /Applications/Google\ Chrome.app/ --args --disable-web-security  --user-data-dir=/Users/doautumn/fang/chrome/MyChromeDevUserData</span><br></pre></td></tr></table></figure>
-<p><a href="https://www.cnblogs.com/dxzg/p/9707639.html">参考链接</a></p>
-]]></content>
-      <categories>
-        <category>Mac</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Lerna学习与使用</title>
     <url>/2023/09/05/Lerna%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在学习<a href="/2023/09/01/wangEditor%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/">wangEditor</a>的过程中，了解到Lerna，这里记录下学习与使用过程。</p>
@@ -199,7 +172,7 @@
 <h3 id="6、发布"><a href="#6、发布" class="headerlink" title="6、发布"></a>6、发布</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">lerna publish from-git --<span class="built_in">yes</span></span></span><br></pre></td></tr></table></figure>
 <h3 id="7、安装依赖"><a href="#7、安装依赖" class="headerlink" title="7、安装依赖"></a>7、安装依赖</h3><p><del>如果只想给某个子包安装依赖 或者 子包之间有依赖关系，可通过如下命令实现：</del></p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">npm install &lt;dependency&gt; -w &lt;package&gt;</span></span><br><span class="line">// dependency可以是子包名称，也可以是开源依赖</span><br><span class="line">// package为目标子包名称，是子包的package.json中的name值</span><br></pre></td></tr></table></figure>
-<h3 id="8、2024-08-11更新"><a href="#8、2024-08-11更新" class="headerlink" title="8、2024-08-11更新"></a>8、2024-08-11更新</h3><p>Lerna@8版本，已经不需要像步骤7那样执行命令了，正常使用<code>npm install\uninstall</code>即可，当安装的是自己的子包时，也无需添加任何额外的参数，Lerna会自动帮我们处理，并且在<code>node_modules</code>目录下，子包的目录会通过软链接的形式指向实际的代码目录，就像这样<br><img src="https://foruda.gitee.com/images/1723366110954041992/064c10aa_358662.png" alt="图1"></p>
+<h3 id="8、2024-08-11更新"><a href="#8、2024-08-11更新" class="headerlink" title="8、2024-08-11更新"></a>8、2024-08-11更新</h3><p>Lerna@8版本，已经不需要像步骤7那样执行命令了，正常使用<code>npm install\uninstall</code>即可，当安装的是自己的子包时，也无需添加任何额外的参数，Lerna会自动帮我们处理，并且在<code>node_modules</code>目录下，子包的目录会通过软链接的形式指向实际的代码目录，就像这样<br><img width="300" alt="软链接.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/软链接.png"></p>
 <p>更多细节可参考<a href="https://lerna.js.org/docs/legacy-package-management">这里</a>。</p>
 ]]></content>
       <categories>
@@ -208,6 +181,30 @@
       <tags>
         <tag>Lerna</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Linux无外网全局安装node依赖包</title>
+    <url>/2023/03/27/Linux%E6%97%A0%E5%A4%96%E7%BD%91%E5%85%A8%E5%B1%80%E5%AE%89%E8%A3%85node%E4%BE%9D%E8%B5%96%E5%8C%85/</url>
+    <content><![CDATA[<ul>
+<li>首先在本地全局安装需要的包<code>npm i -g http-server</code>，（注意：本地必须是全局安装），进入全局安装路径，比如我的电脑安装路径在这里：<code>/usr/local/lib/node_modules/</code>，</li>
+<li>在linux上找到node安装路径，进入其<code>lib/node_modules/</code>目录下，将上述包上传至该目录下</li>
+<li>建立软连接以便全局使用命令：<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ln -s /usr/local/src/nodejs/lib/node_modules/http-server/bin/http-server /usr/local/bin/http-server</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Mac_Chrome跨域</title>
+    <url>/2023/02/05/Mac_Chrome%E8%B7%A8%E5%9F%9F/</url>
+    <content><![CDATA[<p>Mac以允许跨域方式启动Chrome，直接在终端执行以下命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">open -n /Applications/Google\ Chrome.app/ --args --disable-web-security  --user-data-dir=/Users/doautumn/fang/chrome/MyChromeDevUserData</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/dxzg/p/9707639.html">参考链接</a></p>
+]]></content>
+      <categories>
+        <category>Mac</category>
+      </categories>
   </entry>
   <entry>
     <title>Mac_ll命令</title>
@@ -251,6 +248,25 @@
 <li><code>cd tree-2.1.0</code></li>
 <li><code>make install</code></li>
 <li><code>tree --version</code></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Mac</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Mac_彻底删除应用程序</title>
+    <url>/2023/01/11/Mac_%E5%BD%BB%E5%BA%95%E5%88%A0%E9%99%A4%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/</url>
+    <content><![CDATA[<p>不论是通过Finder还是Launchpad卸载应用程序之后，还需要清除应用程序残留的文件，如首选项、支持文件、缓存、隐藏文件等。这些残留文件，目前通过自己使用的情况来看，即使使用CleanMyMac X也无法清除。不过我们可以通过如下方式达到目的：<br>我们只需要在如下目录找到相关目录文件，将其删除即可。</p>
+<ul>
+<li>应用程序支持文件：<code>~/Library/Application Support/(App Name)</code></li>
+<li>首选项：<code>~/Library/Preferences/(App Name)</code></li>
+<li>缓存：<code>~/Library/Caches/(App Name)</code></li>
+</ul>
+<p>如果某些应用在安装时，自动添加到了 <code>设置 &gt; 通用 &gt; 登录项 &gt; 允许在后台</code>，则还需执行如下步骤：</p>
+<ul>
+<li><code>cd /Library/LaunchDaemons/</code>，找到该应用相关的.plist文件，<code>rm -rf xxx</code>删除</li>
+<li><code>cd /Library/LaunchAgents/</code>，找到该应用相关的.plist文件，<code>rm -rf xxx</code>删除</li>
 </ul>
 ]]></content>
       <categories>
@@ -369,6 +385,130 @@
       </tags>
   </entry>
   <entry>
+    <title>Vue3入门</title>
+    <url>/2023/04/23/Vue3%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<p>虽然之前整理过<a href="/2023/01/11/%E4%BD%BF%E7%94%A8Vite%E6%9E%84%E5%BB%BAVue3%E7%BB%84%E4%BB%B6%E5%BA%93/">使用 Vite 构建 Vue3 组件库</a>、<a href="/2023/09/05/Lerna%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/">Lerna 学习与使用</a>，但都过于简单，对于 Vue 的基本概念、语法等知之甚少，也基本没用过 Vite，诸如以下问题均不甚了解：</p>
+<ul>
+<li>SFC 是什么？</li>
+<li>Hooks 又是什么？</li>
+<li>如何理解 Composition API？</li>
+<li>如何实现组件继承？</li>
+<li>如何自定义指令？</li>
+<li>如何自定义结构型指令？</li>
+<li>自定义的指令、组件，是如何实现完整引入和手动导入两种方式的？</li>
+<li>Vue3 中的依赖注入和 Angular 中的有什么区别？</li>
+<li>使用 Vite + Vue3 + TypeScript，如何在一个工程中同时构建多个依赖包？如何组织目录更合理？</li>
+<li>依赖包如何自动生成 .d.ts 声明文件？</li>
+<li>如何实现国际化？</li>
+<li>如何动态创建组件？</li>
+<li>在开发依赖包的过程中，如何更优雅的编写帮助文档？</li>
+</ul>
+<h2 id="一、SFC"><a href="#一、SFC" class="headerlink" title="一、SFC"></a>一、<a href="https://cn.vuejs.org/api/sfc-spec.html">SFC</a></h2><p>一个 Vue 单文件组件 (SFC)，通常使用 <code>*.vue</code> 作为文件扩展名，它是一种使用了类似 HTML 语法的自定义文件格式，用于定义 Vue 组件。一个 Vue 单文件组件在语法上是兼容 HTML 的。</p>
+<p>每一个 <code>*.vue</code> 文件都由三种顶层语言块构成：<code>&lt;template&gt;</code>、<code>&lt;script&gt;</code> 和 <code>&lt;style&gt;</code>，以及一些其他的自定义块：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;example&quot;</span>&gt;</span>&#123;&#123; msg &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">msg</span>: <span class="string">&#x27;Hello world!&#x27;</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.example</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">color</span>: red;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">custom1</span>&gt;</span></span><br><span class="line">  This could be e.g. documentation for the component.</span><br><span class="line"><span class="tag">&lt;/<span class="name">custom1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Hooks"><a href="#二、Hooks" class="headerlink" title="二、Hooks"></a>二、Hooks</h2><p>Vue3 官方文档并没有对 Hooks 做明确定义，却无处不在在使用这个技巧，很多开源项目也在用这个技巧，这里有一些大佬的分享：</p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000044673851">Vue3中的Hooks详解</a></li>
+<li><a href="https://juejin.cn/post/7208111879150993464">理解Vue3中的hooks</a></li>
+<li><a href="https://juejin.cn/post/7083401842733875208">Vue3必学技巧-自定义Hooks-让写Vue3更畅快</a></li>
+</ul>
+<p>其中，我觉得这个解释是最清晰易懂的：</p>
+<ul>
+<li>一般来说，我们开发中会自动抽象出逻辑函数放在utils中，utils中放的纯逻辑，不存在属于组件的东西，例如methods中定义的纯函数等。而hooks就是在utils的基础上再包一层组件级别的东西(钩子函数等)</li>
+<li>hooks和utils的区别： hooks中如果涉及到ref,reactive,computed这些api的数据，那这些数据是具有响应式的，而utils只是单纯提取公共方法就不具备响应式，因此可以把hook理解为加入vue3 api的共通方法</li>
+</ul>
+<h2 id="三、Composition-API"><a href="#三、Composition-API" class="headerlink" title="三、Composition API"></a>三、Composition API</h2><p>组合式 API (Composition API) 是一系列 API 的集合，使我们可以使用函数而不是声明选项的方式书写 Vue 组件。它是一个概括性的术语，涵盖了以下方面的 API：</p>
+<ul>
+<li><a href="https://cn.vuejs.org/api/reactivity-core.html">响应式 API</a>：例如 <code>ref()</code> 和 <code>reactive()</code>，使我们可以直接创建响应式状态、计算属性和侦听器。</li>
+<li><a href="https://cn.vuejs.org/api/composition-api-lifecycle.html">生命周期钩子</a>：例如 <code>onMounted()</code> 和 <code>onUnmounted()</code>，使我们可以在组件各个生命周期阶段添加逻辑。</li>
+<li><a href="https://cn.vuejs.org/api/composition-api-dependency-injection.html">依赖注入</a>：例如 <code>provide()</code> 和 <code>inject()</code>，使我们可以在使用响应式 API 时，利用 Vue 的依赖注入系统。</li>
+<li><a href="https://cn.vuejs.org/guide/reusability/composables.html">组合式函数</a></li>
+<li><a href="https://cn.vuejs.org/guide/extras/composition-api-faq.html#%E7%8B%AC%E7%AB%8B%E7%9A%84-computed-%E5%B1%9E%E6%80%A7">组合式 API 常见问答</a></li>
+</ul>
+<h2 id="四、如何实现组件继承？"><a href="#四、如何实现组件继承？" class="headerlink" title="四、如何实现组件继承？"></a>四、如何实现组件继承？</h2><p>对于一位习惯使用面向对象编程语言的开发者而言，继承被视为一种自然而然的设计模式，Angular 对这一模式的支持更是加深了这种印象，使我一度认为继承是一种理所当然的选择。然而，Vue 并不特别推崇这种方案。在 Vue3 中，它更倾向于推荐使用 Composition API 和可复用的逻辑来实现组件间的复用，这导致我在刚开始的开发过程中着实不是很适应。</p>
+<h3 id="1、Composition-API-的优势"><a href="#1、Composition-API-的优势" class="headerlink" title="1、Composition API 的优势"></a>1、Composition API 的优势</h3><ul>
+<li>更好的可测试性：Composition API 的逻辑更容易被拆分成独立的单元进行测试。</li>
+<li>更清晰的代码结构：每个组合函数负责一部分特定的逻辑，使代码更易于理解和维护。</li>
+<li>更好的可复用性：逻辑可以通过组合函数在多个组件之间共享。</li>
+</ul>
+<h3 id="2、面向对象继承与-Composition-API-的对比"><a href="#2、面向对象继承与-Composition-API-的对比" class="headerlink" title="2、面向对象继承与 Composition API 的对比"></a>2、面向对象继承与 Composition API 的对比</h3><p>在面向对象继承中，可以直接重写方法，这通常意味着：</p>
+<ul>
+<li>简洁性：可以直接覆盖方法实现。</li>
+<li>继承性：子类可以继承父类的所有属性和方法。</li>
+<li>多态性：可以利用多态性来实现不同的行为。</li>
+</ul>
+<p>然而，面向对象继承也有一些缺点：</p>
+<ul>
+<li>紧耦合：类之间的关系紧密，修改一个类可能会影响到其他依赖它的类。</li>
+<li>难以复用：类的逻辑通常与类本身绑定，不易于在不同场景下复用。</li>
+<li>难以调试和测试：较大的类可能会包含许多逻辑，使得调试和测试变得复杂。</li>
+</ul>
+<h2 id="五、如何自定义指令？"><a href="#五、如何自定义指令？" class="headerlink" title="五、如何自定义指令？"></a>五、<a href="https://cn.vuejs.org/guide/reusability/custom-directives.html">如何自定义指令？</a></h2><p>在 <code>&lt;script setup&gt;</code> 中，任何以 <code>v</code> 开头的驼峰式命名的变量都可以被用作一个自定义指令。比如下面的例子，<code>vFocus</code> 即可以在模板中以 <code>v-focus</code> 的形式使用。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> vFocus = &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">mounted</span>: <span class="function">(<span class="params">el</span>) =&gt;</span> el.<span class="title function_">focus</span>()</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">v-focus</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>一般来讲，我们通常会单独封装一些通用指令，而很少会在单个 Vue 组件中自定义指令，比如我们可以这样做：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vFocus = &#123;</span><br><span class="line">  <span class="attr">mounted</span>: <span class="function">(<span class="params">el</span>) =&gt;</span> el.<span class="title function_">focus</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用该指令时，我们可以手动导入使用它：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; vFocus &#125; <span class="keyword">from</span> <span class="string">&#x27;xxx&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>也可以将其全局注册到应用层级：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使 v-focus 在所有组件中都可用</span></span><br><span class="line">app.<span class="title function_">directive</span>(<span class="string">&#x27;focus&#x27;</span>, vFocus)</span><br></pre></td></tr></table></figure>
+<p>而当我们在依赖包中自定义了 N 多个指令时，我们一般会采用插件的方式为每一个指令提供一个 <code>install</code> 方法，然后全局安装插件：</p>
+<ol>
+<li>首先定义一个为指令挂载 <code>install</code> 的通用方法：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> withInstallDirective = &lt;T <span class="keyword">extends</span> <span class="title class_">Directive</span>&gt;<span class="function">(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  <span class="attr">directive</span>: T,</span></span></span><br><span class="line"><span class="params"><span class="function">  <span class="attr">name</span>: <span class="built_in">string</span></span></span></span><br><span class="line"><span class="params"><span class="function"></span>) =&gt;</span> &#123;</span><br><span class="line">  ;(directive <span class="keyword">as</span> <span class="title class_">SFCWithInstall</span>&lt;T&gt;).<span class="property">install</span> = (<span class="attr">app</span>: <span class="title class_">App</span>): <span class="function"><span class="params">void</span> =&gt;</span> &#123;</span><br><span class="line">    app.<span class="title function_">directive</span>(name, directive)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> directive <span class="keyword">as</span> <span class="title class_">SFCWithInstall</span>&lt;T&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>然后每一个指令使用该方法挂载 <code>install</code>：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">ElFocus</span> = <span class="title function_">withInstallDirective</span>(vFocus, <span class="string">&#x27;focus&#x27;</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">ElFocus</span></span><br></pre></td></tr></table></figure></li>
+<li>最后在依赖包的 <code>index.ts</code> 中安装插件，同时将依赖包本身也作为插件挂载上 <code>install</code>：<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ElFocus</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;xxx&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">plugins</span>: <span class="title class_">Plugin</span>[] = [</span><br><span class="line">  <span class="title class_">ElFocus</span>,</span><br><span class="line">  ...</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="title function_">install</span>(<span class="params"><span class="attr">app</span>: <span class="title class_">App</span></span>) &#123;</span><br><span class="line">    plugins.<span class="title function_">forEach</span>(<span class="function"><span class="params">c</span> =&gt;</span> app.<span class="title function_">use</span>(c)) <span class="comment">// app.use() 方法会自动调用插件的 install() 方法</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>上面借助<a href="https://cn.vuejs.org/guide/reusability/plugins.html">插件</a>的设计思路同时介绍了自定义的指令、组件如何实现完整引入和手动导入两种方式。<br>在 Angular 中，没有完整引入的概念，因此这里的<code>插件</code>、<code>install</code>、<code>use</code>需要稍微理解一下。</p>
+<h2 id="六、如何自定义结构型指令？"><a href="#六、如何自定义结构型指令？" class="headerlink" title="六、如何自定义结构型指令？"></a>六、如何自定义结构型指令？</h2><p>在 Vue 中自定义结构型指令比在 Angular 中要简单的多，直接通过 <code>parentNode.appendChild()</code>、<code>parentNode.removeChild()</code> 实现即可。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设这里有一个权限检查函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">checkAuth</span>(<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="comment">// 实现权限检查逻辑</span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">// 返回布尔值表示用户是否有权限</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义自定义指令</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> vAuth = &#123;</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_">checkAuth</span>(binding.<span class="property">value</span>)) &#123;</span><br><span class="line">      el.<span class="property">parentNode</span>.<span class="title function_">removeChild</span>(el); <span class="comment">// 移除 DOM 节点</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">beforeUpdate</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="title function_">checkAuth</span>(binding.<span class="property">value</span>)) &#123;</span><br><span class="line">      el.<span class="property">parentNode</span>.<span class="title function_">removeChild</span>(el); <span class="comment">// 移除 DOM 节点</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!el.<span class="property">parentNode</span>) &#123;</span><br><span class="line">      el.<span class="property">parentNode</span>.<span class="title function_">appendChild</span>(el); <span class="comment">// 如果已经被移除，则重新添加</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">updated</span>(<span class="params">el, binding</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">checkAuth</span>(binding.<span class="property">value</span>) &amp;&amp; !el.<span class="property">parentNode</span>) &#123;</span><br><span class="line">      el.<span class="property">parentNode</span>.<span class="title function_">appendChild</span>(el); <span class="comment">// 如果已经被移除，则重新添加</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、Vue3-中的依赖注入和-Angular-中的有什么区别？"><a href="#七、Vue3-中的依赖注入和-Angular-中的有什么区别？" class="headerlink" title="七、Vue3 中的依赖注入和 Angular 中的有什么区别？"></a>七、Vue3 中的依赖注入和 Angular 中的有什么区别？</h2><p>链接：<a href="https://cn.vuejs.org/guide/components/provide-inject.html">https://cn.vuejs.org/guide/components/provide-inject.html</a><br>在我看来，其实没什么区别，只是写法的区别。<br>在 Angular 中，先是在类的元数据中标记这是<code>可被注入的</code>，然后在 NgModule 的元数据的 <code>providers</code> 中提供，最后直接在其它类的构造函数中注入即可：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 标记是可被注入的</span></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">TestService</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Provide 提供</span></span><br><span class="line"><span class="meta">@NgModule</span>(&#123;</span><br><span class="line">  ...,</span><br><span class="line">  <span class="attr">providers</span>: [<span class="title class_">TestService</span>]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 直接注入使用</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">OtherClass</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="keyword">private</span> <span class="attr">ser</span>: <span class="title class_">TestService</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而在 Vue 中，没有元数据的概念，没有<code>可被注入的</code>概念，直接提供、直接注入：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; provide &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">provide</span>(<span class="comment">/* 注入名 */</span> <span class="string">&#x27;message&#x27;</span>, <span class="comment">/* 值 */</span> <span class="string">&#x27;hello!&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; inject &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> message = <span class="title function_">inject</span>(<span class="string">&#x27;message&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>当然也是可以全局注入的，具体参考上面链接中的官方文档。</p>
+<h2 id="八、使用-Vite-Vue3-TypeScript，如何在一个工程中同时构建多个依赖包？如何组织目录更合理？"><a href="#八、使用-Vite-Vue3-TypeScript，如何在一个工程中同时构建多个依赖包？如何组织目录更合理？" class="headerlink" title="八、使用 Vite + Vue3 + TypeScript，如何在一个工程中同时构建多个依赖包？如何组织目录更合理？"></a>八、使用 Vite + Vue3 + TypeScript，如何在一个工程中同时构建多个依赖包？如何组织目录更合理？</h2><p>如果只是开发一个组件库，那么完全可以参考 <a href="https://element-plus.org/zh-CN/">Element Plus</a> 的目录结构和打包方式，或者也可以参考<a href="https://space.bilibili.com/69097065/channel/collectiondetail?sid=2881868">手把手带你手搓组件库</a>这样的视频教程，他其实也是参考了 Element Plus，只是不需要自己翻 Element Plus 的源码了。</p>
+<p>虽然 Element Plus 是一个单一的组件库，但其内部仍然是拆分了多个子包，通过 <a href="https://www.pnpm.cn/">pnpm</a> 管理多个子包。pnpm 内置了对单一存储库（也称为多包存储库、多项目存储库或单体存储库）的支持， 你可以创建一个 workspace 以将多个项目合并到一个仓库中。但我不喜欢用 pnpm，因为我的 Angular 工程，使用 npm 下载依赖包运行程序没问题，使用 pnpm 下载运行就报错，当然是相同版本的 node 和相同的 package.json，我也懒得去研究了，还是继续使用 <a href="https://lerna.js.org/">Lerna</a> 来实现多包管理。</p>
+<p>需求层面，我并不只是要实现单一的组件库，而是要包含 <a href="/2023/09/05/Lerna%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/">Lerna 学习与使用</a>中已经提到过的 <code>frame</code>、<code>components</code>、<code>charts</code>、<code>compoxes</code>、<code>utils</code> 等。废话不多说，直接开始吧。</p>
+<h3 id="1、初始化-Vue-工程"><a href="#1、初始化-Vue-工程" class="headerlink" title="1、初始化 Vue 工程"></a>1、初始化 Vue 工程</h3><p>我还是习惯 Angular 的设计方案，它是区分应用程序 (application) 和库 (lib) 的，可以通过 cli 直接初始化一个应用程序项目 或 库项目，<em>当然 Vue 也是区分的，只是在打包的时候使用不同的 Vite 配置，需要手动配置</em>。在 Angular 中一般都是先创建一个应用程序，再通过 <code>ng g lib library[name] [options]</code> 命令创建一个库项目。Vue 没有这样的命令，只能手动创建。</p>
+<p>通过 <code>npm create vite@latest my-vue-app -- --template vue-ts</code> 初始化一个工程之后，手动创建 <code>packages/frame</code>、<code>packages/components</code>、<code>packages/charts</code>、<code>packages/compoxes</code>、<code>packages/utils</code> 目录，并在各自目录下创建一个 <code>src</code> 目录和 <code>index.ts</code>、<code>package.json</code>、<code>vite.config.ts</code> 3个文件，此时整个工程目录是这样：<br><img width="150" alt="工程目录.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/工程目录.png"></p>
+<p>每一个子包都需要单独打包，所以每一个目录下都有一个 <code>vite.config.ts</code> 文件。</p>
+<h3 id="2、初始化-Lerna"><a href="#2、初始化-Lerna" class="headerlink" title="2、初始化 Lerna"></a>2、初始化 Lerna</h3><p>在 <code>my-vue-app</code> 目录下直接执行 <code>npx lerna init --packages=&quot;packages/*&quot;</code> 即可，它会创建一个 <code>lerna.json</code> 文件，并安装 <code>lerna</code> 依赖。<br><strong>注意：</strong> 上面这个命令并不会在 <code>package.json</code> 中插入 <code>workspaces</code> 属性，需要我们手动添加：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="string">&quot;workspaces&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;packages/*&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来就可以直接无视 Lerna 了，我们还是正常使用 <code>npm install\uninstall</code>，当安装的是自己的子包时，也无需添加任何额外的参数，Lerna 会自动帮我们处理，并且在 <code>node_modules</code> 目录下，子包的目录会通过软链接的形式指向实际的代码目录，就像这样：<br><img width="300" alt="软链接.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/软链接.png"></p>
+<h3 id="3、配置-vite-config-ts"><a href="#3、配置-vite-config-ts" class="headerlink" title="3、配置 vite.config.ts"></a>3、配置 vite.config.ts</h3><p>可以像官方文档推荐的<a href="https://vitejs.cn/vite3-cn/guide/build.html#multi-page-app">库模式</a>那样只配置一个 <code>vite.config.ts</code> 文件，也可以像教程<a href="https://www.bilibili.com/video/BV1ji421X7GZ/?spm_id_from=333.788&vd_source=726ad3db70255a5ef4d7373d91735d76">项目打包</a>一样配置两个文件 <code>vite.es.config.ts</code> 和 <code>vite.umd.config.ts</code>。</p>
+<h3 id="4、配置-package-json"><a href="#4、配置-package-json" class="headerlink" title="4、配置 package.json"></a>4、配置 package.json</h3><p>除了官方文档推荐的内容之外，</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;my-lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;type&quot;</span>: <span class="string">&quot;module&quot;</span>,</span><br><span class="line">  <span class="string">&quot;files&quot;</span>: [<span class="string">&quot;dist&quot;</span>],</span><br><span class="line">  <span class="string">&quot;main&quot;</span>: <span class="string">&quot;./dist/my-lib.umd.cjs&quot;</span>,</span><br><span class="line">  <span class="string">&quot;module&quot;</span>: <span class="string">&quot;./dist/my-lib.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;exports&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;.&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;import&quot;</span>: <span class="string">&quot;./dist/my-lib.js&quot;</span>,</span><br><span class="line">      <span class="string">&quot;require&quot;</span>: <span class="string">&quot;./dist/my-lib.umd.cjs&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有必要加入其它信息：<code>version</code>、<code>description</code>、<code>publishConfig</code> 等。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;my-lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;my lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;type&quot;</span>: <span class="string">&quot;module&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publishConfig&quot;</span>: &#123;  <span class="comment">// 如果有必要的话</span></span><br><span class="line">    <span class="string">&quot;access&quot;</span>: <span class="string">&quot;publish&quot;</span>,</span><br><span class="line">    <span class="string">&quot;registry&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;files&quot;</span>: [<span class="string">&quot;dist&quot;</span>],</span><br><span class="line">  <span class="string">&quot;main&quot;</span>: <span class="string">&quot;./dist/my-lib.umd.cjs&quot;</span>,</span><br><span class="line">  <span class="string">&quot;module&quot;</span>: <span class="string">&quot;./dist/my-lib.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;exports&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;.&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;import&quot;</span>: <span class="string">&quot;./dist/my-lib.js&quot;</span>,</span><br><span class="line">      <span class="string">&quot;require&quot;</span>: <span class="string">&quot;./dist/my-lib.umd.cjs&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5、打包"><a href="#5、打包" class="headerlink" title="5、打包"></a>5、打包</h3><p>我们可以切换到各自目录下执行 <code>vite build</code> 目录，因为当以命令行方式运行 <code>vite</code> 时，Vite 会自动解析当前目录下名为 <code>vite.config.ts</code> 的文件，也可以显式地通过 <code>--config</code> 命令行选项指定一个配置文件（相对于 <code>cwd</code> 路径进行解析），比如这样，直接在根目录的 <code>package.json</code> 中配置打包脚本，并指定 <code>vite.config.ts</code>：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;dev&quot;</span>: <span class="string">&quot;vite&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build&quot;</span>: <span class="string">&quot;vite build&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:lib&quot;</span>: <span class="string">&quot;npm run build:utils &amp;&amp; npm run build:components &amp;&amp; npm run build:compoxes &amp;&amp; npm run build:charts &amp;&amp; npm run build:frame&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:charts&quot;</span>: <span class="string">&quot;vite build --config packages/charts/vite.config.ts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:components&quot;</span>: <span class="string">&quot;vite build --config packages/components/vite.config.ts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:compoxes&quot;</span>: <span class="string">&quot;vite build --config packages/compoxes/vite.config.ts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:frame&quot;</span>: <span class="string">&quot;vite build --config packages/frame/vite.config.ts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:utils&quot;</span>: <span class="string">&quot;vite build --config packages/utils/vite.config.ts&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、依赖包如何自动生成-d-ts-声明文件？"><a href="#九、依赖包如何自动生成-d-ts-声明文件？" class="headerlink" title="九、依赖包如何自动生成 .d.ts 声明文件？"></a>九、依赖包如何自动生成 <code>.d.ts</code> 声明文件？</h2><p>上面经过一些列的配置，已经能够正常打包了，但还不能自动生成 <code>.d.ts</code> 声明文件，这在使用依赖包时并不友好。我们可以直接通过 <code>vite-plugin-dts</code> 插件自动生成声明文件，但过程中也遇到了一些问题，需要记录下。</p>
+<h3 id="1、安装并配置-vite-plugin-dts-插件"><a href="#1、安装并配置-vite-plugin-dts-插件" class="headerlink" title="1、安装并配置 vite-plugin-dts 插件"></a>1、安装并配置 vite-plugin-dts 插件</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i vite-plugin-dts -D</span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vite.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; resolve &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> dts <span class="keyword">from</span> <span class="string">&#x27;vite-plugin-dts&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">vue</span>(), <span class="title function_">dts</span>()],</span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">lib</span>: &#123;</span><br><span class="line">      <span class="attr">entry</span>: <span class="title function_">resolve</span>(__dirname, <span class="string">&#x27;lib/main.js&#x27;</span>),</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;MyLib&#x27;</span>,</span><br><span class="line">      <span class="comment">// the proper extensions will be added</span></span><br><span class="line">      <span class="attr">fileName</span>: <span class="string">&#x27;my-lib&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rollupOptions</span>: &#123;</span><br><span class="line">      <span class="comment">// 确保外部化处理那些你不想打包进库的依赖</span></span><br><span class="line">      <span class="attr">external</span>: [<span class="string">&#x27;vue&#x27;</span>],</span><br><span class="line">      <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="comment">// 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量</span></span><br><span class="line">        <span class="attr">globals</span>: &#123;</span><br><span class="line">          <span class="attr">vue</span>: <span class="string">&#x27;Vue&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="2、打包"><a href="#2、打包" class="headerlink" title="2、打包"></a>2、打包</h3><p>此时直接打包，如果使用的是 <code>&quot;vite-plugin-dts&quot;: &quot;^4.0.2&quot;</code> 版本，并没有自动生成声明文件；如果使用的是 <code>&quot;vite-plugin-dts&quot;: &quot;^3.9.1&quot;</code> 版本，还会报错：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line">index.<span class="property">ts</span>:<span class="number">1</span>:<span class="number">15</span> - error <span class="title class_">TS2792</span>: <span class="title class_">Cannot</span> find <span class="variable language_">module</span> <span class="string">&#x27;./src/vue&#x27;</span>. <span class="title class_">Did</span> you mean to set the <span class="string">&#x27;moduleResolution&#x27;</span> option to <span class="string">&#x27;nodenext&#x27;</span>, or to add aliases to the <span class="string">&#x27;paths&#x27;</span> option?</span><br></pre></td></tr></table></figure>
+<p>经过<a href="https://blog.csdn.net/weixin_57818879/article/details/140072524">前端 Vite 项目使用 vite-plugin-dts 打包输出.d.ts文件，分析处理踩坑</a>的解释，应该就是 <code>tsconfig.json</code> 的原因。<br><img width="700" alt="报错环境.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/报错环境.png"><br><img width="700" alt="分析和解决.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/分析和解决.png"></p>
+<p>所以我们可以在各子包目录下新建一个 <code>tsconfig.build.json</code> 文件，内容直接复制 <code>tsconfig.app.json</code> 中的内容，然后再改下 <code>include</code> 路径即可。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  ...</span><br><span class="line">  <span class="string">&quot;include&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;./index.ts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;./src/**/*.ts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;./src/**/*.vue&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后再将 <code>tsconfig.build.json</code> 配置到 <code>vite-plugin-dts</code> 插件中就能够自动生成声明文件了。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// vite.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; resolve &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> dts <span class="keyword">from</span> <span class="string">&#x27;vite-plugin-dts&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">vue</span>(), <span class="title function_">dts</span>(&#123; <span class="attr">tsconfigPath</span>: <span class="string">&#x27;./tsconfig.build.json&#x27;</span>, <span class="attr">outDir</span>: <span class="string">&#x27;./dist/types&#x27;</span> &#125;)],</span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">lib</span>: &#123;</span><br><span class="line">      <span class="attr">entry</span>: <span class="title function_">resolve</span>(__dirname, <span class="string">&#x27;lib/main.js&#x27;</span>),</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;MyLib&#x27;</span>,</span><br><span class="line">      <span class="comment">// the proper extensions will be added</span></span><br><span class="line">      <span class="attr">fileName</span>: <span class="string">&#x27;my-lib&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rollupOptions</span>: &#123;</span><br><span class="line">      <span class="comment">// 确保外部化处理那些你不想打包进库的依赖</span></span><br><span class="line">      <span class="attr">external</span>: [<span class="string">&#x27;vue&#x27;</span>],</span><br><span class="line">      <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="comment">// 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量</span></span><br><span class="line">        <span class="attr">globals</span>: &#123;</span><br><span class="line">          <span class="attr">vue</span>: <span class="string">&#x27;Vue&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>最后不要忘了在 <code>package.json</code> 中添加类型声明文件路径。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;my-lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;description&quot;</span>: <span class="string">&quot;my lib&quot;</span>,</span><br><span class="line">  <span class="string">&quot;type&quot;</span>: <span class="string">&quot;module&quot;</span>,</span><br><span class="line">  <span class="string">&quot;publishConfig&quot;</span>: &#123;  <span class="comment">// 如果有必要的话</span></span><br><span class="line">    <span class="string">&quot;access&quot;</span>: <span class="string">&quot;publish&quot;</span>,</span><br><span class="line">    <span class="string">&quot;registry&quot;</span>: <span class="string">&quot;&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;files&quot;</span>: [<span class="string">&quot;dist&quot;</span>],</span><br><span class="line">  <span class="string">&quot;types&quot;</span>: <span class="string">&quot;./dist/types/index.d.ts&quot;</span>,</span><br><span class="line">  <span class="string">&quot;main&quot;</span>: <span class="string">&quot;./dist/my-lib.umd.cjs&quot;</span>,</span><br><span class="line">  <span class="string">&quot;module&quot;</span>: <span class="string">&quot;./dist/my-lib.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;exports&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;.&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;types&quot;</span>: <span class="string">&quot;./dist/types/index.d.ts&quot;</span>,</span><br><span class="line">      <span class="string">&quot;import&quot;</span>: <span class="string">&quot;./dist/my-lib.js&quot;</span>,</span><br><span class="line">      <span class="string">&quot;require&quot;</span>: <span class="string">&quot;./dist/my-lib.umd.cjs&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="十、如何实现国际化？"><a href="#十、如何实现国际化？" class="headerlink" title="十、如何实现国际化？"></a>十、如何实现国际化？</h2><p>Vue 应用程序本身实现国际化比较简单，使用 <a href="https://vue-i18n.intlify.dev/">vue-i18n</a> 很容易达到目的。首先是创建并安装 <code>i18n</code> 实例：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> i18n = <span class="title function_">createI18n</span>(&#123;</span><br><span class="line">  <span class="attr">locale</span>: <span class="string">&#x27;ja&#x27;</span>,</span><br><span class="line">  <span class="attr">fallbackLocale</span>: <span class="string">&#x27;en&#x27;</span>,</span><br><span class="line">  <span class="attr">messages</span>: &#123;</span><br><span class="line">    <span class="attr">en</span>: &#123;</span><br><span class="line">      <span class="attr">message</span>: &#123;</span><br><span class="line">        <span class="attr">hello</span>: <span class="string">&#x27;hello world&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">ja</span>: &#123;</span><br><span class="line">      <span class="attr">message</span>: &#123;</span><br><span class="line">        <span class="attr">hello</span>: <span class="string">&#x27;こんにちは、世界&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">Vue</span>)</span><br><span class="line">app.<span class="title function_">use</span>(i18n)</span><br><span class="line">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>然后在模板中直接使用即可：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;&#123; $t(&#x27;message.hello&#x27;) &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>那在依赖包中如何实现国际化呢？首先想到的是采用 Element Plus 的方案，完全自己实现，但既然我们的主体应用程序（就是使用了上述几个子包的主程序，也就是某个产品或项目的具体应用程序）不可避免的需要使用 <code>vue-i18n</code>，那能否借助它来实现子包的国际化呢？答案是肯定的。<br><em>TODO: 未完待续。</em></p>
+]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+  </entry>
+  <entry>
     <title>http-server开启https服务</title>
     <url>/2022/08/17/http-server%E5%BC%80%E5%90%AFhttps%E6%9C%8D%E5%8A%A1/</url>
     <content><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>直接使用 http-server 命令开启的是 http 服务，在 npmjs 的官网地址中只是看到了 http-server -S 是开启 https 服务的方法，但是我这边直接使用该命令会报如下所示的错误，具体原因是没有证书密钥对文件。<br><img src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/http-server%E5%BC%80%E5%90%AFhttps%E6%9C%8D%E5%8A%A1/%E6%97%A0%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6%E9%94%99%E8%AF%AF.png" alt="无证书文件错误.png"></p>
@@ -430,7 +570,7 @@
   <entry>
     <title>wangEditor学习与使用</title>
     <url>/2023/09/01/wangEditor%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>继之前的<a href="/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/">CKEditor5学习开发之路</a>之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为<a href="https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md">GNU General Public License</a>，不允许闭源商用，因此只能重新调研，具体调研结果可查看<a href="/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/">富文本编辑器调研</a>。</p>
+    <content><![CDATA[<h2 id="一、背景"><a href="#一、背景" class="headerlink" title="一、背景"></a>一、背景</h2><p>继之前的<a href="/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/">CKEditor5学习开发之路</a>之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为<a href="https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md">GNU General Public License</a>，要求使用者也必须开源，因此只能重新调研，具体调研结果可查看<a href="/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/">富文本编辑器调研</a>。</p>
 <h2 id="二、技术选型"><a href="#二、技术选型" class="headerlink" title="二、技术选型"></a>二、技术选型</h2><p>从调研结果来看，除掉CKEditor5，还剩下TinyMCE、wangEditor、Froala Editor是可选的。</p>
 <ul>
 <li><p>TinyMCE</p>
@@ -442,7 +582,7 @@
 </li>
 <li><p>Froala Editor看起来是个不错的选择，但查看<a href="https://github.com/froala/angular-froala-wysiwyg/blob/master/package.json">代码</a>时，发现前端工程依赖的<code>&quot;froala-editor&quot;: &quot;^4.1.1&quot;</code>并没有公开代码仓，公开出来的是<a href="https://github.com/froala/wysiwyg-editor-release">V3版本</a>，其他的公开仓都是适配各种框架的，这。。。开源了个啥</p>
 </li>
-<li><p>wangEditor很明显也不是理想选择，正如调研结果中提到的，bug较多，但没办法，暂时没找到其他开源免费可商用的富文本编辑器。</p>
+<li><p>wangEditor很明显也不是理想选择，正如调研结果中提到的，bug较多，但没办法，暂时没找到其他开源可商用的富文本编辑器。</p>
 </li>
 </ul>
 <h2 id="三、wangEditor的使用与扩展"><a href="#三、wangEditor的使用与扩展" class="headerlink" title="三、wangEditor的使用与扩展"></a>三、wangEditor的使用与扩展</h2><p>不过wangEditor的优势也是比较明显的，帮助文档很详细，示例较多，源码结构也很清晰，弄清楚了它的代码逻辑，修复遇到的bug还是比较简单的。<br><img width="800" alt="架构图.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/wangEditor学习与使用/架构图.png"><br>这里就不再重复罗列自定义扩展新功能的步骤了，按照其<a href="https://www.wangeditor.com/v5/development.html">官网</a>教程一步步来即可。附上包含插入图表、占位符的示例<a href="https://github.com/DoAutumn/wangEditor-test">代码</a>。<br>只记录下对其bug修复、功能调整的技术细节。</p>
@@ -459,8 +599,9 @@
 <figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// BaseButton本身已经有onButtonClick方法了，只是menu没有，所以对menu的接口IBaseMenu进行扩展</span></span><br><span class="line"><span class="comment">// packages/core/src/menus/interface.ts</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IBaseMenu</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">  onButtonClick?: <span class="function">(<span class="params"><span class="attr">editor</span>: <span class="title class_">IDomEditor</span>, <span class="attr">e</span>: <span class="title class_">Event</span></span>) =&gt;</span> <span class="built_in">void</span> <span class="comment">// 和 exec 类似，但主要是为了得到原始 event</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// packages/core/src/menus/bar-item/BaseButton.ts</span></span><br><span class="line"><span class="comment">// // 交给子类去扩展</span></span><br><span class="line"><span class="comment">// abstract onButtonClick(): void</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行 menu.onButtonClick</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="title function_">onButtonClick</span>(<span class="params"><span class="attr">e</span>: <span class="title class_">Event</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> editor = <span class="title function_">getEditorInstance</span>(<span class="variable language_">this</span>)</span><br><span class="line">  <span class="keyword">const</span> menu = <span class="variable language_">this</span>.<span class="property">menu</span></span><br><span class="line">  menu.<span class="property">onButtonClick</span> &amp;&amp; menu.<span class="title function_">onButtonClick</span>(editor, e)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意：BaseButton的所有子类，均需在onButtonClick中调用父类的该方法</span></span><br><span class="line"><span class="title function_">onButtonClick</span>(<span class="params"><span class="attr">e</span>: <span class="title class_">Event</span></span>) &#123;</span><br><span class="line">  <span class="variable language_">super</span>.<span class="title function_">onButtonClick</span>(e)</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="7、扩展工具栏下拉选择Select，使之支持始终显示图标，而不是显示选中的文字"><a href="#7、扩展工具栏下拉选择Select，使之支持始终显示图标，而不是显示选中的文字" class="headerlink" title="7、扩展工具栏下拉选择Select，使之支持始终显示图标，而不是显示选中的文字"></a>7、扩展工具栏下拉选择Select，使之支持始终显示图标，而不是显示选中的文字</h3><p>比如行高，有些富文本编辑器始终显示图标（当然也不能说这样是最好，只是扩展以支持该功能）</p>
 <figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// packages/core/src/menus/interface.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">ISelectMenu</span> <span class="keyword">extends</span> <span class="title class_">IBaseMenu</span> &#123;</span><br><span class="line">  <span class="keyword">readonly</span> alwaysShowIcon?: <span class="built_in">boolean</span> <span class="comment">// 永远显示图标</span></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// packages/core/src/menus/bar-item/Select.ts</span></span><br><span class="line"><span class="keyword">private</span> <span class="title function_">setSelectedValue</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> editor = <span class="title function_">getEditorInstance</span>(<span class="variable language_">this</span>)</span><br><span class="line">  <span class="keyword">const</span> menu = <span class="variable language_">this</span>.<span class="property">menu</span></span><br><span class="line">  <span class="keyword">const</span> &#123; alwaysShowIcon, iconSvg &#125; = menu</span><br><span class="line">  <span class="keyword">const</span> value = menu.<span class="title function_">getValue</span>(editor)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> options = menu.<span class="title function_">getOptions</span>(editor)</span><br><span class="line">  <span class="keyword">const</span> optText = <span class="title function_">getOptionText</span>(options, value.<span class="title function_">toString</span>())</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> $button = <span class="variable language_">this</span>.<span class="property">$button</span></span><br><span class="line">  <span class="keyword">const</span> $downArrow = <span class="title function_">gen$downArrow</span>() <span class="comment">// 向下的箭头图标</span></span><br><span class="line">  $button.<span class="title function_">empty</span>()</span><br><span class="line">  <span class="comment">// 主要是这里的代码</span></span><br><span class="line">  <span class="keyword">if</span> (alwaysShowIcon &amp;&amp; iconSvg) &#123;</span><br><span class="line">    <span class="keyword">const</span> $svg = $(iconSvg)</span><br><span class="line">    <span class="title function_">clearSvgStyle</span>($svg)</span><br><span class="line">    $button.<span class="title function_">append</span>($svg)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $button.<span class="title function_">text</span>(optText)</span><br><span class="line">  &#125;</span><br><span class="line">  $button.<span class="title function_">append</span>($downArrow)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="四、wangEditor私有化"><a href="#四、wangEditor私有化" class="headerlink" title="四、wangEditor私有化"></a>四、wangEditor私有化</h2><p>上面我们对其源码修改了这么多，最好是贡献给wangEditor，但或许存在两点问题：</p>
+<h2 id="四、wangEditor私有化"><a href="#四、wangEditor私有化" class="headerlink" title="四、wangEditor私有化"></a>四、wangEditor私有化</h2><p>上面我们对其源码修改了这么多，最好是贡献给wangEditor，但存在几点障碍：</p>
 <ul>
+<li>作者已经在 2023-08-30 发布了 wangEditor 暂停维护的通知，具体看<a href="https://juejin.cn/post/7272735633458413602">这里</a></li>
 <li>我们的修改不一定能够被他们接受（或许有些问题他们不认为是bug，或许有些扩展他们认为不通用）</li>
 <li>加入其团队略微麻烦，具体要求在<a href="https://github.com/wangeditor-team/wangEditor/blob/master/docs/join.md">这里</a></li>
 </ul>
@@ -476,6 +617,57 @@
         <tag>wangEditor</tag>
         <tag>TinyMCE</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>一文彻底看懂package.json中的各种dependencies</title>
+    <url>/2022/08/31/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/</url>
+    <content><![CDATA[<p>关于package.json中的各种dependencies的详细解释，可以直接参考<a href="https://developer.aliyun.com/article/1051418">这篇文章</a>。</p>
+<p>这里只做一个最终结论的摘录。</p>
+<table>
+<thead>
+<tr>
+<th>依赖类型</th>
+<th>定义在项目中</th>
+<th>定义在依赖中</th>
+<th>一句话总结</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dependencies</td>
+<td>会被安装</td>
+<td>会被安装</td>
+<td>定义包运行所需要的依赖包</td>
+<td>某前端项目使用 react 进行开发，需要将 react 添加到 dependencies 中</td>
+</tr>
+<tr>
+<td>devDependencies</td>
+<td>会被安装</td>
+<td>不会被安装</td>
+<td>定义包在开发时所需要的依赖包</td>
+<td>antd 使用了 @testing-library&#x2F;react 进行测试，需要将 @testing-library&#x2F;react 添加到 devDependencies 中</td>
+</tr>
+<tr>
+<td>peerDependencies</td>
+<td>不会被安装</td>
+<td>不会被安装，但是如果指向的依赖没有被安装或不符合时会有警告（peerDependenciesMeta 会影响该行为）</td>
+<td>定义该包运行所需要的依赖环境，一般和 devDependencies 一起使用</td>
+<td>antd 是一个 react 组件库，为了不和使用它的项目中的 react 版本定义造成冲突，需要将支持的 react 版本添加到 peerDependencies 中</td>
+</tr>
+<tr>
+<td>optionalDependencies</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>会被安装，但是安装报错不会影响</td>
+<td>optionalDependencies 用于定义对包运行不会造成影响的依赖包</td>
+<td>一个包在使用 A 包进行了某些操作，但是如果 A 包不在的话，可以使用别的 API 达到同样的效果，可以将 A 包添加到 optionalDependencies 中</td>
+</tr>
+</tbody></table>
+<hr>
+<p>另外记录下版本号的格式规定：<br><code>固定版本</code>：如4.0.3<br><code>～</code>：如～4.0.3，表示安装 4.0.x 的最新版本，也就是说安装时不会改变主版本号和次版本号<br><code>^</code>：如^17.0.2，表示安装 17.x.x 的最新版本，也就是说安装时不会改变主版本号<br><code>latest</code>：安装最新版本</p>
+]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
   </entry>
   <entry>
     <title>一种基于Angular的半插件式的功能扩展方案</title>
@@ -611,55 +803,46 @@
       </tags>
   </entry>
   <entry>
-    <title>一文彻底看懂package.json中的各种dependencies</title>
-    <url>/2022/08/31/%E4%B8%80%E6%96%87%E5%BD%BB%E5%BA%95%E7%9C%8B%E6%87%82package-json%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8Ddependencies/</url>
-    <content><![CDATA[<p>关于package.json中的各种dependencies的详细解释，可以直接参考<a href="https://developer.aliyun.com/article/1051418">这篇文章</a>。</p>
-<p>这里只做一个最终结论的摘录。</p>
-<table>
-<thead>
-<tr>
-<th>依赖类型</th>
-<th>定义在项目中</th>
-<th>定义在依赖中</th>
-<th>一句话总结</th>
-<th>举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>dependencies</td>
-<td>会被安装</td>
-<td>会被安装</td>
-<td>定义包运行所需要的依赖包</td>
-<td>某前端项目使用 react 进行开发，需要将 react 添加到 dependencies 中</td>
-</tr>
-<tr>
-<td>devDependencies</td>
-<td>会被安装</td>
-<td>不会被安装</td>
-<td>定义包在开发时所需要的依赖包</td>
-<td>antd 使用了 @testing-library&#x2F;react 进行测试，需要将 @testing-library&#x2F;react 添加到 devDependencies 中</td>
-</tr>
-<tr>
-<td>peerDependencies</td>
-<td>不会被安装</td>
-<td>不会被安装，但是如果指向的依赖没有被安装或不符合时会有警告（peerDependenciesMeta 会影响该行为）</td>
-<td>定义该包运行所需要的依赖环境，一般和 devDependencies 一起使用</td>
-<td>antd 是一个 react 组件库，为了不和使用它的项目中的 react 版本定义造成冲突，需要将支持的 react 版本添加到 peerDependencies 中</td>
-</tr>
-<tr>
-<td>optionalDependencies</td>
-<td>会被安装，但是安装报错不会影响</td>
-<td>会被安装，但是安装报错不会影响</td>
-<td>optionalDependencies 用于定义对包运行不会造成影响的依赖包</td>
-<td>一个包在使用 A 包进行了某些操作，但是如果 A 包不在的话，可以使用别的 API 达到同样的效果，可以将 A 包添加到 optionalDependencies 中</td>
-</tr>
-</tbody></table>
-<hr>
-<p>另外记录下版本号的格式规定：<br><code>固定版本</code>：如4.0.3<br><code>～</code>：如～4.0.3，表示安装 4.0.x 的最新版本，也就是说安装时不会改变主版本号和次版本号<br><code>^</code>：如^17.0.2，表示安装 17.x.x 的最新版本，也就是说安装时不会改变主版本号<br><code>latest</code>：安装最新版本</p>
+    <title>仿MacOS的后台管理系统</title>
+    <url>/2023/01/13/%E4%BB%BFMacOS%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前比较流行的开源后台管理系统<a href="https://ng-alain.com/en">NG-ALAIN</a>、<a href="https://pro.ant.design/">Ant Design Pro</a>、<a href="https://panjiachen.github.io/vue-element-admin-site/zh/">Vue-Element-Admin</a>、<a href="http://boot.jeecg.com/">Jeecg Boot</a>等，其页面布局基本都是如下形式：<br><img width="500" alt="常见布局.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/常见布局.png"><br>诚然，这种形式并非不好，但看的多了，难免视觉疲劳。</p>
+<p>其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。</p>
+<p>体验地址：<a href="https://doautumn.github.io/web-os">https://doautumn.github.io/web-os</a></p>
+<blockquote>
+<p>该解决方案并未投入实战，只是用作学习与交流，欢迎感兴趣的小伙伴留言支持。</p>
+</blockquote>
+<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>技术栈：Angular13 + NG-ZORRO13</p>
+<h3 id="1-基本布局"><a href="#1-基本布局" class="headerlink" title="1.基本布局"></a>1.基本布局</h3><p>基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。<br><img width="500" alt="MacOS布局.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/MacOS布局.png"></p>
+<h3 id="2-Window"><a href="#2-Window" class="headerlink" title="2.Window"></a>2.Window</h3><p>不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种<code>键盘独占</code>的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。</p>
+<p>下面来聊一聊Window的具体实现方案。</p>
+<h4 id="2-1-公开的属性、事件"><a href="#2-1-公开的属性、事件" class="headerlink" title="2.1 公开的属性、事件"></a>2.1 公开的属性、事件</h4><p>在做这种开发套件时，我一般首先考虑的是开发人员该如何使用我们提供的基础组件、服务。对于一个窗口而言，首先想到的需要开发人员干预的只有两项内容：<code>title和content</code>。进一步思考，当窗口处于非活动或最小化状态时，我们希望开发人员能够关注下性能，毕竟如果窗口打开过多，如何保证页面不卡顿将会是一件非常有必要的事情。为此我们需要提供两个状态切换事件：<code>active和inactive</code>，当窗口处于上述某种状态时，可以考虑暂停定时器、暂停持续的渲染动画等非必要的性能开销。对开发人员公开的内容除上述4项之外，还会有一些其他细节项，如<code>minimizable（是否能够最小化）、maximizable（是否能够最大化）、style（默认位置尺寸）</code>等。</p>
+<p>使用Window的伪代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;mz-window mzTitle=&quot;这是一个标题&quot; (active)=&quot;handleActive()&quot; (inactive)=&quot;handleInactive()&quot;&gt;</span><br><span class="line">  your code</span><br><span class="line">  ...</span><br><span class="line">&lt;/mz-window&gt;</span><br></pre></td></tr></table></figure>
+<p>内部实现的伪代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// window.component.ts</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &#x27;mz-window&#x27;,</span><br><span class="line">  templateUrl: &#x27;./window.component.html&#x27;,</span><br><span class="line">  styleUrls: [&#x27;./window.component.less&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line">export class WindowComponent implements OnInit, OnDestroy &#123;</span><br><span class="line"></span><br><span class="line">  @Input() mzTitle: string;</span><br><span class="line">  @Input() minimizable: boolean = true;</span><br><span class="line">  @Input() maximizable: boolean = true;</span><br><span class="line">  @Input() style: any;</span><br><span class="line"></span><br><span class="line">  @Output() active = new EventEmitter();</span><br><span class="line">  @Output() inactive = new EventEmitter();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// window.component.html</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;window&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;title&quot;&gt;</span><br><span class="line">    &lt;span&gt;&#123;&#123; mzTitle &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">    &lt;ng-content&gt;&lt;/ng-content&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-窗口的通用逻辑"><a href="#2-2-窗口的通用逻辑" class="headerlink" title="2.2 窗口的通用逻辑"></a>2.2 窗口的通用逻辑</h4><p>对于窗口的打开、关闭、最大化、最小化、拖拽、窗口切换等通用逻辑，都由框架统一实现即可。</p>
+<p><strong>窗口与路由的关系</strong></p>
+<p>而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的<a href="https://angular.cn/api/router/RouteReuseStrategy">路由复用策略</a>与<a href="https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive">keep-alive</a>可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。</p>
+<p>具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。<br><img width="800" alt="路由复用与多窗口.jpg" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/路由复用与多窗口.jpg"><br><img width="800" alt="路由复用与多窗口.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/路由复用与多窗口.png"></p>
+<p><strong>非活动状态窗口的激活</strong></p>
+<p>我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击<code>Wiki</code>并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。<br><img width="650" alt="窗口激活.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/窗口激活.gif"><br>为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。</p>
+<p><strong>窗口的最小化</strong></p>
+<p>目前我们还没有实现MacOS最小化窗口的神奇动画效果的技术方案，暂且实现了缩放的动画效果，和MacOS类似，窗口缩放之后会以缩略图的形式暂存到Dock中。那如何生成窗口的缩略图呢？或者是否可以将窗口直接缩放至Dock中？经过综合考虑，我们希望窗口和Dock尽量是解耦的，所以还是采用了生成缩略图的方案，因为Dock本身也是支持设置图标的，这样只需创建一个Dock对象并将缩略图、窗口标题带上即可。<br><code>new DockItem().init(&#123; name: title, iconPath: image, path: routePath &#125;)</code></p>
+<p>至于缩略图的生成，则是使用了<code>html2canvas</code>。<br><img width="650" alt="窗口最小化.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/窗口最小化.gif"></p>
+<h3 id="3-Dock"><a href="#3-Dock" class="headerlink" title="3.Dock"></a>3.Dock</h3><p>Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。</p>
+<p>关于DockItem和Window的关联，其实比较简单，上文已提到，Window和路由是一一对应的，那只需将DockItem和路由也做关联即可。只不过DockItem和路由并非一一对应，而是一个DockItem对应一个一级路由，包含若干个子路由。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义DockItem</span><br><span class="line">&#123;</span><br><span class="line">  &quot;apps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;VSCode&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/vscode.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo1&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Webstorm&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/webstorm.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo2&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Chrome&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/chrome.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo3&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一级路由</span><br><span class="line">const routes: Routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;&#x27;,</span><br><span class="line">    component: WebOSLayoutComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo1&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo1/demo1.module&#x27;).then(m =&gt; m.Demo1Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo2&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo2/demo2.module&#x27;).then(m =&gt; m.Demo2Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo3&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo3/demo3.module&#x27;).then(m =&gt; m.Demo3Module)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。<br><img width="650" alt="Dock.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/Dock.gif"><br>另外，推荐下<a href="https://juejin.cn/post/6942325271349592100">Steven</a>实现的效果，很丝滑。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>计划将其作为基础开发包发布到npm，但由于还有一些功能暂未完成，如<code>键盘独占</code>、<code>国际化</code>等，故还需等待时日。</p>
 ]]></content>
       <categories>
-        <category>其他</category>
+        <category>Angular</category>
       </categories>
+      <tags>
+        <tag>WebOS</tag>
+        <tag>后台管理系统</tag>
+      </tags>
   </entry>
   <entry>
     <title>使用Nexus托管npm私有仓库</title>
@@ -756,48 +939,6 @@
       </tags>
   </entry>
   <entry>
-    <title>仿MacOS的后台管理系统</title>
-    <url>/2023/01/13/%E4%BB%BFMacOS%E7%9A%84%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>目前比较流行的开源后台管理系统<a href="https://ng-alain.com/en">NG-ALAIN</a>、<a href="https://pro.ant.design/">Ant Design Pro</a>、<a href="https://panjiachen.github.io/vue-element-admin-site/zh/">Vue-Element-Admin</a>、<a href="http://boot.jeecg.com/">Jeecg Boot</a>等，其页面布局基本都是如下形式：<br><img width="500" alt="常见布局.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/常见布局.png"><br>诚然，这种形式并非不好，但看的多了，难免视觉疲劳。</p>
-<p>其实导航、菜单、Tab的设计，无非是为了用户能够更快捷的进入某个特性模块，而特性模块大多是相对独立的，如用户管理、资产管理、系统设置，可以近似看作是一个个独立的App。如果按照这个角度继续思考，那我们为什么不能参考操作系统的布局、交互，设计我们的系统、页面呢？而提到操作系统，MacOS无疑是翘楚之作，于是一款仿MacOS的后台管理系统的前端解决方案便应运而生了，暂且给它起个WebOS的名字吧。</p>
-<p>体验地址：<a href="https://doautumn.github.io/web-os">https://doautumn.github.io/web-os</a></p>
-<blockquote>
-<p>该解决方案并未投入实战，只是用作学习与交流，欢迎感兴趣的小伙伴留言支持。</p>
-</blockquote>
-<h2 id="技术实现"><a href="#技术实现" class="headerlink" title="技术实现"></a>技术实现</h2><p>技术栈：Angular13 + NG-ZORRO13</p>
-<h3 id="1-基本布局"><a href="#1-基本布局" class="headerlink" title="1.基本布局"></a>1.基本布局</h3><p>基本布局部分比较简单，顶部MenuBar、中间Content、底部Dock。<br><img width="500" alt="MacOS布局.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/MacOS布局.png"></p>
-<h3 id="2-Window"><a href="#2-Window" class="headerlink" title="2.Window"></a>2.Window</h3><p>不管是MacOS还是Windows，都是以窗口来呈现应用程序内容的，用户也都习以为常。那如果在Web端也采用这种形式，效果将会如何呢？目前我也没有答案。不过我是持乐观态度的，而且我还为WebOS设计了一种<code>键盘独占</code>的交互模式（这将在下文讲到），我相信在这种模式的加持下，用户的满意度应该是比较高的。</p>
-<p>下面来聊一聊Window的具体实现方案。</p>
-<h4 id="2-1-公开的属性、事件"><a href="#2-1-公开的属性、事件" class="headerlink" title="2.1 公开的属性、事件"></a>2.1 公开的属性、事件</h4><p>在做这种开发套件时，我一般首先考虑的是开发人员该如何使用我们提供的基础组件、服务。对于一个窗口而言，首先想到的需要开发人员干预的只有两项内容：<code>title和content</code>。进一步思考，当窗口处于非活动或最小化状态时，我们希望开发人员能够关注下性能，毕竟如果窗口打开过多，如何保证页面不卡顿将会是一件非常有必要的事情。为此我们需要提供两个状态切换事件：<code>active和inactive</code>，当窗口处于上述某种状态时，可以考虑暂停定时器、暂停持续的渲染动画等非必要的性能开销。对开发人员公开的内容除上述4项之外，还会有一些其他细节项，如<code>minimizable（是否能够最小化）、maximizable（是否能够最大化）、style（默认位置尺寸）</code>等。</p>
-<p>使用Window的伪代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;mz-window mzTitle=&quot;这是一个标题&quot; (active)=&quot;handleActive()&quot; (inactive)=&quot;handleInactive()&quot;&gt;</span><br><span class="line">  your code</span><br><span class="line">  ...</span><br><span class="line">&lt;/mz-window&gt;</span><br></pre></td></tr></table></figure>
-<p>内部实现的伪代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// window.component.ts</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &#x27;mz-window&#x27;,</span><br><span class="line">  templateUrl: &#x27;./window.component.html&#x27;,</span><br><span class="line">  styleUrls: [&#x27;./window.component.less&#x27;]</span><br><span class="line">&#125;)</span><br><span class="line">export class WindowComponent implements OnInit, OnDestroy &#123;</span><br><span class="line"></span><br><span class="line">  @Input() mzTitle: string;</span><br><span class="line">  @Input() minimizable: boolean = true;</span><br><span class="line">  @Input() maximizable: boolean = true;</span><br><span class="line">  @Input() style: any;</span><br><span class="line"></span><br><span class="line">  @Output() active = new EventEmitter();</span><br><span class="line">  @Output() inactive = new EventEmitter();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// window.component.html</span><br><span class="line"></span><br><span class="line">&lt;div class=&quot;window&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;title&quot;&gt;</span><br><span class="line">    &lt;span&gt;&#123;&#123; mzTitle &#125;&#125;&lt;/span&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;content&quot;&gt;</span><br><span class="line">    &lt;ng-content&gt;&lt;/ng-content&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="2-2-窗口的通用逻辑"><a href="#2-2-窗口的通用逻辑" class="headerlink" title="2.2 窗口的通用逻辑"></a>2.2 窗口的通用逻辑</h4><p>对于窗口的打开、关闭、最大化、最小化、拖拽、窗口切换等通用逻辑，都由框架统一实现即可。</p>
-<p><strong>窗口与路由的关系</strong></p>
-<p>而在实现上述功能之前，有一个关键问题需要解决。我们都知道，在基于Angular、Vue、React框架的前端工程中，开发一个中大型的后台管理系统，路由是不可或缺的基础功能。但正如前言中提到的，常见的开源后台管理系统，其主视区只显示当前路由对应的内容，如果我们在主视区想要显示多个窗口，是否意味着将不能再使用路由来组织我们的窗口？好在基于以往的开发经验，答案是否定的。在Angular、Vue中分别有对应的<a href="https://angular.cn/api/router/RouteReuseStrategy">路由复用策略</a>与<a href="https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive">keep-alive</a>可以实现页面缓存（React貌似没有，好多年没用过了），我们可以借助此技术实现多个窗口的同时呈现。</p>
-<p>具体来讲，我们需要将路由和Window进行关联，也即一个Window对应一个路由（Window在初始化之后会暂存其对应的路由URL），同时开启路由复用，当切换路由时，将缓存的路由快照对应的视图层插入到主视区即可。<br><img width="800" alt="路由复用与多窗口.jpg" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/路由复用与多窗口.jpg"><br><img width="800" alt="路由复用与多窗口.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/路由复用与多窗口.png"></p>
-<p><strong>非活动状态窗口的激活</strong></p>
-<p>我们知道，在操作系统中点击非活动状态窗口的任意位置，都能使其处于活动状态，且不触发其内部逻辑，如下所示，点击<code>Wiki</code>并不会直接进入Wiki页面，而只是将浏览器前置使其处于活动状态。<br><img width="650" alt="窗口激活.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/窗口激活.gif"><br>为了实现该效果，当窗口处于非活动状态时，给其设置一个透明遮罩层，点击窗口其实是点击的是遮罩层，触发的动作也仅仅只是路由的跳转，这也算是一个取巧的方案吧。</p>
-<p><strong>窗口的最小化</strong></p>
-<p>目前我们还没有实现MacOS最小化窗口的神奇动画效果的技术方案，暂且实现了缩放的动画效果，和MacOS类似，窗口缩放之后会以缩略图的形式暂存到Dock中。那如何生成窗口的缩略图呢？或者是否可以将窗口直接缩放至Dock中？经过综合考虑，我们希望窗口和Dock尽量是解耦的，所以还是采用了生成缩略图的方案，因为Dock本身也是支持设置图标的，这样只需创建一个Dock对象并将缩略图、窗口标题带上即可。<br><code>new DockItem().init(&#123; name: title, iconPath: image, path: routePath &#125;)</code></p>
-<p>至于缩略图的生成，则是使用了<code>html2canvas</code>。<br><img width="650" alt="窗口最小化.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/窗口最小化.gif"></p>
-<h3 id="3-Dock"><a href="#3-Dock" class="headerlink" title="3.Dock"></a>3.Dock</h3><p>Dock的实现，有两个问题需要解决，一是单个应用程序图标（这里我们称之为DockItem吧）和Window的关联，二是丝滑的动画效果。</p>
-<p>关于DockItem和Window的关联，其实比较简单，上文已提到，Window和路由是一一对应的，那只需将DockItem和路由也做关联即可。只不过DockItem和路由并非一一对应，而是一个DockItem对应一个一级路由，包含若干个子路由。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义DockItem</span><br><span class="line">&#123;</span><br><span class="line">  &quot;apps&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;VSCode&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/vscode.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo1&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Webstorm&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/webstorm.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo2&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;name&quot;: &quot;Chrome&quot;,</span><br><span class="line">      &quot;iconPath&quot;: &quot;./assets/app-icons/chrome.svg&quot;,</span><br><span class="line">      &quot;path&quot;: &quot;demo3&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 一级路由</span><br><span class="line">const routes: Routes = [</span><br><span class="line">  &#123;</span><br><span class="line">    path: &#x27;&#x27;,</span><br><span class="line">    component: WebOSLayoutComponent,</span><br><span class="line">    children: [</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo1&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo1/demo1.module&#x27;).then(m =&gt; m.Demo1Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo2&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo2/demo2.module&#x27;).then(m =&gt; m.Demo2Module)</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        path: &#x27;demo3&#x27;,</span><br><span class="line">        loadChildren: () =&gt; import(&#x27;./views/demo3/demo3.module&#x27;).then(m =&gt; m.Demo3Module)</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
-
-<p>对于Dock丝滑的放大效果，这里实现的并不足够细致，就不详细阐述了，无非是动画处理scale、margin等样式，感兴趣的可以查看源码。<br><img width="650" alt="Dock.gif" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/仿MacOS的后台管理系统/Dock.gif"><br>另外，推荐下<a href="https://juejin.cn/post/6942325271349592100">Steven</a>实现的效果，很丝滑。</p>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>计划将其作为基础开发包发布到npm，但由于还有一些功能暂未完成，如<code>键盘独占</code>、<code>国际化</code>等，故还需等待时日。</p>
-]]></content>
-      <categories>
-        <category>Angular</category>
-      </categories>
-      <tags>
-        <tag>WebOS</tag>
-        <tag>后台管理系统</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用nvm管理切换多个node版本</title>
     <url>/2023/03/10/%E4%BD%BF%E7%94%A8nvm%E7%AE%A1%E7%90%86%E5%88%87%E6%8D%A2%E5%A4%9A%E4%B8%AAnode%E7%89%88%E6%9C%AC/</url>
     <content><![CDATA[<h2 id="1、Node版本管理工具"><a href="#1、Node版本管理工具" class="headerlink" title="1、Node版本管理工具"></a>1、Node版本管理工具</h2><p>node版本管理工具其实有很多，常见的的有nvm、n、fnm。之前一直使用n来管理node版本的，但是忽然有一天发现，安装n之前是需要先安装node的，而先安装的这一版本的node，不在n的管理范畴中，基于这两点原因，放弃了n的使用，转向了nvm。<br>本文主要记录下nvm的安装步骤和常用命令。</p>
@@ -889,6 +1030,51 @@
         <tag>node-ssh</tag>
         <tag>sshpass</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>可视化技术选型</title>
+    <url>/2022/07/16/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="架构对比"><a href="#架构对比" class="headerlink" title="架构对比"></a>架构对比</h2><ul>
+<li>BS 架构：Unity、WebGL、Threejs</li>
+<li>CS 架构：Unity、UE4、Ventuz</li>
+<li>因为 Ventuz 是国外收费引擎，因此下面内容不做对比。</li>
+</ul>
+<h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2><ul>
+<li>CS 架构优于 BS 架构。</li>
+<li>CS 架构中，UE4 和 Unity 效果各有特色，UE4 写实效果优于 Unity，Unity 其他效果优于 UE4。</li>
+<li>BS 架构：Unity 的 B 端效果要优于 WebGL 和 Threejs，WebGL 和 Threejs 效果基本差不多。</li>
+</ul>
+<h2 id="体量对比"><a href="#体量对比" class="headerlink" title="体量对比"></a>体量对比</h2><ul>
+<li>UE4 体量是这几个技术中最大的，相对于 Unity，UE4 的安装包 10GB 左右，同时对开发设备要求也是最高的，相同的项目等级，UE4 项目的体量要大于 Unity。</li>
+<li>BS 架构因为效果低于 CS 架构，因此体量相对较小。</li>
+</ul>
+<h2 id="开发对比"><a href="#开发对比" class="headerlink" title="开发对比"></a>开发对比</h2><ul>
+<li>BS 架构中 WebGL 和 Threejs 因为没有成熟的渲染流程，开发工作量比较大，但是 Unity 的 WebGL 是基于 Unity 引擎渲染，有成熟的渲染流程，开发工作量比较小；举个例子，在场景中增加一个相机，WebGL 和 Threejs 需要手动敲代码增加一个相机，而 Unity 只需要拖一个相机组件到场景即可。前两者使用 JS 语言，后面的 Unity 使用 C# 语言，最后发布成 WebGL。</li>
+<li>相比 WebGL 和 Threejs，Unity 开发 B 端，主要工作是场景设计以及开发部分，不需要关心模型导入等其他问题。</li>
+<li>CS 架构中，UE4 使用 C++ 语言开发，Unity 使用 C# 语言开发，UE4 的 C++ 语言也是在原 C++ 语言上增加的反射机制，因此编译比较慢；C# 语言是面向对象语言，有反射机制，因此开发过程中编译比较快。</li>
+<li>扩展性：Unity 要优于 UE4，毕竟 C# 语言是面向对象的语言，市面上 Unity 的插件是要多于 UE4 的插件。这个从腾讯选择 Unity 做自己产品就可以看出。</li>
+</ul>
+<h2 id="友好对比"><a href="#友好对比" class="headerlink" title="友好对比"></a>友好对比</h2><ul>
+<li>这里不做 B 端的阐述，相对 C 端，B 端的友好度很低。</li>
+<li>UE4 的界面给人一种比较乱的感觉，画面跳色太多；在编辑材质、模型等资源时，会重新打开一个窗口，造成多个窗口来回拖动，影响操作性。</li>
+<li>Unity 的界面友好度要优于 UE4，Unity 的所有窗口都在同一个大窗口之下，一目了然的可以看到各个窗口的内容。</li>
+</ul>
+<h2 id="渲染对比"><a href="#渲染对比" class="headerlink" title="渲染对比"></a>渲染对比</h2><ul>
+<li>因为 C 端效果要优于 B 端，因此不做 B 端阐述。</li>
+<li>Unity 是实时渲染，当修改材质时，可以实时看到场景内物体上材质的改变。</li>
+<li>但是 UE4 修改材质时，需要保存并编译后才能看到，编译过程耗费的时间也跟使用的设备配置有关。</li>
+</ul>
+<h2 id="平台对比"><a href="#平台对比" class="headerlink" title="平台对比"></a>平台对比</h2><ul>
+<li>Unity 可以发布成 B 端、C 端、移动端等</li>
+<li>UE4 可以发布成 C 端、移动端等</li>
+</ul>
+<h2 id="维护对比"><a href="#维护对比" class="headerlink" title="维护对比"></a>维护对比</h2><p>Unity 的项目维护成本要低于 UE4 的维护成本，这个维护成本是从人力、设备等多方面考虑，一个相同体量项目，UE4 技术比 Unity 技术要多 1~2 个人。</p>
+<h2 id="发布对比"><a href="#发布对比" class="headerlink" title="发布对比"></a>发布对比</h2><p>以相同项目发布成 C 端为例，UE4 耗费的时间要高于 Unity，具体是多少要看项目大小。</p>
+<h2 id="像素流技术"><a href="#像素流技术" class="headerlink" title="像素流技术"></a>像素流技术</h2><p>现在 UE4 和 Unity 都有像素流技术，像素流的原理是将服务器渲染的画面通过视频流的方式传递至客户端，客户端不做渲染工作。因为是视频流，所以对网络带宽是有要求的，当然务器成本就很高。</p>
+]]></content>
+      <categories>
+        <category>可视化</category>
+      </categories>
   </entry>
   <entry>
     <title>如何将透明度应用于CSS变量</title>
@@ -1124,25 +1310,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Mac_彻底删除应用程序</title>
-    <url>/2023/01/11/Mac_%E5%BD%BB%E5%BA%95%E5%88%A0%E9%99%A4%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F/</url>
-    <content><![CDATA[<p>不论是通过Finder还是Launchpad卸载应用程序之后，还需要清除应用程序残留的文件，如首选项、支持文件、缓存、隐藏文件等。这些残留文件，目前通过自己使用的情况来看，即使使用CleanMyMac X也无法清除。不过我们可以通过如下方式达到目的：<br>我们只需要在如下目录找到相关目录文件，将其删除即可。</p>
-<ul>
-<li>应用程序支持文件：<code>~/Library/Application Support/(App Name)</code></li>
-<li>首选项：<code>~/Library/Preferences/(App Name)</code></li>
-<li>缓存：<code>~/Library/Caches/(App Name)</code></li>
-</ul>
-<p>如果某些应用在安装时，自动添加到了 <code>设置 &gt; 通用 &gt; 登录项 &gt; 允许在后台</code>，则还需执行如下步骤：</p>
-<ul>
-<li><code>cd /Library/LaunchDaemons/</code>，找到该应用相关的.plist文件，<code>rm -rf xxx</code>删除</li>
-<li><code>cd /Library/LaunchAgents/</code>，找到该应用相关的.plist文件，<code>rm -rf xxx</code>删除</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Mac</category>
-      </categories>
-  </entry>
-  <entry>
     <title>通过Gitee的OpenAPI实现图床</title>
     <url>/2024/09/27/%E9%80%9A%E8%BF%87Gitee%E7%9A%84OpenAPI%E5%AE%9E%E7%8E%B0%E5%9B%BE%E5%BA%8A/</url>
     <content><![CDATA[<p>写博客、记笔记时，总会遇到图片上传的问题，如果使用本地图片，那么图片的存储和管理就会变得非常麻烦，所以需要一个图床来存储图片，方便管理和使用。</p>
@@ -1169,50 +1336,5 @@
       <tags>
         <tag>图床</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>可视化技术选型</title>
-    <url>/2022/07/16/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="架构对比"><a href="#架构对比" class="headerlink" title="架构对比"></a>架构对比</h2><ul>
-<li>BS 架构：Unity、WebGL、Threejs</li>
-<li>CS 架构：Unity、UE4、Ventuz</li>
-<li>因为 Ventuz 是国外收费引擎，因此下面内容不做对比。</li>
-</ul>
-<h2 id="效果对比"><a href="#效果对比" class="headerlink" title="效果对比"></a>效果对比</h2><ul>
-<li>CS 架构优于 BS 架构。</li>
-<li>CS 架构中，UE4 和 Unity 效果各有特色，UE4 写实效果优于 Unity，Unity 其他效果优于 UE4。</li>
-<li>BS 架构：Unity 的 B 端效果要优于 WebGL 和 Threejs，WebGL 和 Threejs 效果基本差不多。</li>
-</ul>
-<h2 id="体量对比"><a href="#体量对比" class="headerlink" title="体量对比"></a>体量对比</h2><ul>
-<li>UE4 体量是这几个技术中最大的，相对于 Unity，UE4 的安装包 10GB 左右，同时对开发设备要求也是最高的，相同的项目等级，UE4 项目的体量要大于 Unity。</li>
-<li>BS 架构因为效果低于 CS 架构，因此体量相对较小。</li>
-</ul>
-<h2 id="开发对比"><a href="#开发对比" class="headerlink" title="开发对比"></a>开发对比</h2><ul>
-<li>BS 架构中 WebGL 和 Threejs 因为没有成熟的渲染流程，开发工作量比较大，但是 Unity 的 WebGL 是基于 Unity 引擎渲染，有成熟的渲染流程，开发工作量比较小；举个例子，在场景中增加一个相机，WebGL 和 Threejs 需要手动敲代码增加一个相机，而 Unity 只需要拖一个相机组件到场景即可。前两者使用 JS 语言，后面的 Unity 使用 C# 语言，最后发布成 WebGL。</li>
-<li>相比 WebGL 和 Threejs，Unity 开发 B 端，主要工作是场景设计以及开发部分，不需要关心模型导入等其他问题。</li>
-<li>CS 架构中，UE4 使用 C++ 语言开发，Unity 使用 C# 语言开发，UE4 的 C++ 语言也是在原 C++ 语言上增加的反射机制，因此编译比较慢；C# 语言是面向对象语言，有反射机制，因此开发过程中编译比较快。</li>
-<li>扩展性：Unity 要优于 UE4，毕竟 C# 语言是面向对象的语言，市面上 Unity 的插件是要多于 UE4 的插件。这个从腾讯选择 Unity 做自己产品就可以看出。</li>
-</ul>
-<h2 id="友好对比"><a href="#友好对比" class="headerlink" title="友好对比"></a>友好对比</h2><ul>
-<li>这里不做 B 端的阐述，相对 C 端，B 端的友好度很低。</li>
-<li>UE4 的界面给人一种比较乱的感觉，画面跳色太多；在编辑材质、模型等资源时，会重新打开一个窗口，造成多个窗口来回拖动，影响操作性。</li>
-<li>Unity 的界面友好度要优于 UE4，Unity 的所有窗口都在同一个大窗口之下，一目了然的可以看到各个窗口的内容。</li>
-</ul>
-<h2 id="渲染对比"><a href="#渲染对比" class="headerlink" title="渲染对比"></a>渲染对比</h2><ul>
-<li>因为 C 端效果要优于 B 端，因此不做 B 端阐述。</li>
-<li>Unity 是实时渲染，当修改材质时，可以实时看到场景内物体上材质的改变。</li>
-<li>但是 UE4 修改材质时，需要保存并编译后才能看到，编译过程耗费的时间也跟使用的设备配置有关。</li>
-</ul>
-<h2 id="平台对比"><a href="#平台对比" class="headerlink" title="平台对比"></a>平台对比</h2><ul>
-<li>Unity 可以发布成 B 端、C 端、移动端等</li>
-<li>UE4 可以发布成 C 端、移动端等</li>
-</ul>
-<h2 id="维护对比"><a href="#维护对比" class="headerlink" title="维护对比"></a>维护对比</h2><p>Unity 的项目维护成本要低于 UE4 的维护成本，这个维护成本是从人力、设备等多方面考虑，一个相同体量项目，UE4 技术比 Unity 技术要多 1~2 个人。</p>
-<h2 id="发布对比"><a href="#发布对比" class="headerlink" title="发布对比"></a>发布对比</h2><p>以相同项目发布成 C 端为例，UE4 耗费的时间要高于 Unity，具体是多少要看项目大小。</p>
-<h2 id="像素流技术"><a href="#像素流技术" class="headerlink" title="像素流技术"></a>像素流技术</h2><p>现在 UE4 和 Unity 都有像素流技术，像素流的原理是将服务器渲染的画面通过视频流的方式传递至客户端，客户端不做渲染工作。因为是视频流，所以对网络带宽是有要求的，当然务器成本就很高。</p>
-]]></content>
-      <categories>
-        <category>可视化</category>
-      </categories>
   </entry>
 </search>
