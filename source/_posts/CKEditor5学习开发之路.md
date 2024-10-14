@@ -19,7 +19,7 @@ sticky: 8
 
 这是有道技术团队分享的架构设计，具有极高的参考价值。看完这两篇文章，本人甚至都有自己开发实现一把的冲动了。奈何考虑到只有我一个人在做这个事情，而且文章虽好，但没有技术细节，实现难度较大，最终只能作罢，只好沿着富文本编辑器的思路继续调研。
 
-网上关于富文本编辑器的推荐着实不少，[推荐几款好用的富文本编辑器](https://blog.csdn.net/growb/article/details/124446195)、[推荐10款常用的富文本编辑器](https://jishuin.proginn.com/p/763bfbd75b52)，经过综合对比，最终选定了[CKEditor](https://ckeditor.com/)。之所以选CKEditor，一是因为它可以使用与Angular（公司前端技术栈）的原生集成，二是支持从 Word、Excel 和 Google Docs 粘贴。
+网上关于富文本编辑器的推荐着实不少，[推荐几款好用的富文本编辑器](https://blog.csdn.net/growb/article/details/124446195)、[推荐10款常用的富文本编辑器](https://jishuin.proginn.com/p/763bfbd75b52)，经过综合对比，最终选定了[CKEditor](https://ckeditor.com/)。之所以选CKEditor，一是因为它适配了Angular框架，提供了依赖包`@ckeditor/ckeditor5-angular`（公司技术栈就是Angular），二是支持从 Word、Excel 和 Google Docs 粘贴。
 ## 三、CKEditor的使用与踩坑
 对于CKEditor的介绍，这里就不再赘述了，官方文档介绍的更为详细，但目前还没找到中文文档。
 
@@ -34,27 +34,13 @@ CKEditor支持在5种模式下使用：Classic、Balloon、Balloon Block、Inlin
 
 对于这个错误，官网也有详细[说明](https://ckeditor.com/docs/ckeditor5/latest/support/error-codes.html#error-ckeditor-duplicated-modules)，大概意思就是不能在已经构建的包`@ckeditor/ckeditor5-build-decoupled-document`中再导入新的插件。
 
-如果只是计划添加CKEditor提供的现有插件，则可以使用[Online Builder](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#creating-custom-builds-with-online-builder)来解决上述问题。但正如前文提到的，我们的需求还包括支持插入占位符、图表，因此我们还需继续研究CKEditor如何扩展一个新的插件。
+如果只是使用CKEditor提供的现有插件，则可以使用[Online Builder](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#creating-custom-builds-with-online-builder)来解决上述问题。但正如前文提到的，我们的需求还包括支持插入占位符、图表，因此我们还需继续研究CKEditor如何扩展一个新的插件。
 ### 3、[从源代码构建编辑器](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source)
-正如上文提到，当我们想要扩展一个新插件时，就不能使用CKEditor提供的已经构建好的包了`[CKEditor提供了5种已构建好的包，对应上述提到的5种使用模式]`，而是需要基于源码进行开发构建。可以按照其[文档](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source)一步步搭建开发环境、开发、构建，而另一种相对比较简单的方式则是直接下载[源码](https://github.com/ckeditor/ckeditor5)，进入packages/ckeditor5-build-decoupled-document目录，直接安装依赖、开发、构建，这就意味着我们开发并构建了一个属于自己的包`@ckedtior/ckeditor5-build-decoupled-document1`。
+正如上文提到，当我们想要扩展一个新插件时，就不能使用CKEditor提供的已经构建好的包了`[CKEditor提供了5种已构建好的包，对应上述提到的5种使用模式]`，而是需要基于源码进行开发构建。可以按照其[文档](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#building-the-editor-from-source)一步步搭建开发环境、开发、构建，而另一种相对比较简单的方式则是直接下载[源码](https://github.com/ckeditor/ckeditor5)，进入packages/ckeditor5-build-decoupled-document目录，直接安装依赖、开发、构建。
 
-上述这两种方式，和我们最初的设想还有些偏差。我们希望将富文本编辑器开发成一个公共组件供产线各个产品使用，设想的使用方式也尽量简单，只需安装我们提供的富文本编辑器组件包`teditor`和我们依赖的开源包`@ckeditor/*`即可。
+其实我一开始的想法是，在一个Angular工程中安装`@ckeditor/ckeditor5-angular`，然后开发新插件，最后将这个Angular工程打包成一个依赖包提供给产线各部门使用（我们部门的职责之一就是为各部门提供开发套件）。但是在打包代码时程序报错了，具体什么错误记不清了，由于时间关系没有继续研究。
+*TODO: 后面有时间了还得再回来看看。*
 
-而一旦我们开发并构建了属于自己的`@ckedtior/ckeditor5-build-decoupled-document1`，则意味着我们又得多维护一个包，这是我们不想要的，但目前没有解决办法。当然我们也尝试过将CKEditor源码和Angular工程进行整合以期能够构建成一个包，但没有成功，具体原因由于时间关系没有深究。
-
-不过最终，为了开发方便，我们还是决定在安装了构建包的Angular工程中开发插件，只不过相关依赖不是在Angular工程中引入，而是在源码中将其挂载到export的对象上，部分代码如下：
-```
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import Command from '@ckeditor/ckeditor5-core/src/command';
-
-export default class DecoupledEditor extends DecoupledEditorBase { }
-
-DecoupledEditor.Plugin = Plugin;
-DecoupledEditor.Command = Command;
-
-// 其中 DecoupledEditor 是源码 ckeditor5-build-decoupled-document 中已有的对象
-// 将源码构建之后替换掉Angular工程node_modules中对应的包即可
-```
 ## 四、插件开发
 好了，准备工作已完成，下面可以进入代码开发阶段了。关于插件开发的入门，可参考[这里](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/plugins/creating-simple-plugin-timestamp.html)。
 ### 1、图片上传
@@ -67,8 +53,9 @@ DecoupledEditor.Command = Command;
 - 思考一
 对于图表，我们测试使用的是ECharts。我们知道如果想要实例化一个图表，也即调用它的初始化方法`echarts.init(dom?: HTMLDivElement|HTMLCanvasElement)`，需要一个Dom元素作为参数，那么我们需要研究的就是在插件中如何能够获取到新创建的Dom了。
 通过文档中的 [Using a React component in a block widget](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/tutorials/using-react-in-a-widget.html) 这个教程，我们发现其在渲染 React component 时，就是获取到插件中新创建的Dom进而渲染组件的。
-那么这个问题便迎刃而解了，个人觉得最难的也就是这点了，主要是如何能够想到这一点并找到合适的解决方法。
+那么这个问题便迎刃而解了。
 > 通过这个问题，需要再次告诫自己，对于这种比较成熟的产品、开发套件、开源库等，一手文档一定是其官方文档，哪怕是英文的，也要仔细研读，不要图省事去网上搜罗别人的博客、技术分享。
+> 刚开始的时候，我是各种搜、各种查，但始终没有找到如何获取新创建的Dom的方案，最后还是通过官方文档找到了答案。
 
 - 思考二
 图表插入之后，如何确定当前选中的是图表元素，进而进行后续的业务操作？

@@ -6,7 +6,7 @@ tags: [wangEditor,TinyMCE,富文本编辑器]
 category: 富文本编辑器
 ---
 ## 一、背景
-继之前的[CKEditor5学习开发之路](/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/)之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为[GNU General Public License](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)，不允许闭源商用，因此只能重新调研，具体调研结果可查看[富文本编辑器调研](/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/)。
+继之前的[CKEditor5学习开发之路](/2023/01/11/CKEditor5%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/)之后，这又是一篇对富文本编辑器的学习与使用的整理回顾笔记。之所以会再一次研究富文本编辑器，并且目标对象变了，主要是因为CKEditor5的License为[GNU General Public License](https://github.com/ckeditor/ckeditor5/blob/master/LICENSE.md)，要求使用者也必须开源，因此只能重新调研，具体调研结果可查看[富文本编辑器调研](/2023/09/01/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8%E8%B0%83%E7%A0%94/)。
 ## 二、技术选型
 从调研结果来看，除掉CKEditor5，还剩下TinyMCE、wangEditor、Froala Editor是可选的。
 
@@ -17,7 +17,7 @@ category: 富文本编辑器
 
 - Froala Editor看起来是个不错的选择，但查看[代码](https://github.com/froala/angular-froala-wysiwyg/blob/master/package.json)时，发现前端工程依赖的`"froala-editor": "^4.1.1"`并没有公开代码仓，公开出来的是[V3版本](https://github.com/froala/wysiwyg-editor-release)，其他的公开仓都是适配各种框架的，这。。。开源了个啥
 
-- wangEditor很明显也不是理想选择，正如调研结果中提到的，bug较多，但没办法，暂时没找到其他开源免费可商用的富文本编辑器。
+- wangEditor很明显也不是理想选择，正如调研结果中提到的，bug较多，但没办法，暂时没找到其他开源可商用的富文本编辑器。
 ## 三、wangEditor的使用与扩展
 不过wangEditor的优势也是比较明显的，帮助文档很详细，示例较多，源码结构也很清晰，弄清楚了它的代码逻辑，修复遇到的bug还是比较简单的。
 <img width="800" alt="架构图.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/wangEditor学习与使用/架构图.png">
@@ -165,7 +165,8 @@ private setSelectedValue() {
 
 ```
 ## 四、wangEditor私有化
-上面我们对其源码修改了这么多，最好是贡献给wangEditor，但或许存在两点问题：
+上面我们对其源码修改了这么多，最好是贡献给wangEditor，但存在几点障碍：
+- 作者已经在 2023-08-30 发布了 wangEditor 暂停维护的通知，具体看[这里](https://juejin.cn/post/7272735633458413602)
 - 我们的修改不一定能够被他们接受（或许有些问题他们不认为是bug，或许有些扩展他们认为不通用）
 - 加入其团队略微麻烦，具体要求在[这里](https://github.com/wangeditor-team/wangEditor/blob/master/docs/join.md)
 
