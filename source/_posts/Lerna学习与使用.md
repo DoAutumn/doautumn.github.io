@@ -109,6 +109,6 @@ $ npm install <dependency> -w <package>
 ```
 ### 8、2024-08-11更新
 Lerna@8版本，已经不需要像步骤7那样执行命令了，正常使用`npm install\uninstall`即可，当安装的是自己的子包时，也无需添加任何额外的参数，Lerna会自动帮我们处理，并且在`node_modules`目录下，子包的目录会通过软链接的形式指向实际的代码目录，就像这样
-![图1](https://foruda.gitee.com/images/1723366110954041992/064c10aa_358662.png)
+<img width="300" alt="软链接.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/软链接.png">
 
 更多细节可参考[这里](https://lerna.js.org/docs/legacy-package-management)。

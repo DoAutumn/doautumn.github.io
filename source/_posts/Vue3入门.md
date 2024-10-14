@@ -69,7 +69,7 @@ Vue3 官方文档并没有对 Hooks 做明确定义，却无处不在在使用�
 - [组合式 API 常见问答](https://cn.vuejs.org/guide/extras/composition-api-faq.html#%E7%8B%AC%E7%AB%8B%E7%9A%84-computed-%E5%B1%9E%E6%80%A7)
 
 ## 四、如何实现组件继承？
-对于一位习惯使用面向对象编程语言的开发者而言，继承被视为一种自然而然的设计模式，Angular 对这一模式的支持更是加深了这种印象，使我一度认为继承是一种理所当然的选择。然而，Vue 并不特别推崇这种方案。在 Vue3 中，它更倾向于推荐使用 Composition API 和可复用的逻辑来实现组件间的复用，这导致我在开发过程中经历了一定程度的适应期。
+对于一位习惯使用面向对象编程语言的开发者而言，继承被视为一种自然而然的设计模式，Angular 对这一模式的支持更是加深了这种印象，使我一度认为继承是一种理所当然的选择。然而，Vue 并不特别推崇这种方案。在 Vue3 中，它更倾向于推荐使用 Composition API 和可复用的逻辑来实现组件间的复用，这导致我在刚开始的开发过程中着实不是很适应。
 ### 1、Composition API 的优势
 - 更好的可测试性：Composition API 的逻辑更容易被拆分成独立的单元进行测试。
 - 更清晰的代码结构：每个组合函数负责一部分特定的逻辑，使代码更易于理解和维护。
@@ -185,7 +185,7 @@ export const vAuth = {
 ## 七、Vue3 中的依赖注入和 Angular 中的有什么区别？
 链接：[https://cn.vuejs.org/guide/components/provide-inject.html](https://cn.vuejs.org/guide/components/provide-inject.html)
 在我看来，其实没什么区别，只是写法的区别。
-在 Angular 中，先是在类的元数据中标记这是可被注入的，然后在 Module 的元数据的 `providers` 中提供，最后直接在其它类的构造函数中注入即可：
+在 Angular 中，先是在类的元数据中标记这是`可被注入的`，然后在 NgModule 的元数据的 `providers` 中提供，最后直接在其它类的构造函数中注入即可：
 ```ts
 // 标记是可被注入的
 @Injectable()
@@ -202,7 +202,7 @@ export class OtherClass {
   constructor(private ser: TestService) {}
 }
 ```
-而在 Vue 中，没有元数据的概念，没有可被注入的概念，直接提供、直接注入：
+而在 Vue 中，没有元数据的概念，没有`可被注入的`概念，直接提供、直接注入：
 ```html
 <script setup>
 import { provide } from 'vue'
@@ -222,11 +222,12 @@ const message = inject('message')
 ## 八、使用 Vite + Vue3 + TypeScript，如何在一个工程中同时构建多个依赖包？如何组织目录更合理？
 如果只是开发一个组件库，那么完全可以参考 [Element Plus](https://element-plus.org/zh-CN/) 的目录结构和打包方式，或者也可以参考[手把手带你手搓组件库](https://space.bilibili.com/69097065/channel/collectiondetail?sid=2881868)这样的视频教程，他其实也是参考了 Element Plus，只是不需要自己翻 Element Plus 的源码了。
 
-虽然 Element Plus 是一个单一的组件库，但其内部仍然是拆分了多个子包，通过 [pnpm](https://www.pnpm.cn/) 管理多个子包。pnpm 内置了对单一存储库（也称为多包存储库、多项目存储库或单体存储库）的支持， 你可以创建一个 workspace 以将多个项目合并到一个仓库中。但我不喜欢用 pnpm，我的 Angular 工程，使用 npm 下载依赖包运行程序没问题，使用 pnpm 下载运行就报错，当然是相同版本的 node 和相同的 package.json，我也懒得去研究了，还是继续使用 [Lerna](https://lerna.js.org) 来实现多包管理。
+虽然 Element Plus 是一个单一的组件库，但其内部仍然是拆分了多个子包，通过 [pnpm](https://www.pnpm.cn/) 管理多个子包。pnpm 内置了对单一存储库（也称为多包存储库、多项目存储库或单体存储库）的支持， 你可以创建一个 workspace 以将多个项目合并到一个仓库中。但我不喜欢用 pnpm，因为我的 Angular 工程，使用 npm 下载依赖包运行程序没问题，使用 pnpm 下载运行就报错，当然是相同版本的 node 和相同的 package.json，我也懒得去研究了，还是继续使用 [Lerna](https://lerna.js.org) 来实现多包管理。
 
-需求层面，我并不只是要实现单一的组件库，而是要包含 [Lerna学习与使用](/2023/09/05/Lerna%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/)中已经提到过的 `frame`、`components`、`charts`、`compoxes`、`utils` 等。废话不多说，直接开始吧。
+需求层面，我并不只是要实现单一的组件库，而是要包含 [Lerna 学习与使用](/2023/09/05/Lerna%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/)中已经提到过的 `frame`、`components`、`charts`、`compoxes`、`utils` 等。废话不多说，直接开始吧。
 ### 1、初始化 Vue 工程
-我还是习惯 Angular 的设计方案，它是区分应用程序 (application) 和库 (lib) 的，*当然 Vue 也是区分的，只是在打包的时候使用不同的 Vite 配置*。在 Angular 中一般都是先创建一个应用程序，再通过 `ng g lib library[name] [options]` 命令创建一个库项目。Vue 没有这样的命令，只能手动创建。
+我还是习惯 Angular 的设计方案，它是区分应用程序 (application) 和库 (lib) 的，可以通过 cli 直接初始化一个应用程序项目 或 库项目，*当然 Vue 也是区分的，只是在打包的时候使用不同的 Vite 配置，需要手动配置*。在 Angular 中一般都是先创建一个应用程序，再通过 `ng g lib library[name] [options]` 命令创建一个库项目。Vue 没有这样的命令，只能手动创建。
+
 通过 `npm create vite@latest my-vue-app -- --template vue-ts` 初始化一个工程之后，手动创建 `packages/frame`、`packages/components`、`packages/charts`、`packages/compoxes`、`packages/utils` 目录，并在各自目录下创建一个 `src` 目录和 `index.ts`、`package.json`、`vite.config.ts` 3个文件，此时整个工程目录是这样：
 <img width="150" alt="工程目录.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/工程目录.png">
 
@@ -248,7 +249,7 @@ const message = inject('message')
 ### 3、配置 vite.config.ts
 可以像官方文档推荐的[库模式](https://vitejs.cn/vite3-cn/guide/build.html#multi-page-app)那样只配置一个 `vite.config.ts` 文件，也可以像教程[项目打包](https://www.bilibili.com/video/BV1ji421X7GZ/?spm_id_from=333.788&vd_source=726ad3db70255a5ef4d7373d91735d76)一样配置两个文件 `vite.es.config.ts` 和 `vite.umd.config.ts`。
 ### 4、配置 package.json
-除了官方文档推荐的内容之外
+除了官方文档推荐的内容之外，
 ```js
 {
   "name": "my-lib",
@@ -264,7 +265,7 @@ const message = inject('message')
   }
 }
 ```
-还有必要加入其它信息：`version`、`description`、`publishConfig` 等
+还有必要加入其它信息：`version`、`description`、`publishConfig` 等。
 ```js
 {
   "name": "my-lib",
@@ -339,7 +340,7 @@ export default defineConfig({
 })
 ```
 ### 2、打包
-此时直接打包，如果使用的是 `"vite-plugin-dts": "^4.0.2"` 版本，并没有自动生成声明文件；如果使用的是 `"vite-plugin-dts": "^3.9.1"` 版本，还会报错
+此时直接打包，如果使用的是 `"vite-plugin-dts": "^4.0.2"` 版本，并没有自动生成声明文件；如果使用的是 `"vite-plugin-dts": "^3.9.1"` 版本，还会报错：
 ```ts
 index.ts:1:15 - error TS2792: Cannot find module './src/vue'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 ```
@@ -347,7 +348,7 @@ index.ts:1:15 - error TS2792: Cannot find module './src/vue'. Did you mean to se
 <img width="700" alt="报错环境.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/报错环境.png">
 <img width="700" alt="分析和解决.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Vue3入门/分析和解决.png">
 
-所以我们可以在各子包目录下新建一个 `tsconfig.build.json` 文件，内容直接复制 `tsconfig.app.json`，然后再改下 `include` 路径即可。
+所以我们可以在各子包目录下新建一个 `tsconfig.build.json` 文件，内容直接复制 `tsconfig.app.json` 中的内容，然后再改下 `include` 路径即可。
 ```js
 {
   ...
@@ -444,3 +445,4 @@ app.mount('#app')
 </template>
 ```
 那在依赖包中如何实现国际化呢？首先想到的是采用 Element Plus 的方案，完全自己实现，但既然我们的主体应用程序（就是使用了上述几个子包的主程序，也就是某个产品或项目的具体应用程序）不可避免的需要使用 `vue-i18n`，那能否借助它来实现子包的国际化呢？答案是肯定的。
+*TODO: 未完待续。*
