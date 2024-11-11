@@ -1,6 +1,5 @@
 ---
 title: 如何将透明度应用于CSS变量
-toc: true
 date: 2024-06-04 17:05:49
 tags: CSS变量
 category: CSS
