@@ -9,6 +9,7 @@ category: Mac
 我们只需要在如下目录找到相关目录文件，将其删除即可。
 - 应用程序支持文件：`~/Library/Application Support/(App Name)`
 - 首选项：`~/Library/Preferences/(App Name)`
+- 资料包：`~/Library/Containers/(App Name)`
 - 缓存：`~/Library/Caches/(App Name)`
 
 如果某些应用在安装时，自动添加到了 `设置 > 通用 > 登录项 > 允许在后台`，则还需执行如下步骤：
