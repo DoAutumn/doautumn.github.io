@@ -2202,3 +2202,20 @@ html[data-dark='true'] {
     text-align: end;
     margin-bottom: 6px;
 }
+
+.v[data-class=v] p {
+    margin: 0 !important;
+}
+.v[data-class=v] .vcards .vcard {
+   padding-top: 0.25em !important;
+}
+.v[data-class=v] .vrow {
+    padding: 5px 0 !important;
+}
+.v[data-class=v] .vwrap .vheader .vinput {
+    padding-top: 0 !important;
+}
+.v[data-class=v] .veditor {
+    min-height: 5em !important;
+    padding: 0 2px !important;
+}

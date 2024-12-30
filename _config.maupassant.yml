@@ -23,7 +23,7 @@ valine: ## See: https://valine.js.org
   notify: false ## 1.4.0+ 已废弃 ## Mail notifier, see https://github.com/xCss/Valine/wiki/Valine-评论系统中的邮件提醒设置
   verify: false ## 1.4.0+ 已废弃 ## Validation code.
   placeholder: Just so so ## Comment box placeholders.
-  avatar: "mm" ## Gravatar type, see https://github.com/xCss/Valine/wiki/avatar-setting-for-valine
+  avatar: "mp" ## Gravatar type, see https://github.com/xCss/Valine/wiki/avatar-setting-for-valine
   pageSize: 10 ## Number of comments per page.
   guest_info: nick,mail,link ## Attributes of reviewers.
 minivaline: ## See: https://github.com/MiniValine/MiniValine
