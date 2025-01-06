@@ -996,6 +996,7 @@ figure.highlight,
 .codeblock {
   background: #e4e4e4;
   margin: 10px 0;
+  margin-bottom: 20px;
   line-height: 1.1em;
   color: #333;
   overflow: hidden;
@@ -2004,4 +2005,25 @@ html[data-dark=true] img {
 .waline-comment-content-author {
   text-align: end;
   margin-bottom: 6px;
+}
+
+.v[data-class=v] p {
+  margin: 0 !important;
+}
+
+.v[data-class=v] .vcards .vcard {
+  padding-top: 0.25em !important;
+}
+
+.v[data-class=v] .vrow {
+  padding: 5px 0 !important;
+}
+
+.v[data-class=v] .vwrap .vheader .vinput {
+  padding-top: 0 !important;
+}
+
+.v[data-class=v] .veditor {
+  min-height: 5em !important;
+  padding: 0 2px !important;
 }
