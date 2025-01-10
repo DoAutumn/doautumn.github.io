@@ -38,6 +38,7 @@ category: 极空间
 <img width="500" alt="SSH登录.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/极空间Docker安装CentOS并开启SSH/SSH登录.png">
 
 **安装镜像源和系统下载工具**
+<span style="font-size: 13px; color: #999999">下面的命令需要整体复制粘贴，应该是极空间中Docker的命令行工具有bug</span>
 ```shell
 sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-* 
 
