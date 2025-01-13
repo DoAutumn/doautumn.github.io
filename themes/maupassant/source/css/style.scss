@@ -1122,6 +1122,11 @@ figure.highlight,
         font-size: 13px;
     }
 }
+blockquote {
+  figure.highlight {
+    margin: 10px 0;
+  }
+}
 
 // Gist
 .gist {

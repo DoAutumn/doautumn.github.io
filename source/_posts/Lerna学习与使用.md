@@ -103,21 +103,16 @@ $ lerna publish from-git --yes
 > **2024-10-29更新**
 > 关于步骤5、6的特殊说明：
 > - 虽然全局安装了`lerna`，但也不能直接在终端执行上述命令，会报如下错误：
-`lerna ERR! EUNCOMMIT Working tree has uncommitted changes, please commit or remove the following changes before continuing:`
-*原因是lerna会更新package.json中的版本号和CHANGELOG.md文件，但是坑爹啊有木有，明明是你的机制改动了我本地文件，又说我本地有残留文件，搞不懂为什么会这样*
+> <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line">lerna ERR! EUNCOMMIT Working tree has uncommitted changes, please commit or remove the following changes before continuing:</span></pre></td></tr></tbody></table></figure>
+<span style="font-size: 14px; color: #999999; font-style: italic;">原因是lerna会更新package.json中的版本号和CHANGELOG.md文件，但是坑爹啊有木有，明明是你的机制改动了我本地文件，又说我本地有残留文件，搞不懂为什么会这样</span>
 > - 需要将上述命令放到package.json的scripts中，如下：
-"scripts": {
-  "version": "lerna version --conventional-commits",
-  "publish": "lerna publish from-git --yes",
-},
+> <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br /><span class="line">2</span><br /><span class="line">3</span><br /><span class="line">4</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line">"scripts": {</span><br /><span class="line">&nbsp;&nbsp;"version": "lerna version --conventional-commits",</span><br /><span class="line">&nbsp;&nbsp;"publish": "lerna publish from-git --yes",</span><br /><span class="line">},</span></pre></td></tr></tbody></table></figure>
 > - 然后通过`npm run version`、`npm run publish`执行，就不会报错了
+
 ### 7、安装依赖
 ~~如果只想给某个子包安装依赖 或者 子包之间有依赖关系，可通过如下命令实现：~~
-```shell
-$ npm install <dependency> -w <package>
-// dependency可以是子包名称，也可以是开源依赖
-// package为目标子包名称，是子包的package.json中的name值
-```
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br /><span class="line">2</span><br /><span class="line">3</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line"><del>$ npm install [dependency] -w [package]</del></span><br /><span class="line"><del>// dependency可以是子包名称，也可以是开源依赖</del></span><br /><span class="line"><del>// package为目标子包名称，是子包的package.json中的name值</del></span></pre></td></tr></tbody></table></figure>
+
 > **2024-08-11更新**
 > 关于步骤7的特殊说明：
 > Lerna@8版本，已经不需要像步骤7那样执行命令了，正常使用`npm install\uninstall`即可，当安装的是自己的子包时，也无需添加任何额外的参数，Lerna会自动帮我们处理，并且在`node_modules`目录下，子包的目录会通过软链接的形式指向实际的代码目录，就像这样
