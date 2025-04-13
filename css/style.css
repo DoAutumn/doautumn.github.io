@@ -1072,6 +1072,10 @@ figure.highlight .line,
   font-size: 13px;
 }
 
+blockquote figure.highlight {
+  margin: 10px 0;
+}
+
 .gist .line,
 .gist .line-number {
   font-family: Menlo, Consolas, monospace;
