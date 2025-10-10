@@ -24,3 +24,54 @@ curl -s https://raw.githubusercontent.com/actuallymentor/battery/main/setup.sh |
 ```
 battery maintain 80
 ```
+
+---
+#### 2025-10-10更新
+升级到 macOS Tahoe 26 之后，`battery`不起作用了，很多人反馈了 issues，也没见作者有回复，在众多 issues 中，有人推荐了[batt](https://github.com/charlie0129/batt)，试了一下效果还不错。
+
+- Installation Script
+```
+bash <(curl -fsSL https://github.com/charlie0129/batt/raw/master/hack/install.sh)
+```
+
+- Help
+```
+doautumn@Mac ~ % batt help
+batt is a tool to control battery charging on Apple Silicon MacBooks.
+
+Website: https://github.com/charlie0129/batt
+
+Usage:
+  batt [command]
+
+Basic:
+  adapter                    Enable or disable power input
+  disable                    Disable batt
+  limit                      Set upper charge limit
+  status                     Get the current status of batt
+
+Advanced:
+  disable-charging-pre-sleep Set whether to disable charging before sleep if charge limit is enabled
+  lower-limit-delta          Set the delta between lower and upper charge limit
+  magsafe-led                Control MagSafe LED according to battery charging status
+  prevent-idle-sleep         Set whether to prevent idle sleep during a charging session
+  prevent-system-sleep       Set whether to prevent system sleep during a charging session (experimental)
+
+Installation:
+  install                    Install batt (system-wide)
+  uninstall                  Uninstall batt (system-wide)
+
+Additional Commands:
+  completion                 Generate the autocompletion script for the specified shell
+  gui                        Start the batt GUI (debug)
+  help                       Help about any command
+  version                    Print version
+
+Flags:
+      --config string          config file path (default "/etc/batt.json")
+      --daemon-socket string   batt daemon unix socket path (default "/var/run/batt.sock")
+  -h, --help                   help for batt
+  -l, --log-level string       log level (trace, debug, info, warn, error, fatal, panic) (default "info")
+
+Use "batt [command] --help" for more information about a command.
+```
