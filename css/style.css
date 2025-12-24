@@ -355,7 +355,8 @@ div {
   display: inline-block;
   margin: 0;
   padding: 0 8px;
-  background: #e4e4e4;
+  color: #d56161;
+  background: #f6f7f9;
   font-family: Menlo, Consolas, monospace !important;
   line-height: 22px;
   border-radius: 3px;
@@ -403,7 +404,8 @@ div {
   display: inline-block;
   margin: 0;
   padding: 0px 5px;
-  background: #e4e4e4;
+  color: #d56161;
+  background: #f6f7f9;
   font-family: Menlo, Consolas, monospace !important;
   line-height: 22px;
   border-radius: 3px;
@@ -994,14 +996,13 @@ pre {
 /* syntax highlight*/
 figure.highlight,
 .codeblock {
-  background: #e4e4e4;
+  background: #f9fafb;
   margin: 10px 0;
   margin-bottom: 20px;
   line-height: 1.1em;
   color: #333;
   overflow: hidden;
   border-radius: 3px;
-  border: solid 1px #dadada;
 }
 figure.highlight table,
 .codeblock table {
@@ -1039,7 +1040,7 @@ figure.highlight figcaption,
   font-size: 13px;
   padding: 0 15px 20px;
   margin: 0;
-  background: #e4e4e4;
+  background: #f9fafb;
   color: #999999;
 }
 figure.highlight figcaption a,
@@ -1049,8 +1050,8 @@ figure.highlight figcaption a,
 }
 figure.highlight .gutter,
 .codeblock .gutter {
-  background: #e4e4e4;
-  border-right: 1px solid #cbcbcb;
+  background: #f9fafb;
+  border-right: 1px solid #dfe2e5;
   padding: 0.3em 8px;
   user-select: none;
   text-align: right;
