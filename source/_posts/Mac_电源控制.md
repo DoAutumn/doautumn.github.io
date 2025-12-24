@@ -26,7 +26,7 @@ battery maintain 80
 ```
 
 ---
-#### 2025-10-10更新
+### 2025-10-10更新
 升级到 macOS Tahoe 26 之后，`battery`不起作用了，很多人反馈了 issues，也没见作者有回复，在众多 issues 中，有人推荐了[batt](https://github.com/charlie0129/batt)，试了一下效果还不错。
 
 - Installation Script

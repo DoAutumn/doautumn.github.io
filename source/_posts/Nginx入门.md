@@ -148,6 +148,25 @@ server {
   proxy_connect_timeout 10s;
   ```
 
+### 1.4 root 和 alias 区别
+`root` 和 `alias` 指令都用于指定服务器静态资源文件的路径，例如 HTML 文件、视频、图片文件等。虽然它们的使用方法比较相似，但有一些关键区别，容易导致混淆。
+- root
+`root` 指令用于设置请求的根目录。它通常定义在 `server` 或 `location` 块中。`root` 指令会将请求的 URI 附加到指定的根目录路径后面。例如：
+```nginx
+location /images/ {
+   root /var/www;
+}
+```
+在这个例子中，请求 `/images/example.jpg` 将会映射到文件路径 `/var/www/images/example.jpg`(实际路径是 `root值` + `location值`)。
+- alias
+`alias` 指令用于将请求的 URI 映射到指定的目录。与 `root` 不同，`alias` 指令会将请求的 URI 替换为指定的目录路径。例如：
+```nginx
+location /images/ {
+   alias /var/www/images/;
+}
+```
+在这个例子中，请求 `/images/example.jpg` 同样将会映射到文件路径 `/var/www/images/example.jpg`(实际路径就是 `alias值`)。
+
 ## 二、Nginx的安装
 ### 2.1 [官网下载](https://nginx.org/en/download.html)
 
@@ -182,6 +201,9 @@ cd nginx-1.26.3
 ```bash
 make && make install
 ```
+
+### 2.3 Mac下通过 brew 安装
+<img width="500" alt="Mac_Nginx.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Nginx入门/Mac_Nginx.png">
 
 ## 三、Nginx常用命令
 ```base

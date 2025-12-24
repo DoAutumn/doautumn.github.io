@@ -1,9 +1,9 @@
 ---
-title: 微前端之Angular应用方案
+title: 微前端之 @worktile/planet 实现方案
 toc: true
 date: 2024-11-08 19:10:17
-tags: [微前端, worktile/planet]
-category: Angular
+tags: [worktile/planet]
+category: 微前端
 ---
 ## 什么是微前端
 > Techniques, strategies and recipes for building a **modern web app** with **multiple teams** that can **ship features independently**. -- [Micro Frontends](https://micro-frontends.org/)
@@ -35,7 +35,7 @@ category: Angular
 ## [qiankun](https://qiankun.umijs.org/zh)
 > 可能是你见过最完善的微前端解决方案🧐
 
-关于 qiankun 的使用，有机会再去整理。
+关于 qiankun 的使用，详见 [微前端之 qiankun 实现方案](/2025/12/23/微前端之qiankun实现方案/#四、启动测试)。
 
 ## [Planet](http://planet.ngnice.com/)
 > Angular 框架下无懈可击的微前端框架和一体化解决方案

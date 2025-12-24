@@ -109,6 +109,16 @@ $ lerna publish from-git --yes
 > <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br /><span class="line">2</span><br /><span class="line">3</span><br /><span class="line">4</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line">"scripts": {</span><br /><span class="line">&nbsp;&nbsp;"version": "lerna version --conventional-commits",</span><br /><span class="line">&nbsp;&nbsp;"publish": "lerna publish from-git --yes",</span><br /><span class="line">},</span></pre></td></tr></tbody></table></figure>
 > - 然后通过`npm run version`、`npm run publish`执行，就不会报错了
 
+> **2025-09-30更新**
+> 如果想要自动生成ChangeLog的同时升级一个大版本，比如从1.x.x升级到2.0.0，了解到的 git commit 规范应该是：
+> - 带 ! 标记的类型，如：
+> <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line">feat!: 重构用户认证接口，移除旧版 token 验证</span></pre></td></tr></tbody></table></figure>
+> - 包含 BREAKING CHANGE 的脚注，如：
+> <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br /><span class="line">2</span><br /><span class="line">3</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line">fix: 修复订单计算逻辑</span><br /><span class="line">修正了折扣计算错误，但改变了返回值格式。</span><br /><span class="line">BREAKING CHANGE: 订单金额字段从字符串改为数字类型</span></pre></td></tr></tbody></table></figure>
+> - 但经过验证并不好使（暂时未找到原因），所以只能手动把version脚本改成：
+> <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line">"version": "lerna version major --conventional-commits"</span></pre></td></tr></tbody></table></figure>
+> <img width="500" alt="不生效截图.png" src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/Lerna学习与使用/不生效截图.png">
+
 ### 7、安装依赖
 ~~如果只想给某个子包安装依赖 或者 子包之间有依赖关系，可通过如下命令实现：~~
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br /><span class="line">2</span><br /><span class="line">3</span></pre></td><td class="code" style="width: 884.172px;"><pre style="width: 884.172px;"><span class="line"><del>$ npm install [dependency] -w [package]</del></span><br /><span class="line"><del>// dependency可以是子包名称，也可以是开源依赖</del></span><br /><span class="line"><del>// package为目标子包名称，是子包的package.json中的name值</del></span></pre></td></tr></tbody></table></figure>
