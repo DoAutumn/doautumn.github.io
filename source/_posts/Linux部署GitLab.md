@@ -101,3 +101,6 @@ sudo gitlab-ctl reconfigure
 ```bash
 sudo gitlab-ctl restart
 ```
+
+## 八、卸载GitLab
+[参考地址](https://blog.csdn.net/KingOfOnePiece/article/details/110467928)
