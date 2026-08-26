@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta content="no-referrer" name="referrer"><meta name="description" content="度·秋的博客"><title>书签管家：Chrome 新标签页书签管理与端到端加密密码库 | 度·秋</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.png"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><div class="darkmode-toggle">🌓</div><script>var prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+var toggle = document.querySelector('.darkmode-toggle');
+var html = document.querySelector('html');
+
+html.dataset.dark = localStorage.dark || prefersDarkMode.matches;
+
+toggle.addEventListener('click', () => {
+localStorage.dark = !(html.dataset.dark == 'true');
+html.dataset.dark = localStorage.dark;
+});</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">书签管家：Chrome 新标签页书签管理与端到端加密密码库</h1><a id="logo" href="/.">度·秋</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">书签管家：Chrome 新标签页书签管理与端到端加密密码库</h1><div class="post-meta">2026-08-17<span> | </span><span class="category"><a href="/categories/Chrome/">Chrome</a></span><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> 阅读</span></span><span class="post-time"><span class="post-meta-item-text"> | </span><span class="post-meta-item-icon"><i class="fa fa-keyboard-o"></i><span class="post-count"> 1.4k</span><span class="post-meta-item-text"> 字</span></span></span><span class="post-time"> | <span class="post-meta-item-icon"><i class="fa fa-clock-o"></i><span class="post-count"> 4</span><span class="post-meta-item-text"> 分钟</span></span></span></div><a class="disqus-comment-count" href="/2026/08/17/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E5%AE%B6_Chrome%E6%89%A9%E5%B1%95%E5%AF%86%E7%A0%81%E5%BA%93%E4%B8%8E%E5%8A%A0%E5%AF%86%E5%90%8C%E6%AD%A5/#vcomment"><span class="valine-comment-count" data-xid="/2026/08/17/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E5%AE%B6_Chrome%E6%89%A9%E5%B1%95%E5%AF%86%E7%A0%81%E5%BA%93%E4%B8%8E%E5%8A%A0%E5%AF%86%E5%90%8C%E6%AD%A5/"></span><span> 条评论</span></a><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-text">设计目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E6%A6%82%E8%A7%88"><span class="toc-text">功能概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E9%94%81%E5%AE%9A"><span class="toc-text">同步与锁定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E7%89%A9%E8%AF%86%E5%88%AB%E4%B8%8E-PRF"><span class="toc-text">生物识别与 PRF</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C"><span class="toc-text">安全边界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%BB%93%E6%9E%84"><span class="toc-text">技术结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></div></div><div class="post-content"><p>Chrome 原生书签足够好用，但一旦把账号密码写进标题，或依赖浏览器账号同步明文凭据，安全边界就比较模糊。为此我做了一个 Manifest V3 扩展：<strong>书签管家</strong>——在新标签页管理原生书签，并提供标签、密码库，以及向 <strong>私人 Gitee &#x2F; GitHub 仓库</strong> 的端到端加密同步。</p>
+<p>仓库：<a target="_blank" rel="noopener" href="https://gitee.com/doautumn/bookmarks">https://gitee.com/doautumn/bookmarks</a>（当前 <strong>v1.3.1</strong>）</p>
+<!-- 配图占位：扩展图标 / 新标签页第一眼 -->
+<p><img src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E7%90%86/%E5%B7%A5%E4%BD%9C%E5%8F%B0.png" alt="工作台.png"></p>
+<h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><ol>
+<li><strong>书签仍使用 Chrome 原生数据</strong>：增删改与网页收藏均走系统书签 API，不另建一套书签存储。</li>
+<li><strong>凭据与书签标题分离</strong>：账号、密码进入密码库，按 URL 关联，避免写在标题中。</li>
+<li><strong>多机同步仅传输密文</strong>：云端为 AES-GCM 载荷（<code>meta.json</code> + <code>payload.enc</code>）；主密码经 PBKDF2 派生密钥，不以明文长期落盘。</li>
+<li><strong>兼顾日常效率</strong>：登录页自动填充；可选 Touch ID &#x2F; Windows Hello 解锁。</li>
+</ol>
+<h2 id="功能概览"><a href="#功能概览" class="headerlink" title="功能概览"></a>功能概览</h2><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工作台</td>
+<td>新标签页时钟、Bing 搜索、最近打开、「常用」侧栏</td>
+</tr>
+<tr>
+<td>书签管理</td>
+<td>宫格 &#x2F; 列表、分组树、搜索与标签、批量操作</td>
+</tr>
+<tr>
+<td>密码库</td>
+<td>按书签 URL 存储账号、密码、备注；支持清理孤儿凭据</td>
+</tr>
+<tr>
+<td>自动填充</td>
+<td>匹配登录页；唯一命中可静默填充，多账号时提供选择条</td>
+</tr>
+<tr>
+<td>云端同步</td>
+<td>私人仓库端到端加密；锁定期间禁止上传，避免空密码库覆盖远端</td>
+</tr>
+<tr>
+<td>会话锁定</td>
+<td>空闲锁定、手动锁定、关闭浏览器后再打开：书签仍可用，凭据需解锁</td>
+</tr>
+</tbody></table>
+<!-- 配图占位：书签管理宫格视图 -->
+<p><img src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E7%90%86/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E7%90%86.png" alt="书签管理.png"></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li>打开 <code>chrome://extensions</code>，开启「开发者模式」</li>
+<li>「加载已解压的扩展程序」，选择仓库根目录</li>
+<li>打开新标签页，或通过工具栏图标进入</li>
+</ol>
+<p>首次使用可选：从旧 Gist 迁移、全新初始化、连接已有仓库。Token 建议仅授予该私有仓库所需的最小权限。</p>
+<h2 id="同步与锁定"><a href="#同步与锁定" class="headerlink" title="同步与锁定"></a>同步与锁定</h2><p>若在锁定状态下仍用空密码库加密上传，会覆盖远端已有数据。当前策略如下：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>书签</th>
+<th>密码库 &#x2F; 自动填充</th>
+<th>云端上传</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>已解锁</td>
+<td>可用</td>
+<td>可用</td>
+<td>书签变更防抖上传；支持手动推拉</td>
+</tr>
+<tr>
+<td>锁定 &#x2F; 刚重启浏览器</td>
+<td>可用</td>
+<td>需先解锁</td>
+<td><strong>不上传</strong></td>
+</tr>
+</tbody></table>
+<p>锁定期间仍可收藏网页，变更保留在本机 Chrome 书签中。解锁后的同步流程：</p>
+<ol>
+<li><strong>拉取</strong>远端密码库与标签（<strong>不覆盖</strong>本机书签树，避免冲掉锁定期间的本地变更）</li>
+<li><strong>仅当本机书签与远端不一致时上传</strong>，减少无意义的仓库提交</li>
+<li>拉取失败时仍会保守上传一次，避免本地积压长期无法上云</li>
+</ol>
+<p>空闲锁定由后台 <code>chrome.alarms</code> 约每分钟检查一次；锁定后，其它已打开的扩展页会同步清除内存中的明文凭据。</p>
+<h2 id="生物识别与-PRF"><a href="#生物识别与-PRF" class="headerlink" title="生物识别与 PRF"></a>生物识别与 PRF</h2><p>启用生物识别后，扩展通过 WebAuthn 平台认证器唤起系统指纹 &#x2F; Windows Hello 对话框。</p>
+<p>网站通行密钥（如 GitHub 登录）与密码库解锁对 WebAuthn 的需求并不相同：</p>
+<ul>
+<li><strong>通行密钥登录</strong>：完成用户验证即可</li>
+<li><strong>密码库解锁</strong>：还需要从认证器取得可用于解密封装密钥的材料，依赖 WebAuthn <strong>PRF</strong> 扩展</li>
+</ul>
+<p>部分环境（例如 Chrome 本机档案中的 Touch ID）可以完成指纹验证，但不提供 PRF。因此实现分为两档：</p>
+<ol>
+<li><strong>PRF 模式</strong>：由认证器派生密钥，包装密码库 AES 密钥</li>
+<li><strong>门控模式</strong>：指纹仅作身份验证；包装密钥仍保存在本机扩展存储中。可降低误触解锁的风险，但无法对抗直接读取本机 Chrome 配置目录的攻击面</li>
+</ol>
+<p>修改主密码后，生物识别会关闭，需要重新启用。</p>
+<!-- 配图占位：系统 Touch ID / Windows Hello 对话框 -->
+<p><img src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E7%90%86/%E7%94%9F%E7%89%A9%E8%AF%86%E5%88%AB.png" alt="生物识别.png"></p>
+<h2 id="安全边界"><a href="#安全边界" class="headerlink" title="安全边界"></a>安全边界</h2><p>适用场景：<strong>私有仓库 + 可信本机环境</strong>，并建议开启系统磁盘加密与自动锁屏。</p>
+<p>它不是「整盘失守仍可保全密码库」一类产品；更接近「私人加密备份 + 会话内可用」的书签与凭据工具。</p>
+<p>主要约定：</p>
+<ul>
+<li>主密码经 PBKDF2 派生，不以明文保存</li>
+<li>派生密钥默认仅存在于 <code>chrome.storage.session</code>；关闭浏览器后需重新解锁</li>
+<li>本机密码库以密文缓存落盘；云端仅保存加密载荷</li>
+<li>Token、主密码及解密后的备份均不应提交到 Git</li>
+<li>自动填充仍会将密码写入页面 DOM，需接受登录页 XSS 等通用风险</li>
+<li>锁定状态下仍可能保留「哪些 URL 存有凭据」一类元数据（用于界面提示）</li>
+</ul>
+<h2 id="技术结构"><a href="#技术结构" class="headerlink" title="技术结构"></a>技术结构</h2><p>无构建步骤的纯前端扩展。修改代码后，在 <code>chrome://extensions</code> 重新加载扩展，并硬刷新标签页即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">manifest.json</span><br><span class="line">html/bookmarks.html</span><br><span class="line">styles/app.css</span><br><span class="line">scripts/</span><br><span class="line">  app.js           # UI</span><br><span class="line">  background.js    # Service Worker：同步、取密、空闲检查</span><br><span class="line">  autofill.js      # 内容脚本</span><br><span class="line">  biometric.js     # WebAuthn 解锁</span><br><span class="line">  session / vault / crypto / sync / unlock-flow / …</span><br></pre></td></tr></table></figure>
+
+<p>权限包括：<code>bookmarks</code>、<code>storage</code>、<code>tabs</code>、<code>alarms</code>，以及对 Gitee &#x2F; GitHub API 与自动填充页面的主机访问权限。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>书签管家优先保证原生书签体验，再在密码库与同步上采用「私有仓库 + 会话锁定」的收口方式。若需要类似能力，可直接从仓库克隆使用或二次修改。</p>
+<p>欢迎在仓库提交 Issue；文中截图会在后续补齐。</p>
+<!-- 配图占位：关于页版本号 / 云端同步配置页 -->
+<p><img src="https://gitee.com/doautumn/doautumn.gitee.io/raw/master/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E7%90%86/%E4%BA%91%E7%AB%AF%E5%90%8C%E6%AD%A5.png" alt="云端同步.png"></p>
+</div><div class="tags"><a href="/tags/Chrome扩展"><i class="fa fa-tag">Chrome扩展</i></a><a href="/tags/WebAuthn"><i class="fa fa-tag">WebAuthn</i></a><a href="/tags/密码库"><i class="fa fa-tag">密码库</i></a><a href="/tags/书签"><i class="fa fa-tag">书签</i></a><a href="/tags/AES-GCM"><i class="fa fa-tag">AES-GCM</i></a></div><div class="post-nav"><a class="pre" href="/2026/08/19/%E6%9E%81%E7%A9%BA%E9%97%B4-Docker-Compose%E9%83%A8%E7%BD%B2GitLab/">在极空间 Docker 中用 Compose 部署 GitLab</a><a class="next" href="/2026/08/06/%E5%BE%AE%E4%BF%A1%E5%8D%A0%E4%BA%86150G%E4%B8%8D%E6%95%A2%E5%88%A0-NAS%E4%B8%8A%E8%B7%91%E4%B8%AA%E5%BE%AE%E4%BF%A1%E6%89%8B%E6%9C%BA%E9%9A%8F%E4%BE%BF%E6%B8%85/">微信占了150G不敢删？NAS上跑个微信，手机随便清</a></div><div id="vcomment"></div><script type="text/javascript" src="/js/Valine.min@1.5.3.js?v=1.0.0"></script><script>var notify = 'false' == 'true' ? true : false;
+var verify = 'false' == 'true' ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'Ylm0rfOhwGkUmkm1IQDlP42D-gzGzoHsz',
+  appKey:'QsQIdFzfw66Bm2vhzczh2arx',
+  placeholder:'Just so so',
+  avatar:'mp',
+  avatar_cdn:'https://cravatar.cn/avatar/',
+  guest_info:guest_info,
+  pageSize:'10'
+})
+</script></div></div></div><div class="pure-u-1 pure-u-md-1-4"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="关于"><img class="nofancybox" src="/img/avatar.jpg"/></a><p>To be a better man.</p><a class="info-icon" href="https://gitee.com/doautumn" title="Gitee" target="_blank" style="margin-inline:5px"> <i class="fa fa-git-square" style="margin-inline:5px"></i></a><a class="info-icon" href="mailto:doautumn@163.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/DoAutumn" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Angular/">Angular</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/CSS/">CSS</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Chrome/">Chrome</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Electron/">Electron</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mac/">Mac</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vue/">Vue</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8F%AF%E8%A7%86%E5%8C%96/">可视化</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8/">富文本编辑器</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E5%89%8D%E7%AB%AF/">微前端</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9E%81%E7%A9%BA%E9%97%B4/">极空间</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/CKEditor5/" style="font-size: 15px;">CKEditor5</a> <a href="/tags/%E5%AF%8C%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 15px;">富文本编辑器</a> <a href="/tags/Gzip/" style="font-size: 15px;">Gzip</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 15px;">性能优化</a> <a href="/tags/Lerna/" style="font-size: 15px;">Lerna</a> <a href="/tags/GitLab/" style="font-size: 15px;">GitLab</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Obsidian/" style="font-size: 15px;">Obsidian</a> <a href="/tags/Puppeteer/" style="font-size: 15px;">Puppeteer</a> <a href="/tags/%E6%97%A0%E5%A4%B4%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 15px;">无头浏览器</a> <a href="/tags/gitignore/" style="font-size: 15px;">.gitignore</a> <a href="/tags/vscode/" style="font-size: 15px;">vscode</a> <a href="/tags/wangEditor/" style="font-size: 15px;">wangEditor</a> <a href="/tags/TinyMCE/" style="font-size: 15px;">TinyMCE</a> <a href="/tags/Angular%E6%8F%92%E4%BB%B6/" style="font-size: 15px;">Angular插件</a> <a href="/tags/License/" style="font-size: 15px;">License</a> <a href="/tags/Valine/" style="font-size: 15px;">Valine</a> <a href="/tags/LeanCloud/" style="font-size: 15px;">LeanCloud</a> <a href="/tags/Chrome%E6%89%A9%E5%B1%95/" style="font-size: 15px;">Chrome扩展</a> <a href="/tags/WebAuthn/" style="font-size: 15px;">WebAuthn</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%BA%93/" style="font-size: 15px;">密码库</a> <a href="/tags/%E4%B9%A6%E7%AD%BE/" style="font-size: 15px;">书签</a> <a href="/tags/AES-GCM/" style="font-size: 15px;">AES-GCM</a> <a href="/tags/pm2/" style="font-size: 15px;">pm2</a> <a href="/tags/Angular/" style="font-size: 15px;">Angular</a> <a href="/tags/%E6%B8%B2%E6%9F%93%E5%99%A8/" style="font-size: 15px;">渲染器</a> <a href="/tags/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83/" style="font-size: 15px;">注册中心</a> <a href="/tags/Provided-by-%E8%B1%86%E5%8C%85/" style="font-size: 15px;">Provided by 豆包</a> <a href="/tags/WebOS/" style="font-size: 15px;">WebOS</a> <a href="/tags/%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/" style="font-size: 15px;">后台管理系统</a> <a href="/tags/Nexus/" style="font-size: 15px;">Nexus</a> <a href="/tags/npm%E7%A7%81%E6%9C%8D/" style="font-size: 15px;">npm私服</a> <a href="/tags/Vite/" style="font-size: 15px;">Vite</a> <a href="/tags/Vue3%E7%BB%84%E4%BB%B6%E5%BA%93/" style="font-size: 15px;">Vue3组件库</a> <a href="/tags/nrm/" style="font-size: 15px;">nrm</a> <a href="/tags/npm%E6%BA%90%E7%AE%A1%E7%90%86/" style="font-size: 15px;">npm源管理</a> <a href="/tags/nvm/" style="font-size: 15px;">nvm</a> <a href="/tags/Node%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86/" style="font-size: 15px;">Node版本管理</a> <a href="/tags/git-hooks/" style="font-size: 15px;">git hooks</a> <a href="/tags/commitlint/" style="font-size: 15px;">commitlint</a> <a href="/tags/husky/" style="font-size: 15px;">husky</a> <a href="/tags/inquirer/" style="font-size: 15px;">inquirer</a> <a href="/tags/node-ssh/" style="font-size: 15px;">node-ssh</a> <a href="/tags/sshpass/" style="font-size: 15px;">sshpass</a> <a href="/tags/CSS%E5%8F%98%E9%87%8F/" style="font-size: 15px;">CSS变量</a> <a href="/tags/WechatOnCloud/" style="font-size: 15px;">WechatOnCloud</a> <a href="/tags/qiankun/" style="font-size: 15px;">qiankun</a> <a href="/tags/worktile-planet/" style="font-size: 15px;">worktile/planet</a> <a href="/tags/yalc/" style="font-size: 15px;">yalc</a> <a href="/tags/%E6%9E%81%E7%A9%BA%E9%97%B4/" style="font-size: 15px;">极空间</a> <a href="/tags/%E7%94%B5%E5%AD%90%E8%A1%A8%E6%A0%BC/" style="font-size: 15px;">电子表格</a> <a href="/tags/Electron/" style="font-size: 15px;">Electron</a> <a href="/tags/node-canvas/" style="font-size: 15px;">node-canvas</a> <a href="/tags/%E5%9B%BE%E5%BA%8A/" style="font-size: 15px;">图床</a> <a href="/tags/%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB/" style="font-size: 15px;">实时语音识别</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2026/08/19/%E6%9E%81%E7%A9%BA%E9%97%B4-Docker-Compose%E9%83%A8%E7%BD%B2GitLab/">在极空间 Docker 中用 Compose 部署 GitLab</a></li><li class="post-list-item"><a class="post-list-link" href="/2026/08/17/%E4%B9%A6%E7%AD%BE%E7%AE%A1%E5%AE%B6_Chrome%E6%89%A9%E5%B1%95%E5%AF%86%E7%A0%81%E5%BA%93%E4%B8%8E%E5%8A%A0%E5%AF%86%E5%90%8C%E6%AD%A5/">书签管家：Chrome 新标签页书签管理与端到端加密密码库</a></li><li class="post-list-item"><a class="post-list-link" href="/2026/08/06/%E5%BE%AE%E4%BF%A1%E5%8D%A0%E4%BA%86150G%E4%B8%8D%E6%95%A2%E5%88%A0-NAS%E4%B8%8A%E8%B7%91%E4%B8%AA%E5%BE%AE%E4%BF%A1%E6%89%8B%E6%9C%BA%E9%9A%8F%E4%BE%BF%E6%B8%85/">微信占了150G不敢删？NAS上跑个微信，手机随便清</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/12/23/%E5%BE%AE%E5%89%8D%E7%AB%AF%E4%B9%8Bqiankun%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88/">微前端之 qiankun 实现方案</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/12/18/Linux%E9%83%A8%E7%BD%B2GitLab/">Linux部署GitLab</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/09/02/%E4%BB%8E%E9%9B%B6%E6%9E%84%E5%BB%BA%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84%20Angular%20%E9%97%AE%E7%AD%94%E6%B8%B2%E6%9F%93%E5%99%A8%20SDK/">从零构建可扩展的 Angular 问答渲染器 SDK</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/08/19/Mac_%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/">Mac_全局代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/04/13/Nginx%E5%85%A5%E9%97%A8/">Nginx入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/01/13/gitignore%E6%96%87%E4%BB%B6%E4%B8%8D%E8%B5%B7%E4%BD%9C%E7%94%A8%E7%9A%84%E5%8E%9F%E5%9B%A0%E5%8F%8A%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">.gitignore文件不起作用的原因及解决办法</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/01/06/%E9%98%BF%E9%87%8C%E4%BA%91-%E6%99%BA%E8%83%BD%E8%AF%AD%E9%9F%B3%E4%BA%A4%E4%BA%92/">阿里云-智能语音交互</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://www.haomwei.com/" title="屠·城" target="_blank">屠·城</a><ul></ul><a href="https://cirry.cn/" title="菜小牛" target="_blank">菜小牛</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2026 <a href="/." rel="nofollow">度·秋.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><link rel="stylesheet" type="text/css" href="/css/search.css?v=1.0.0"><script type="text/javascript" src="/js/search.js?v=1.0.0"></script><script>var search_path = 'search.json';
+if (search_path.length == 0) {
+  search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script><script type="text/javascript" src="/js/tag.js?v=1.0.0"></script></div></body></html>

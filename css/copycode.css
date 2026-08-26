@@ -1,0 +1,31 @@
+.highlight {
+  position: relative;
+}
+
+.btn-copy {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 6px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+  color: #808080;
+  -webkit-transition: opacity 0.3s ease-in-out;
+  -o-transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
+  background: #fff;
+  opacity: 0;
+}
+
+.highlight:hover .btn-copy {
+  opacity: 1;
+}
